@@ -1,9 +1,5 @@
 import type { HeadConfig } from "vuepress";
-// import { withBase } from "@vuepress/client";
-
-function withBase(dir: string): string {
-  return `/vuepress2-note${dir.startsWith("/") ? "" : "/"}${dir}`;
-}
+import { withBase } from "./common";
 
 // Allowed tags in `<head>`
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/head
