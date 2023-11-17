@@ -38,7 +38,7 @@ const iconConfig: HeadConfig[] = [
   ],
 ];
 
-const seoConfig = [
+const seoConfig: HeadConfig[] = [
   ["meta", { name: "author", content: "lawsssscat" }],
   ["meta", { name: "keywords", content: "vuepress,随笔,笔记,日常,开发,旅游" }],
 ];
