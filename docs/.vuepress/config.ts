@@ -1,10 +1,12 @@
+import process from "node:process";
 import { defineUserConfig, defaultTheme } from "vuepress";
+import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
 import { headConfig } from "./configs/index";
 import { navbarConfig, sidebarConfig } from "./configs/index";
 
 export default defineUserConfig({
   // set site base to default value
-  base: "/vuepress2-node/",
+  base: "/vuepress2-note/",
 
   // extra tags in `<head>`
   head: [...headConfig],
@@ -64,4 +66,11 @@ export default defineUserConfig({
       },
     },
   }),
+
+  plugins: [
+    googleAnalyticsPlugin({
+      // we have multiple deployments, which would use different id
+      id: process.env.DOCS_GA_ID ?? "",
+    }),
+  ],
 });
