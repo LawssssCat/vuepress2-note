@@ -1,4 +1,9 @@
 import type { HeadConfig } from "vuepress";
+// import { withBase } from "@vuepress/client";
+
+function withBase(dir: string): string {
+  return `/vuepress2-note${dir.startsWith("/") ? "" : "/"}${dir}`;
+}
 
 // Allowed tags in `<head>`
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/head
@@ -12,7 +17,7 @@ const iconConfig: HeadConfig[] = [
       rel: "icon",
       type: "image/png",
       sizes: "16x16",
-      href: `/images/icons/favicon-16x16.png`,
+      href: withBase(`/images/icons/favicon-16x16.png`),
     },
   ],
   [
@@ -21,18 +26,21 @@ const iconConfig: HeadConfig[] = [
       rel: "icon",
       type: "image/png",
       sizes: "32x32",
-      href: `/images/icons/favicon-32x32.png`,
+      href: withBase(`/images/icons/favicon-32x32.png`),
     },
   ],
   [
     "link",
-    { rel: "apple-touch-icon", href: `/images/icons/apple-touch-icon.png` },
+    {
+      rel: "apple-touch-icon",
+      href: withBase(`/images/icons/apple-touch-icon.png`),
+    },
   ],
   [
     "link",
     {
       rel: "mask-icon",
-      href: "/images/icons/safari-pinned-tab.svg",
+      href: withBase("/images/icons/safari-pinned-tab.svg"),
       color: "#3eaf7c",
     },
   ],
