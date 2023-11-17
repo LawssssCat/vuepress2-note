@@ -1,13 +1,10 @@
+---
+title: Vue 奇怪语法整理
+---
 
-`setup` 语法糖
+### `setup` 语法糖
 
-<table>
-<tr>
-<td>完整写法</td>
-<td>语法糖</td>
-</tr>
-<tr>
-<td>
+完整写法
 
 ```vue
 <script lang="ts">
@@ -20,8 +17,7 @@ export default {
 </script>
 ```
 
-</td>
-<td>
+语法糖
 
 ```vue
 <script lang="ts" setup>
@@ -29,11 +25,7 @@ export default {
 </script>
 ```
 
-</td>
-</tr>
-</table>
-
-`{{ .. }}` 表达式计算
+### `{{ .. }}` 表达式计算
 
 ```vue
 {{ 1 + 1 }} // 2

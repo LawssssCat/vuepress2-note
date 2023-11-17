@@ -29,7 +29,15 @@ export const navbarConfig: NavbarConfig = [
     children: [
       {
         text: "前端开发",
-        children: ["/dev/js/", "/dev/ts/", "/dev/vue/"],
+        children: [
+          "/dev/js/",
+          "/dev/ts/",
+          {
+            text: "vue",
+            ariaLabel: "Vue 开发笔记",
+            link: "/dev/vue/",
+          },
+        ],
       },
       {
         text: "后端开发",
@@ -44,6 +52,10 @@ export const navbarConfig: NavbarConfig = [
   {
     text: "运维笔记",
     children: [
+      {
+        text: "容器技术",
+        children: ["/ops/k8s/"],
+      },
       {
         text: "监控工具",
         children: ["/ops/zabbix/"],
