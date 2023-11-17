@@ -1,5 +1,6 @@
 import { defineUserConfig, defaultTheme } from "vuepress";
 import { headConfig } from "./configs/index";
+import { navbarConfig, sidebarConfig } from "./configs/index";
 
 export default defineUserConfig({
   // set site base to default value
@@ -27,8 +28,12 @@ export default defineUserConfig({
     docsBranch: "master",
     docsDir: "docs",
 
+    colorMode: "dark",
+
     locales: {
       "/": {
+        navbar: navbarConfig,
+        sidebar: sidebarConfig,
         selectLanguageName: "简体中文",
         selectLanguageText: "选择语言",
         selectLanguageAriaLabel: "选择语言",
@@ -58,7 +63,5 @@ export default defineUserConfig({
         selectLanguageAriaLabel: "Select language",
       },
     },
-
-    // 默认主题配置
   }),
 });

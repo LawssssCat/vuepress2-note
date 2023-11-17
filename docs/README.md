@@ -18,6 +18,8 @@ features:
       柴米油盐酱醋茶...
   - title: 开发笔记
     details: 普通程序员如何摆脱CRUD的工作？
+  # - title: 运维笔记
+  #   details: 
   - title: 旅游日志
     details: 火焰的水潭，寒冰的土地，满沙的雪原！
 footer: MIT Licensed | Copyright © 2018-present Lawsssscat
