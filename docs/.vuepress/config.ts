@@ -4,6 +4,7 @@ import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
 import { searchPlugin } from "@vuepress/plugin-search";
 import { headConfig } from "./configs/index";
 import { baseConfig, navbarConfig, sidebarConfig } from "./configs/index";
+import { tagsAliasConfig } from "./configs/index";
 
 export default defineUserConfig({
   // set site base to default value
@@ -93,9 +94,19 @@ export default defineUserConfig({
          */
         // 标签 Frontmatter 中的 `tags`
         if (page.frontmatter.tags && page.frontmatter.tags instanceof Array) {
-          page.frontmatter.tags.forEach((t) => {
-            extra.push(t);
+          const temp = new Set<string>();
+          page.frontmatter.tags.forEach((tag) => {
+            const tagLower = tag.toLowerCase();
+            temp.add(tagLower);
+            Object.keys(tagsAliasConfig).forEach((key) => {
+              temp.add(key);
+              const alias = tagsAliasConfig[key];
+              if (tagLower in alias) {
+                alias.forEach((a) => temp.add(a));
+              }
+            });
           });
+          extra.push(...Array.from(temp));
         }
         // 描述 Frontmatter 中的 `description`
         if (page.frontmatter.description) {
