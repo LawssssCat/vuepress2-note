@@ -41,11 +41,24 @@ export const navbarConfig: NavbarConfig = [
       },
       {
         text: "后端开发",
-        children: ["/dev/ruoyi-vue-pro/"],
+        children: ["/dev/java/"],
       },
       {
         text: "开发工具",
         children: ["/dev/apifox/"],
+      },
+      {
+        text: "集成项目",
+        children: [
+          {
+            text: "若依",
+            link: "/dev/ruoyi-vue/",
+          },
+          {
+            text: "芋道（若依pro）",
+            link: "/dev/ruoyi-vue-pro/",
+          },
+        ],
       },
     ],
   },
