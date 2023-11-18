@@ -9,7 +9,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
   "/art/": [
     {
       text: "绘图",
-      children: ["pix/README.md", "svg/README.md"],
+      children: ["pixel/", "svg/", "stable-diffusion/"],
     },
   ],
   "/dev/ruoyi-vue/": ["/*"],
