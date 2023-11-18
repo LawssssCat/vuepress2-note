@@ -1,6 +1,7 @@
 import process from "node:process";
 import { defineUserConfig, defaultTheme } from "vuepress";
 import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
+import { searchPlugin } from "@vuepress/plugin-search";
 import { headConfig } from "./configs/index";
 import { baseConfig, navbarConfig, sidebarConfig } from "./configs/index";
 
@@ -68,9 +69,44 @@ export default defineUserConfig({
   }),
 
   plugins: [
+    // google 分析插件
     googleAnalyticsPlugin({
       // we have multiple deployments, which would use different id
       id: process.env.DOCS_GA_ID ?? "",
+    }),
+    // search 插件
+    searchPlugin({
+      maxSuggestions: 10,
+      locales: {
+        "/": {
+          placeholder: "搜索",
+        },
+        "/en/": {
+          placeholder: "Search",
+        },
+      },
+      getExtraFields: (page) => {
+        // 默认情况下，该插件会将页面标题和小标题作为搜索索引
+        let extra: string[] = [];
+        /**
+         * 【注意优先级】
+         */
+        // 标签 Frontmatter 中的 `tags`
+        if (page.frontmatter.tags && page.frontmatter.tags instanceof Array) {
+          page.frontmatter.tags.forEach((t) => {
+            extra.push(t);
+          });
+        }
+        // 描述 Frontmatter 中的 `description`
+        if (page.frontmatter.description) {
+          extra.push(page.frontmatter.description);
+        }
+        // 日期 Page 中的 `date` '2020-09-09'
+        if (page.date) {
+          extra.push(page.date);
+        }
+        return extra;
+      },
     }),
   ],
 });

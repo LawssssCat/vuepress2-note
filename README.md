@@ -28,3 +28,14 @@ pnpm docs:dev
 ├─ pnpm-lock.yaml           🤖项目依赖-lock
 └─ README.md                💡项目说明 <--- this file
 ```
+
+文章 frontmatter \
+<https://v2.vuepress.vuejs.org/zh/reference/frontmatter.html>
+
+```yaml
+title: 标题 （被搜索）
+description: 描述 （被搜索）
+tags:
+  - 标签 （被搜索）
+date: 日期 yyyy-MM-dd （被搜索）
+```

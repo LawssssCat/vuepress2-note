@@ -67,7 +67,13 @@ export const navbarConfig: NavbarConfig = [
     children: [
       {
         text: "博客",
-        children: ["/dev/vuepress/"],
+        children: [
+          "/dev/vuepress/",
+          {
+            text: "hugo",
+            link: "https://lawsssscat.github.io/hugo-usage-doc/",
+          },
+        ],
       },
     ],
   },

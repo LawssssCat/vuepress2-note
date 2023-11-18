@@ -11,6 +11,9 @@ devDependencies:
   '@vuepress/plugin-google-analytics':
     specifier: 2.0.0-beta.68
     version: 2.0.0-beta.68
+  '@vuepress/plugin-search':
+    specifier: 2.0.0-beta.68
+    version: 2.0.0-beta.68
   vue:
     specifier: ^3.3.8
     version: 3.3.8
@@ -720,6 +723,22 @@ packages:
     dependencies:
       '@vuepress/core': 2.0.0-beta.68
       prismjs: 1.29.0
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - supports-color
+      - typescript
+    dev: true
+
+  /@vuepress/plugin-search@2.0.0-beta.68:
+    resolution: {integrity: sha512-qeyIKolu4WJpUdgq/rLgE0qExn0B3e/KBMlGfvsRawbPdtu1XdHlG6RtuLfzPQC33tMFFmhj3H9qradNrZtHpg==}
+    dependencies:
+      '@vuepress/client': 2.0.0-beta.68
+      '@vuepress/core': 2.0.0-beta.68
+      '@vuepress/shared': 2.0.0-beta.68
+      '@vuepress/utils': 2.0.0-beta.68
+      chokidar: 3.5.3
+      vue: 3.3.8
+      vue-router: 4.2.5(vue@3.3.8)
     transitivePeerDependencies:
       - '@vue/composition-api'
       - supports-color
