@@ -16,5 +16,6 @@ function arrayToLowerCase(arr: string[]) {
 export const tagsAliasConfig: Record<string, string[]> = {
   JavaScript: arrayToLowerCase(["js", "JavaScript"]),
   Kubernetes: arrayToLowerCase(["k8s", "Kubernetes"]),
+  GPU: arrayToLowerCase(["gpu", "显卡"]),
   Economist: arrayToLowerCase(["economist", "经济学人"]),
 };

@@ -14,13 +14,7 @@ export const navbarConfig: NavbarConfig = [
     children: [
       {
         text: "绘图",
-        children: [
-          "/art/svg/",
-          {
-            text: "像素图片",
-            link: "/art/pix",
-          },
-        ],
+        children: ["/art/svg/", "/art/pixel/", "/art/stable-diffusion/"],
       },
     ],
   },
@@ -74,6 +68,10 @@ export const navbarConfig: NavbarConfig = [
         children: ["/ops/zabbix/"],
       },
     ],
+  },
+  {
+    text: "硬件笔记",
+    children: ["/hardware/gpu/"],
   },
   {
     text: "脑洞工具",
