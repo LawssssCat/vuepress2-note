@@ -88,35 +88,34 @@ export default defineUserConfig({
       },
       getExtraFields: (page) => {
         // 默认情况下，该插件会将页面标题和小标题作为搜索索引
-        let extra: string[] = [];
+        let extra = new Set<string>();
         /**
          * 【注意优先级】
          */
         // 标签 Frontmatter 中的 `tags`
         if (page.frontmatter.tags && page.frontmatter.tags instanceof Array) {
-          const temp = new Set<string>();
           page.frontmatter.tags.forEach((tag) => {
+            // console.log(page.title, "-", tag);
             const tagLower = tag.toLowerCase();
-            temp.add(tagLower);
+            extra.add(tagLower);
             Object.keys(tagsAliasConfig).forEach((key) => {
-              temp.add(key);
               const alias = tagsAliasConfig[key];
-              if (tagLower in alias) {
-                alias.forEach((a) => temp.add(a));
+              if (alias.includes(tagLower)) {
+                extra.add(key);
+                alias.forEach((a) => extra.add(a));
               }
             });
           });
-          extra.push(...Array.from(temp));
         }
         // 描述 Frontmatter 中的 `description`
         if (page.frontmatter.description) {
-          extra.push(page.frontmatter.description);
+          extra.add(page.frontmatter.description);
         }
         // 日期 Page 中的 `date` '2020-09-09'
         if (page.date) {
-          extra.push(page.date);
+          extra.add(page.date);
         }
-        return extra;
+        return Array.from(extra);
       },
     }),
   ],
