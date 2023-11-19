@@ -18,4 +18,10 @@ export const tagsAliasConfig: Record<string, string[]> = {
   Kubernetes: arrayToLowerCase(["k8s", "Kubernetes"]),
   GPU: arrayToLowerCase(["gpu", "显卡"]),
   Economist: arrayToLowerCase(["economist", "经济学人"]),
+  美食: arrayToLowerCase(["美食", "delicious"]),
+  鲁菜: arrayToLowerCase(["美食", "鲁菜"]),
+  酒: arrayToLowerCase(["酒"]),
+  酱酒: arrayToLowerCase(["酒"]),
+  燕玲春酒: arrayToLowerCase(["酒", "酱酒", "燕玲春酒", "北京华都酒厂"]),
+  北京华都酒厂: arrayToLowerCase(["国企"]),
 };
