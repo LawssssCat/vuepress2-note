@@ -6,6 +6,8 @@ pnpm docs:dev
 
 + Markdown语法基础： <https://commonmark.org/help/>
 + Markdown语法扩展： <https://v2.vuepress.vuejs.org/zh/guide/markdown.html#markdown>
+  + emoji-cheat-sheet <https://github.com/ikatyang/emoji-cheat-sheet>
+  + 自定义容器 <https://v2.vuepress.vuejs.org/zh/reference/default-theme/markdown.html>
 + Vuepress使用指南： <https://v2.vuepress.vuejs.org/zh/guide/getting-started.html>
 + Vuepress配置列表： <https://v2.vuepress.vuejs.org/zh/reference/config.html>
 
