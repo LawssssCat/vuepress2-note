@@ -20,16 +20,18 @@ function parseFolder(perfix: string, pattern: string): string[] | string {
   }
   const result: string[] = [];
   const patternDir = pattern.substring(0, pattern.length - 2);
-  fs.readdirSync(path.join(docsPath, perfix, patternDir)).forEach((folder) => {
-    const folderPath = path.join(docsPath, perfix, patternDir, folder);
-    if (folderPath.endsWith(".md") && fs.statSync(folderPath).isFile()) {
-      result.push(concatPath("/", perfix, patternDir, folder));
-    }
-  });
+  fs.readdirSync(path.join(docsPath, perfix, patternDir))
+    .sort((a, b) => b.localeCompare(a))
+    .forEach((folder) => {
+      const folderPath = path.join(docsPath, perfix, patternDir, folder);
+      if (folderPath.endsWith(".md") && fs.statSync(folderPath).isFile()) {
+        result.push(concatPath("/", perfix, patternDir, folder));
+      }
+    });
   return result;
 }
 
-function aaa(
+function handleGenerateSidebarItem(
   key: string,
   item: SidebarItem | SidebarGroup | string
 ): SidebarItem | SidebarGroup | string | string[] {
@@ -40,7 +42,7 @@ function aaa(
   } else {
     const result: SidebarItem = item;
     if ((item as SidebarGroup).children) {
-      (item as SidebarGroup).children = xxx(
+      (item as SidebarGroup).children = handleGenerateSidebarArray(
         key,
         (item as SidebarGroup).children
       );
@@ -64,10 +66,13 @@ function aaa(
   }
 }
 
-function xxx(key: string, value: SidebarConfigArray): SidebarConfigArray {
+function handleGenerateSidebarArray(
+  key: string,
+  value: SidebarConfigArray
+): SidebarConfigArray {
   const result: SidebarConfigArray = [];
   value.forEach((item) => {
-    const temp = aaa(key, item);
+    const temp = handleGenerateSidebarItem(key, item);
     if (temp instanceof Array) temp.forEach((t) => result.push(t));
     else result.push(temp);
   });
@@ -79,7 +84,10 @@ export function generateSidebarConfig(config: SidebarConfig): SidebarConfig {
     return config as SidebarConfigArray;
   }
   for (const key in config as SidebarConfigObject) {
-    config[key] = xxx(key, (config as SidebarConfigObject)[key]);
+    config[key] = handleGenerateSidebarArray(
+      key,
+      (config as SidebarConfigObject)[key]
+    );
   }
   console.log(JSON.stringify(config, null, 2));
   return config;
