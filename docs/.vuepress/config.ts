@@ -2,9 +2,8 @@ import process from "node:process";
 import { defineUserConfig, defaultTheme } from "vuepress";
 import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
 import { searchPlugin } from "@vuepress/plugin-search";
-import { headConfig } from "./configs/index";
+import { headConfig, tagAliasMapConfig } from "./configs/index";
 import { baseConfig, navbarConfig, sidebarConfig } from "./configs/index";
-import { tagsAliasConfig } from "./configs/index";
 
 export default defineUserConfig({
   // set site base to default value
@@ -89,22 +88,14 @@ export default defineUserConfig({
       getExtraFields: (page) => {
         // 默认情况下，该插件会将页面标题和小标题作为搜索索引
         let extra = new Set<string>();
-        /**
-         * 【注意优先级】
-         */
         // 标签 Frontmatter 中的 `tags`
         if (page.frontmatter.tags && page.frontmatter.tags instanceof Array) {
           page.frontmatter.tags.forEach((tag) => {
             // console.log(page.title, "-", tag);
             const tagLower = tag.toLowerCase();
             extra.add(tagLower);
-            Object.keys(tagsAliasConfig).forEach((key) => {
-              const alias = tagsAliasConfig[key];
-              if (alias.includes(tagLower)) {
-                extra.add(key);
-                alias.forEach((a) => extra.add(a));
-              }
-            });
+            const arr = tagAliasMapConfig[tagLower];
+            if (arr) arr.forEach((i) => extra.add(i));
           });
         }
         // 描述 Frontmatter 中的 `description`

@@ -13,15 +13,86 @@ function arrayToLowerCase(arr: string[]) {
   return arr.map((t) => t.toLowerCase());
 }
 
-export const tagsAliasConfig: Record<string, string[]> = {
-  JavaScript: arrayToLowerCase(["js", "JavaScript"]),
-  Kubernetes: arrayToLowerCase(["k8s", "Kubernetes"]),
-  GPU: arrayToLowerCase(["gpu", "显卡"]),
-  Economist: arrayToLowerCase(["economist", "经济学人"]),
-  美食: arrayToLowerCase(["美食", "delicious"]),
-  鲁菜: arrayToLowerCase(["美食", "鲁菜"]),
-  酒: arrayToLowerCase(["酒"]),
-  酱酒: arrayToLowerCase(["酒"]),
-  燕玲春酒: arrayToLowerCase(["酒", "酱酒", "燕玲春酒", "北京华都酒厂"]),
-  北京华都酒厂: arrayToLowerCase(["国企"]),
+type TagAliasConfig = {
+  alias: string[];
+  tags: string[];
 };
+
+function genTagAliasConfig(
+  map: Record<string, TagAliasConfig>
+): Record<string, string[]> {
+  const result: Record<string, string[]> = {};
+  // 1 base
+  Object.keys(map).forEach((key) => {
+    const value = map[key];
+    const keys = new Set<string>([key.toLowerCase(), ...value.alias]);
+    const tags = new Set<string>([...keys, ...value.tags]);
+    keys.forEach((k) => (result[k] = Array.from(tags)));
+  });
+  // 2 recursion
+  Object.keys(result).forEach((key) => {
+    result[key] = handleGenerateTagRescursion(result, result[key], []);
+  });
+  // 3
+  return result;
+}
+
+function handleGenerateTagRescursion(
+  map: Record<string, string[]>,
+  raw: string[] | null,
+  gen: string[]
+): string[] {
+  if (raw) {
+    raw.forEach((tag) => {
+      if (!gen.includes(tag)) {
+        gen.push(tag);
+        gen.push(...handleGenerateTagRescursion(map, map[tag], gen));
+      }
+    });
+  }
+  return gen;
+}
+
+// result search docs/.vuepress/.temp/internal/searchIndex.js
+export const tagAliasMapConfig: Record<string, string[]> = genTagAliasConfig({
+  JavaScript: {
+    alias: arrayToLowerCase(["js"]),
+    tags: arrayToLowerCase([]),
+  },
+  Kubernetes: {
+    alias: arrayToLowerCase(["k8s"]),
+    tags: arrayToLowerCase(["容器编排"]),
+  },
+  运维: {
+    alias: arrayToLowerCase(["operator"]),
+    tags: arrayToLowerCase([]),
+  },
+  GPU: {
+    alias: arrayToLowerCase(["显卡"]),
+    tags: arrayToLowerCase([]),
+  },
+  Economist: {
+    alias: arrayToLowerCase(["经济学人"]),
+    tags: arrayToLowerCase([]),
+  },
+  美食: {
+    alias: arrayToLowerCase(["delicious"]),
+    tags: arrayToLowerCase([]),
+  },
+  鲁菜: {
+    alias: arrayToLowerCase([]),
+    tags: arrayToLowerCase(["美食"]),
+  },
+  酱酒: {
+    alias: arrayToLowerCase([]),
+    tags: arrayToLowerCase(["酒"]),
+  },
+  燕玲春酒: {
+    alias: arrayToLowerCase([]),
+    tags: arrayToLowerCase(["酱酒", "北京华都酒厂"]),
+  },
+  北京华都酒厂: {
+    alias: arrayToLowerCase([]),
+    tags: arrayToLowerCase(["国企"]),
+  },
+});
