@@ -1,9 +1,15 @@
 import process from "node:process";
+import path from "path";
 import { defineUserConfig, defaultTheme } from "vuepress";
 import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
+import { registerComponentsPlugin } from "@vuepress/plugin-register-components";
 import { searchPlugin } from "@vuepress/plugin-search";
 import { headConfig, tagAliasMapConfig } from "./configs/index";
 import { baseConfig, navbarConfig, sidebarConfig } from "./configs/index";
+import appRoot from "app-root-path";
+
+// 获取 ".vupress" 目录的绝对路径
+const __dirname = appRoot.resolve("docs/.vuepress/");
 
 export default defineUserConfig({
   // set site base to default value
@@ -108,6 +114,9 @@ export default defineUserConfig({
         }
         return Array.from(extra);
       },
+    }),
+    registerComponentsPlugin({
+      componentsDir: path.resolve(__dirname, "./components"),
     }),
   ],
 });
