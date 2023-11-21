@@ -10,6 +10,15 @@ export const navbarConfig: NavbarConfig = [
     link: "/travel/",
   },
   {
+    text: "语言笔记",
+    children: [
+      {
+        text: "英语",
+        children: ["/language/english/"],
+      },
+    ],
+  },
+  {
     text: "美术笔记",
     children: [
       {
@@ -24,33 +33,54 @@ export const navbarConfig: NavbarConfig = [
       {
         text: "前端开发",
         children: [
-          "/dev/js/",
-          "/dev/ts/",
+          {
+            text: "JavaScript",
+            link: "/dev/front-end/js/",
+          },
+          {
+            text: "TypeScript",
+            link: "/dev/front-end/ts/",
+          },
           {
             text: "vue",
             ariaLabel: "Vue 开发笔记",
-            link: "/dev/vue/",
+            link: "/dev/front-end/vue/",
           },
         ],
       },
       {
         text: "后端开发",
-        children: ["/dev/java/"],
+        children: [
+          {
+            text: "Java",
+            link: "/dev/java/java/",
+          },
+          {
+            text: "Spring",
+            link: "/dev/java/spring/",
+          },
+          { text: "Spring Cloud", link: "/dev/java/spring-cloud/" },
+        ],
       },
       {
         text: "开发工具",
-        children: ["/dev/apifox/"],
+        children: [
+          {
+            text: "Apifox",
+            link: "/dev/tool/apifox/",
+          },
+        ],
       },
       {
         text: "集成项目",
         children: [
           {
             text: "若依",
-            link: "/dev/ruoyi-vue/",
+            link: "/dev/project/ruoyi-vue/",
           },
           {
             text: "芋道（若依pro）",
-            link: "/dev/ruoyi-vue-pro/",
+            link: "/dev/project/ruoyi-vue-pro/",
           },
         ],
       },
@@ -59,13 +89,18 @@ export const navbarConfig: NavbarConfig = [
   {
     text: "运维笔记",
     children: [
+      "/ops/structure/",
       {
         text: "容器技术",
-        children: ["/ops/k8s/"],
+        children: [{ text: "Kubernetes", link: "/ops/k8s/" }],
       },
       {
         text: "监控工具",
-        children: ["/ops/zabbix/"],
+        children: [{ text: "Zabbix", link: "/ops/zabbix/" }],
+      },
+      {
+        text: "堡垒机",
+        children: [{ text: "JumpServer", link: "/ops/jumpserver/" }],
       },
     ],
   },
@@ -79,9 +114,12 @@ export const navbarConfig: NavbarConfig = [
       {
         text: "博客",
         children: [
-          "/dev/vuepress/",
           {
-            text: "hugo",
+            text: "Vuepress",
+            link: "/dev/tool/vuepress/",
+          },
+          {
+            text: "Hugo",
             link: "https://lawsssscat.github.io/hugo-usage-doc/",
           },
         ],
