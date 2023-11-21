@@ -55,13 +55,46 @@ function handleGenerateTagRescursion(
 
 // result search docs/.vuepress/.temp/internal/searchIndex.js
 export const tagAliasMapConfig: Record<string, string[]> = genTagAliasConfig({
+  开源: {
+    alias: arrayToLowerCase([
+      "OpenSource",
+      "open source",
+      "open-source",
+      "open_source",
+    ]),
+    tags: arrayToLowerCase([]),
+  },
   JavaScript: {
     alias: arrayToLowerCase(["js"]),
     tags: arrayToLowerCase([]),
   },
+  Java: {
+    alias: arrayToLowerCase([]),
+    tags: arrayToLowerCase([]),
+  },
+  Spring: {
+    alias: arrayToLowerCase([]),
+    tags: arrayToLowerCase(["Java"]),
+  },
+  SpringCloud: {
+    alias: arrayToLowerCase(["spring cloud", "spring-cloud", "spring_cloud"]),
+    tags: arrayToLowerCase(["Spring", "微服务"]),
+  },
+  微服务: {
+    alias: arrayToLowerCase([]),
+    tags: arrayToLowerCase([]),
+  },
+  JumpServer: {
+    alias: arrayToLowerCase([]),
+    tags: arrayToLowerCase(["堡垒机", "开源"]),
+  },
+  堡垒机: {
+    alias: arrayToLowerCase([]),
+    tags: arrayToLowerCase(["跳板机"]),
+  },
   Kubernetes: {
     alias: arrayToLowerCase(["k8s"]),
-    tags: arrayToLowerCase(["容器编排"]),
+    tags: arrayToLowerCase(["容器编排", "微服务"]),
   },
   运维: {
     alias: arrayToLowerCase(["operator"]),
@@ -70,6 +103,26 @@ export const tagAliasMapConfig: Record<string, string[]> = genTagAliasConfig({
   GPU: {
     alias: arrayToLowerCase(["显卡"]),
     tags: arrayToLowerCase([]),
+  },
+  blog: {
+    alias: arrayToLowerCase(["博客"]),
+    tags: arrayToLowerCase([]),
+  },
+  vuepress: {
+    alias: arrayToLowerCase([]),
+    tags: arrayToLowerCase(["博客"]),
+  },
+  面试: {
+    alias: arrayToLowerCase(["interview"]),
+    tags: arrayToLowerCase([]),
+  },
+  Language: {
+    alias: arrayToLowerCase(["语言"]),
+    tags: arrayToLowerCase(["听力", "口语", "写作", "听", "说", "读", "写"]),
+  },
+  English: {
+    alias: arrayToLowerCase(["英语"]),
+    tags: arrayToLowerCase(["语言"]),
   },
   Economist: {
     alias: arrayToLowerCase(["经济学人"]),
