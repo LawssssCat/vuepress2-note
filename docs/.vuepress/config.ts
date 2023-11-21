@@ -18,6 +18,12 @@ export default defineUserConfig({
   // extra tags in `<head>`
   head: [...headConfig],
 
+  markdown: {
+    headers: {
+      level: [2, 3, 4],
+    },
+  },
+
   // site-level locales config
   locales: {
     "/": {
@@ -38,6 +44,7 @@ export default defineUserConfig({
     docsDir: "docs",
 
     colorMode: "dark",
+    sidebarDepth: 4,
 
     locales: {
       "/": {
