@@ -7,8 +7,10 @@ import type {
   SidebarItem,
   SidebarGroup,
 } from "vuepress";
+import appRoot from "app-root-path";
 
-const docsPath = path.join(__dirname, "../../");
+// 获取 ".vupress" 目录的绝对路径
+const docsPath = appRoot.resolve("docs");
 
 function concatPath(...arr: string[]): string {
   return arr.join("/").replace(/\/+/g, "/");
