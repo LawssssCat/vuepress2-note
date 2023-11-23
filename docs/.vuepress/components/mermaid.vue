@@ -1,5 +1,5 @@
 <template>
-  <div class="mermaid">
+  <div class="mermaid" style="background-color: #fff">
     <slot></slot>
   </div>
 </template>
