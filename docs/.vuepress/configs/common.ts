@@ -64,6 +64,18 @@ export const tagAliasMapConfig: Record<string, string[]> = genTagAliasConfig({
     ]),
     tags: arrayToLowerCase([]),
   },
+  安全: {
+    alias: arrayToLowerCase(["Security"]),
+    tags: arrayToLowerCase([]),
+  },
+  验证: {
+    alias: arrayToLowerCase(["Authentication"]),
+    tags: arrayToLowerCase([]),
+  },
+  授权: {
+    alias: arrayToLowerCase(["Authorization"]),
+    tags: arrayToLowerCase([]),
+  },
   JavaScript: {
     alias: arrayToLowerCase(["js"]),
     tags: arrayToLowerCase([]),
@@ -75,6 +87,14 @@ export const tagAliasMapConfig: Record<string, string[]> = genTagAliasConfig({
   Spring: {
     alias: arrayToLowerCase([]),
     tags: arrayToLowerCase(["Java"]),
+  },
+  SpringSecurity: {
+    alias: arrayToLowerCase([
+      "Spring Security",
+      "Spring-Security",
+      "Spring_Security",
+    ]),
+    tags: arrayToLowerCase(["安全", "验证", "授权"]),
   },
   SpringCloud: {
     alias: arrayToLowerCase(["spring cloud", "spring-cloud", "spring_cloud"]),
@@ -102,6 +122,10 @@ export const tagAliasMapConfig: Record<string, string[]> = genTagAliasConfig({
   },
   GPU: {
     alias: arrayToLowerCase(["显卡"]),
+    tags: arrayToLowerCase([]),
+  },
+  tool: {
+    alias: arrayToLowerCase(["tools", "util", "utils", "工具"]),
     tags: arrayToLowerCase([]),
   },
   blog: {

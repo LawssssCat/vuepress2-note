@@ -2,6 +2,9 @@
 title: Vuepress 使用笔记
 tags:
   - vuepress
+  - 博客
+  - 工具
+  - mermaid
 ---
 
 官网（vuepress-next）： <https://v2.vuepress.vuejs.org/zh/> \
@@ -17,6 +20,8 @@ awesome-vuepress： <https://github.com/vuepress/awesome-vuepress>
 + 太花哨，但牛逼 - <https://artiely.github.io/>
 
 ## Vuepress 2.x 配置 Mermaid
+
+mermaid 官网 <https://mermaid.nodejs.cn/>
 
 ~~由于第三方插件 [vuepress-plugin-mermaidjs](https://github.com/eFrane/vuepress-plugin-mermaidjs) 并没有适配最新版的 VuePress 2.x，因此需要手动配置 VuePress 2.x 来渲染 Mermaid 绘图。~~ （已经支持）
 

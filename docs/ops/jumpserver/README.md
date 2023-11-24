@@ -108,8 +108,11 @@ systemctl stop firewalld
 
 # 关闭SELinux
 sed 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config -i
+reboot # 系统级别设置，重启才会生效
 getenforce
 ```
+
+安装依赖
 
 ```bash
 # 配置yum源
@@ -117,4 +120,52 @@ wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos
 wget -O /etc/yum.repos.d/epel.repo https://mirrors.aliyun.com/repo/epel-7.repo
 yum clean all
 yum makecache
+
+# 安装系统初始化所需的软件 （如果系统是最小化安装，则需要安装这些软件）
+yum install -y bash-completion vim lrzsz wget expect net-tools nc nmap tree dos2unix htop iftop iotop unzip telnet sl psmisc nethogs glances bc ntpdate openldap-devel
+```
+
+安装 jumpserver
+
+```bash
+# 安装 jumpserver 所需环境
+yum install -y git python-pip gcc automake autoconf python-devel vim sshpass lrzsz readline-devel
+
+# 修改系统的字符集，改为中文 （希望在 jumpserver 上显示中文，避免乱码）
+localedef -c -f UTF-8 -i zh_CN zh_CN.UTF-8
+export LC_ALL=zh_CN.UTF-8
+# 写入全局配置文件，才能永久生效
+echo 'LANG="zh_CN.UTF-8"' > /etc/locale.conf
+# 检查变量值，确保值均为"zh_CN.UTF-8"
+locale
+######### before
+LANG=en_US.UTF-8
+LC_CTYPE="en_US.UTF-8"
+LC_NUMERIC="en_US.UTF-8"
+LC_TIME="en_US.UTF-8"
+LC_COLLATE="en_US.UTF-8"
+LC_MONETARY="en_US.UTF-8"
+LC_MESSAGES="en_US.UTF-8"
+LC_PAPER="en_US.UTF-8"
+LC_NAME="en_US.UTF-8"
+LC_ADDRESS="en_US.UTF-8"
+LC_TELEPHONE="en_US.UTF-8"
+LC_MEASUREMENT="en_US.UTF-8"
+LC_IDENTIFICATION="en_US.UTF-8"
+LC_ALL=
+######### after
+LANG=zh_CN.UTF-8
+LC_CTYPE="zh_CN.UTF-8"
+LC_NUMERIC="zh_CN.UTF-8"
+LC_TIME="zh_CN.UTF-8"
+LC_COLLATE="zh_CN.UTF-8"
+LC_MONETARY="zh_CN.UTF-8"
+LC_MESSAGES="zh_CN.UTF-8"
+LC_PAPER="zh_CN.UTF-8"
+LC_NAME="zh_CN.UTF-8"
+LC_ADDRESS="zh_CN.UTF-8"
+LC_TELEPHONE="zh_CN.UTF-8"
+LC_MEASUREMENT="zh_CN.UTF-8"
+LC_IDENTIFICATION="zh_CN.UTF-8"
+LC_ALL=zh_CN.UTF-8
 ```

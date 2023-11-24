@@ -11,6 +11,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       text: "绘图",
       children: ["pixel/", "svg/", "stable-diffusion/"],
     },
+    {
+      text: "音视频",
+      children: ["ffmpeg/"],
+    },
   ],
   "/dev/project/": ["ruoyi-vue/", "ruoyi-vue-pro/"],
   "/dev/front-end/": [
@@ -37,6 +41,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["spring/", "spring/interview.md"],
     },
     {
+      text: "Spring Security",
+      children: ["spring/spring-security.md"],
+    },
+    {
       text: "Spring Cloud",
       children: ["spring-cloud/", "spring-cloud/interview.md"],
     },
@@ -51,6 +59,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     {
       text: "体系架构",
       link: "structure.md",
+    },
+    {
+      text: "数据库",
+      children: ["oracle/database.md", "redis/"],
     },
     {
       text: "容器编排",

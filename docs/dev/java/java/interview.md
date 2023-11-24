@@ -35,7 +35,7 @@ tags:
 
 ### 哲学家就餐问题 —— 死锁
 
-[![](https://book.awesome-go.fun/uploads/images/gallery/2023-11/scaled-1680-/sJ6P4zTViZU8xWCg-image-1699604189026.png)](https://book.awesome-go.fun/uploads/images/gallery/2023-11/sJ6P4zTViZU8xWCg-image-1699604189026.png)
+![sJ6P4zTViZU8xWCg-image-1699604189026.png](https://s2.loli.net/2023/11/23/Kjw7EzpC5Zh2U4d.png)
 
 OOA - OOD - DDD
 
