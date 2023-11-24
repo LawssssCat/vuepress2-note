@@ -25,6 +25,10 @@ export const navbarConfig: NavbarConfig = [
         text: "绘图",
         children: ["/art/svg/", "/art/pixel/", "/art/stable-diffusion/"],
       },
+      {
+        text: "音视频",
+        children: ["/art/ffmpeg"],
+      },
     ],
   },
   {
@@ -50,6 +54,7 @@ export const navbarConfig: NavbarConfig = [
       },
       {
         text: "后端开发",
+        link: "/dev/back-end/",
         children: [
           {
             text: "Java",
@@ -61,6 +66,23 @@ export const navbarConfig: NavbarConfig = [
           },
           { text: "Spring Cloud", link: "/dev/java/spring-cloud/" },
         ],
+      },
+      // {
+      //   text: "Python开发",
+      //   children: [],
+      // },
+      // {
+      //   text: "Go开发",
+      //   children: [],
+      // },
+      // {
+      //   text: "Rust开发",
+      //   children: [],
+      // },
+      {
+        text: "大数据开发",
+        link: "/dev/big-data/",
+        children: [],
       },
       {
         text: "开发工具",
@@ -90,6 +112,13 @@ export const navbarConfig: NavbarConfig = [
     text: "运维笔记",
     children: [
       "/ops/structure/",
+      {
+        text: "数据库",
+        children: [
+          { text: "Oracle", link: "/ops/oracle/database.md" },
+          { text: "Redis", link: "/ops/redis/" },
+        ],
+      },
       {
         text: "容器技术",
         children: [{ text: "Kubernetes", link: "/ops/k8s/" }],
