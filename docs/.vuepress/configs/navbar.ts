@@ -35,6 +35,11 @@ export const navbarConfig: NavbarConfig = [
     text: "开发笔记",
     children: [
       {
+        text: "算法与数据结构",
+        link: "/dev/algorithm/",
+        children: [],
+      },
+      {
         text: "前端开发",
         children: [
           {
@@ -46,7 +51,7 @@ export const navbarConfig: NavbarConfig = [
             link: "/dev/front-end/ts/",
           },
           {
-            text: "vue",
+            text: "Vue",
             ariaLabel: "Vue 开发笔记",
             link: "/dev/front-end/vue/",
           },
@@ -87,6 +92,10 @@ export const navbarConfig: NavbarConfig = [
       {
         text: "开发工具",
         children: [
+          {
+            text: "Idea",
+            link: "/dev/tool/idea",
+          },
           {
             text: "Apifox",
             link: "/dev/tool/apifox/",

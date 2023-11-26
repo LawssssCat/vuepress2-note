@@ -17,6 +17,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     },
   ],
   "/dev/project/": ["ruoyi-vue/", "ruoyi-vue-pro/"],
+  "/dev/algorithm/": ["README.md", "java.md"],
   "/dev/front-end/": [
     {
       text: "JavaScript",
@@ -50,6 +51,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     },
   ],
   "/dev/tool/": [
+    {
+      text: "Idea",
+      children: ["idea/"],
+    },
     {
       text: "博客",
       children: ["vuepress/"],
