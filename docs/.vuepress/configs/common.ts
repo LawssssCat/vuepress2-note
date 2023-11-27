@@ -172,4 +172,12 @@ export const tagAliasMapConfig: Record<string, string[]> = genTagAliasConfig({
     alias: arrayToLowerCase([]),
     tags: arrayToLowerCase(["国企"]),
   },
+  华为: {
+    alias: arrayToLowerCase(["Huawei"]),
+    tags: arrayToLowerCase([]),
+  },
+  hod: {
+    alias: arrayToLowerCase([]),
+    tags: arrayToLowerCase(["华为", "外包"]),
+  },
 });

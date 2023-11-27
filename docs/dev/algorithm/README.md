@@ -120,7 +120,9 @@ void print(int n) {
 
 ## 数据结构和算法
 
-20 个重点：
+20 个重点： （按常用程度/难易程度排序）
+
+<!--
 
 ```txt
 数据结构
@@ -146,6 +148,8 @@ void print(int n) {
     动态规划
     字符串匹配算法
 ```
+
+-->
 
 ### 数据结构 - 数组
 
@@ -227,8 +231,20 @@ todo
 
 + 除了线程池这种池结构用到队列排队请求，还有那些场景用到队列排队请求？
 + 如何实现无锁并发队列
++ 表达式求值：中缀、后缀、逆波兰（RPN） <https://www.nowcoder.com/practice/9566499a2e1546c0a257e885dfdbf30d>
+  + 中缀转后缀
+    + 数字直接写入RPN
+    + 运算符优先级大进栈，优先级小先出栈写入RPN后进栈
+    + "(" 进栈
+    + ")" 出栈写入RPN
+    + 遍历完成后，全部出栈，写入RPN
+  + 后缀计算
 
-### 算法 - 递归
+### 实现方式 - 递归
+
+一些算法/数据结构遍历需要用到的实现方法。
+
+e.g.
 
 ```java
 int f(int n) {
@@ -243,13 +259,131 @@ int f(int n) {
 1. 子问题解决方法类似
 1. 有中止条件
 
+调试递归:
+
+1. 打印日志发现，递归值。
+2. 结合条件断点进行调试。
+
 #### 递归应用
 
 + DFS 深度优先搜索
 + 前中后序
 + 二叉树遍历
 
-### 算法 - 分治
+### 算法 - 排序🔥
+
+排序算法时间复杂度： <https://blog.csdn.net/LawssssCat/article/details/102798623>
+
+常用的其实就三个：
+
++ 冒泡/插入 —— 喜欢哪个用哪个
++ 快排
++ 二分
+
+#### 冒泡排序（Bubble-Sort）
+
+online visual demo: <https://algorithm-visualizer.org/brute-force/bubble-sort>
+
+```java
+int[] arr = {2,5,9,3,7,6,0,1,99,22,44,4,8};
+// bubble sort —— 
+int n = arr.length;
+boolean swapped;
+do {
+    swapped = false;
+    for (int i=1; i<n; i++) {
+        if(arr[i-1] > arr[i]) {
+            swapped = true;
+            int t = arr[i];
+            arr[i] = arr[i-1];
+            arr[i-1] = t;
+        }
+    }
+    n--;
+} while(swapped);
+System.out.println(Arrays.toString(arr));
+// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 22, 44, 99]
+```
+
+::: tip
+冒泡排序写法有许多。上述的写法初看会有疑问 “为什么swapped为false就可以停止排序了？” 这里解释下：
+
+有这疑问大概是不清楚这个代码做了什么，其实就三步：
+
+1. 检查排序是否正确（从小到大排序`for i=1 .. if(arr[i-1] > arr[i])`）
+    + 如果排序不正确则需要进行下一步替换（`swapped=true`）
+    + 如果排序正确，则任务完成(๑•̀ㅂ•́)و✧（`swapped=false`，`while(swapped)不成立`）
+1. 把最大的放最后，然后排除考虑
+1. 继续第一步（只是考虑范围变小了）
+
+所以，“swapped为false就可以停止排序” 其实就是说 “排序正确！任务完成！”。很直白吧？
+:::
+
+#### 插入排序（Insertion-Sort）
+
+online visual demo: <https://algorithm-visualizer.org/brute-force/insertion-sort>
+
+```java
+int[] arr = {2,5,9,3,7,6,0,1,99,22,44,4,8};
+// insertion sort
+for(int i=1; i<arr.length; i++) {
+    int value = arr[i];
+    int j = i-1;
+    for (; j>=0; j--) {
+        if(arr[j] > value) {
+            arr[j+1] = arr[j];
+        } else {
+            break;
+        }
+    }
+    arr[j+1] = value;
+}
+System.out.println(Arrays.toString(arr));
+// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 22, 44, 99]
+```
+
+::: tip
+插入排序的思想是先把左边的（已知的）排序好，再考虑新的值：
+
+1. 判断新的值位置是否正确（`arr[j] > value`）
+    1. 如果新的值位置不对
+        + 把左边已排序的后移，空出位置（`arr[j+1] = arr[j]`）
+        + 再把新的值 “插入” 到对的位置上（`arr[j+1] = value`）
+    1. 如果新的值位置对了
+        + 继续第一步（只是考虑范围变大了）
+
+💡插入排序这种逐渐把考虑范围扩大的做法和冒泡排序那种逐渐把考虑范围缩小的做法刚好相反！
+:::
+
+#### 选择排序（Selection-Sort）❌
+
+::: danger
+不建议使用
+:::
+
+简而言之： 遍历多次，每次把最大/最小的放在前面/后面。
+
+不建议使用的原因是它的最大、最小、平均时间复杂度都是`O(n^2)`，没有任何优化空间，属于最慢的排序算法。且不稳定。
+
+好处是直观（一个对程序没啥用的好处）
+
+![348604caaf0a1b1d7fee0512822f0e50.webp](https://s2.loli.net/2023/11/26/9iTQkDY1nluM76y.webp)
+
+#### 归并排序（Merge-Sort）✈️
+
+<!-- <Badge type="tip" text="快速" vertical="top" /> -->
+
+Alias: 二分查找
+
+::: tip
+上述的三种排序（冒泡、插入、选择）时间复杂度高，适合小规模排序。下面介绍的归并排序、快速排序时间复杂度`O(n^2)`，可以用在大规模排序上。
+:::
+
+用了 “分治” 思想，用 “递归” 实现。
+
+![db7f892d3355ef74da9cd64aa926dc2b.webp](https://s2.loli.net/2023/11/26/keKQPUSW18izEv7.webp)
+
+#### 快速排序（Quicksort）✈️
 
 ### 算法 - 动态规划
 
@@ -258,26 +392,3 @@ int f(int n) {
 + [x] 极客时间王争《数据结构与算法之美》 【本文图片来源之一】
   + [x] 基础
   + [ ] 实战
-+ [ ] 算法面试题 <https://www.amoscloud.com/zh/ProgramingPractice/NowCoder/Adecco>
-+ [ ] 牛客网（简单、中等难度） <https://www.nowcoder.com/exam/company>
-+ [ ] 力扣（简单、中等难度） <https://leetcode-cn.com/problemset/all/>
-+ [ ] 分类练习：
-  + [x] 基础能力 <https://www.nowcoder.com/practice/649b210ef44446e3b1cd1be6fa4cab5e?tpId=37&&tqId=21258&rp=1&ru=/ta/huawei&qru=/ta/huawei/question-ranking>
-  + [x] 字符串操作 <https://www.nowcoder.com/practice/637062df51674de8ba464e792d1a0ac6?tpId=37&&tqId=21319&rp=1&ru=/ta/huawei&qru=/ta/huawei/question-ranking>
-  + [ ] 栈 <https://www.nowcoder.com/practice/f549ee08ddd84b8485a4fa9aefaf4a38?tpId=37&&tqId=21302&rp=1&ru=/ta/huawei&qru=/ta/huawei/question-ranking>
-  + [x] 链表 <https://www.nowcoder.com/practice/54404a78aec1435a81150f15f899417d?tpId=37&&tqId=21274&rp=1&ru=/ta/huawei&qru=/ta/huawei/question-ranking>
-  + [ ] 排序 <https://www.nowcoder.com/practice/9a763ed59c7243bd8ab706b2da52b7fd?tpId=37&&tqId=21248&rp=1&ru=/ta/huawei&qru=/ta/huawei/question-ranking>
-  + [ ] 搜索遍历 <https://www.nowcoder.com/questionTerminal/cf24906056f4488c9ddb132f317e03bc?answerType=1&f=discussion>
-  + [ ] 字符串
-    + [ ] 字符统计 <https://www.nowcoder.com/practice/c1f9561de1e240099bdb904765da9ad0?tpId=37&&tqId=21325&rp=1&ru=/ta/huawei&qru=/ta/huawei/question-ranking>
-  + [ ] 数组
-    + [ ] 合并区间 <https://www.nowcoder.com/practice/0596b6232ce74b18b60ba0367d7f2492?tpId=182&&tqId=34827&rp=1&ru=/ta/exam-all&qru=/ta/exam-all/question-ranking>
-  + [ ] 链表
-    + [ ] 链表合并： <https://www.nowcoder.com/practice/46bda7f0570a47b6b54a29a0a6ae4c27?tpId=182&&tqId=34634&rp=1&ru=/ta/exam-all&qru=/ta/exam-all/question-ranking>
-  + [ ] 二叉树
-    + [ ] 从中序与后序遍历序列构造二叉树 <https://leetcode-cn.com/explore/learn/card/data-structure-binary-tree/4/conclusion/15/>
-    + [ ] 二叉树的序列化 <https://www.nowcoder.com/practice/e3a3a1a956914d8ca5688ea47a5cf9c9?tpId=182&&tqId=34761&rp=1&ru=/ta/exam-all&qru=/ta/exam-all/question-ranking>
-  + [ ] 动态规划
-    + [ ] 猴子爬山（牛客）/爬楼梯（leetcode） <https://www.nowcoder.com/practice/b178fcef3ed4448c99d7c0297312212d?tpId=182&&tqId=34365&rp=1&ru=/ta/exam-all&qru=/ta/exam-all/question-ranking>
-  + [ ] 数学题 <https://www.nowcoder.com/practice/caf35ae421194a1090c22fe223357dca?tpId=37&&tqId=21330&rp=1&ru=/ta/huawei&qru=/ta/huawei/question-ranking>
-  + [ ] 图 <https://www.nowcoder.com/practice/5427af99168b45f4a14aec195b28a839?tpId=182&&tqId=34439&rp=1&ru=/activity/oj&qru=/ta/exam-all/question-ranking>

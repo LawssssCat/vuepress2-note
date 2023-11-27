@@ -19,6 +19,119 @@ awesome-vuepress： <https://github.com/vuepress/awesome-vuepress>
 + 内容不错 - <https://docs.shanyuhai.top/>
 + 太花哨，但牛逼 - <https://artiely.github.io/>
 
+## 内置功能（默认主题）
+
+### 内置组件 - 提示框
+
+<https://v2.vuepress.vuejs.org/zh/reference/default-theme/markdown.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AE%B9%E5%99%A8>
+
+```markdown
+::: tip
+这是一个提示
+:::
+
+::: warning
+这是一个警告
+:::
+
+::: danger
+这是一个危险警告
+:::
+
+::: details
+这是一个 details 标签
+:::
+```
+
+::: tip
+这是一个提示
+:::
+
+::: warning
+这是一个警告
+:::
+
+::: danger
+这是一个危险警告
+:::
+
+::: details
+这是一个 details 标签
+:::
+
+### 内置组件 - Badge
+
+<https://v2.vuepress.vuejs.org/zh/reference/default-theme/components.html#badge>
+
+```markdown
+- VuePress - <Badge type="tip" text="v2" vertical="top" />
+- VuePress - <Badge type="warning" text="v2" vertical="middle" />
+- VuePress - <Badge type="danger" text="v2" vertical="bottom" />
+```
+
+- VuePress - <Badge type="tip" text="v2" vertical="top" />
+- VuePress - <Badge type="warning" text="v2" vertical="middle" />
+- VuePress - <Badge type="danger" text="v2" vertical="bottom" />
+
+### 内置组件 - CodeGroup
+
+<https://v2.vuepress.vuejs.org/zh/reference/default-theme/components.html#codegroup>
+
+``````markdown
+<CodeGroup>
+  <CodeGroupItem title="PNPM">
+
+```bash:no-line-numbers
+pnpm install
+```
+
+  </CodeGroupItem>
+
+  <CodeGroupItem title="YARN">
+
+```bash:no-line-numbers
+yarn install
+```
+
+  </CodeGroupItem>
+
+  <CodeGroupItem title="NPM" active>
+
+```bash:no-line-numbers
+npm install
+```
+
+  </CodeGroupItem>
+</CodeGroup>
+``````
+
+
+<CodeGroup>
+  <CodeGroupItem title="PNPM">
+
+```bash:no-line-numbers
+pnpm install
+```
+
+  </CodeGroupItem>
+
+  <CodeGroupItem title="YARN">
+
+```bash:no-line-numbers
+yarn install
+```
+
+  </CodeGroupItem>
+
+  <CodeGroupItem title="NPM" active>
+
+```bash:no-line-numbers
+npm install
+```
+
+  </CodeGroupItem>
+</CodeGroup>
+
 ## Vuepress 2.x 配置 Mermaid
 
 mermaid 官网 <https://mermaid.nodejs.cn/>
