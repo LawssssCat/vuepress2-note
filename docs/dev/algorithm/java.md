@@ -6,8 +6,9 @@ title: Java 算法刷题笔记
 
 有个印象，用到想到就行。
 
+### 位运算
+
 ```java
-// 位运算
 // 与（&）、非（~）、或（|）、异或（^）
 int c = m^n;
 int count = 0;
@@ -31,13 +32,17 @@ Integer.toHexString(int i);
 Integer.toOctalString(int i);
 // 10 -> 2
 Integer.toBinaryString(int i);
+```
 
+### 字符串
+
+```java
 // 字符统计（技巧：标准ASCII字符在0~127位上，统计时创建一个128大小的数组即可【我的意思是：不需要map！！！】）
 // 0~9=48~57,A~Z=65~90,a~z=97~122 （没必要记）
 new int[128]
 
-// 字符串
 StringBuffer strb = new StringBuffer(str).reverse(); // 反转
+
 // 字符串 - 前补0
 // 1 // for数字only
   String.format("%07d",321);  
@@ -50,20 +55,31 @@ StringBuffer strb = new StringBuffer(str).reverse(); // 反转
 // 1 // 12300000
   (123 + "00000000").substring(0, 8);
 
-// 正则
+// 字符串 - 保留小数位（原生）
+    String str = String.format("%.2f",5.26419); // 保两位小数
+    double four = Double.parseDouble(str);
+// 保留小数位（DecimalFormat）
+    DecimalFormat format = new DecimalFormat("#.00");
+    String str = format.format(5.26419);
+    double four = Double.parseDouble(str);
+// 保留小数位（BigDecimal）
+    BigDecimal two = new BigDecimal(5.26419);
+    double three = two.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+```
+
+### 正则
+
+```java
 String[] s = str.split("[^a-zA-Z]");
 // matches()方法：匹配整个区域。
 // find()方法：包含
 Pattern.compile("[a-z]").matcher("021Abc9000").find()
+```
 
-// 集合类
-import java.util.*;
-new HashSet<>(); // 去重
-new BitSet(); // 去重，小空间开销
-new LinkedHashMap<String,Integer>(); // key 按存入顺序存储
+### 数组
 
-// 遍历
-// 获取集合后8位
+```java
+// 遍历 - 获取集合后8位
     int count=0;
     for (String key:data.keySet()){
         count++;
@@ -71,6 +87,16 @@ new LinkedHashMap<String,Integer>(); // key 按存入顺序存储
             System.out.println(key+" "+data.get(key));
         }
     }
+```
+
+### 集合类
+
+```java
+import java.util.*;
+new HashSet<>(); // 去重
+new BitSet(); // 去重，小空间开销
+new LinkedHashMap<String,Integer>(); // key 按存入顺序存储
+new TreeMap<Integer, Integer>(); // key 按值有序
 ```
 
 ## 经典
