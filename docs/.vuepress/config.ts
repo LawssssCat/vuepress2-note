@@ -1,6 +1,6 @@
 import process from "node:process";
-import path from "path";
 import { defineUserConfig, defaultTheme } from "vuepress";
+import { getDirname, path } from "@vuepress/utils";
 import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
 import { registerComponentsPlugin } from "@vuepress/plugin-register-components";
 import { searchPlugin } from "@vuepress/plugin-search";
@@ -21,6 +21,15 @@ export default defineUserConfig({
   markdown: {
     headers: {
       level: [2, 3, 4],
+    },
+    importCode: {
+      handleImportPath: (str) => {
+        str = str.replace(
+          /^@code\/java/,
+          path.resolve(appRoot.path, "code/demo-java/src")
+        );
+        return str;
+      },
     },
   },
 

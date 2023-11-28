@@ -126,19 +126,21 @@ void print(int n) {
 
 ```txt
 数据结构
-    数组
-    链表
-    栈
-    队列
-    散列表
-    二叉树
-    堆
+    数组 x
+    链表 x
+    栈 x
+    队列 x
+    散列表 x
+    二叉树 x
+    堆 x
     跳表
     图
     Trie 树
 算法
-    递归
-    排序
+    递归 x
+    排序 x
+      冒泡/插入 x
+      归并/快速 x
     二分查找
     搜索
     哈希算法
@@ -240,7 +242,7 @@ todo
     + 遍历完成后，全部出栈，写入RPN
   + 后缀计算
 
-### 实现方式 - 递归
+### 实现方式 - 递归>
 
 一些算法/数据结构遍历需要用到的实现方法。
 
@@ -284,26 +286,7 @@ int f(int n) {
 
 online visual demo: <https://algorithm-visualizer.org/brute-force/bubble-sort>
 
-```java
-int[] arr = {2,5,9,3,7,6,0,1,99,22,44,4,8};
-// bubble sort —— 
-int n = arr.length;
-boolean swapped;
-do {
-    swapped = false;
-    for (int i=1; i<n; i++) {
-        if(arr[i-1] > arr[i]) {
-            swapped = true;
-            int t = arr[i];
-            arr[i] = arr[i-1];
-            arr[i-1] = t;
-        }
-    }
-    n--;
-} while(swapped);
-System.out.println(Arrays.toString(arr));
-// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 22, 44, 99]
-```
+@[code](@code/java/main/java/org/example/algorithm/SortBubble.java)
 
 ::: tip
 冒泡排序写法有许多。上述的写法初看会有疑问 “为什么swapped为false就可以停止排序了？” 这里解释下：
@@ -323,24 +306,7 @@ System.out.println(Arrays.toString(arr));
 
 online visual demo: <https://algorithm-visualizer.org/brute-force/insertion-sort>
 
-```java
-int[] arr = {2,5,9,3,7,6,0,1,99,22,44,4,8};
-// insertion sort
-for(int i=1; i<arr.length; i++) {
-    int value = arr[i];
-    int j = i-1;
-    for (; j>=0; j--) {
-        if(arr[j] > value) {
-            arr[j+1] = arr[j];
-        } else {
-            break;
-        }
-    }
-    arr[j+1] = value;
-}
-System.out.println(Arrays.toString(arr));
-// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 22, 44, 99]
-```
+@[code](@code/java/main/java/org/example/algorithm/SortInsertion.java)
 
 ::: tip
 插入排序的思想是先把左边的（已知的）排序好，再考虑新的值：
@@ -373,19 +339,49 @@ System.out.println(Arrays.toString(arr));
 
 <!-- <Badge type="tip" text="快速" vertical="top" /> -->
 
-Alias: 二分查找
+online visual demo: <https://algorithm-visualizer.org/divide-and-conquer/merge-sort>
 
 ::: tip
-上述的三种排序（冒泡、插入、选择）时间复杂度高，适合小规模排序。下面介绍的归并排序、快速排序时间复杂度`O(n^2)`，可以用在大规模排序上。
-:::
+上述的三种排序（冒泡、插入、选择）时间复杂度高`O(n^2)`，适合小规模排序。下面介绍的归并排序、快速排序用了“分治”思想和“递归”实现，时间复杂度`O(nlogn)`，可以用在大规模排序上。
 
-用了 “分治” 思想，用 “递归” 实现。
+归并排序 | 最好 | 最坏 | 平均 | 备注
+--- | --- | --- | --- | ---
+时间复杂度 <td colspan=3> `O(nlogn)` </td> | 性能稳定！✅
+空间复杂度 <td colspan=3> `O(n)` </td> | 不是原地排序算法！❌
+稳定性 <td colspan=4> 稳定！✅ </td>
+:::
 
 ![db7f892d3355ef74da9cd64aa926dc2b.webp](https://s2.loli.net/2023/11/26/keKQPUSW18izEv7.webp)
 
+@[code](@code/java/main/java/org/example/algorithm/SortMerge.java)
+
 #### 快速排序（Quicksort）✈️
 
+Alias: 快排 \
+Rel: 二分查找（类似） \
+online visual demo: <https://algorithm-visualizer.org/divide-and-conquer/quicksort>
+
+::: tip
+上述的“归并排序”和这里的“快速排序”都用到了“分治”思想。
+
+归并排序 | 最好 | 最坏 | 平均 | 备注
+--- | --- | --- | --- | ---
+时间复杂度 | `O(n)` | `O(n^2)` | `O(nlogn)` | 性能时好时坏 ☁️
+空间复杂度 <td colspan=3> `O(n)` </td> | 原地排序算法！✅
+稳定性 <td colspan=4> 不稳定！❌ </td>
+:::
+
+![image.png](https://s2.loli.net/2023/11/28/qpDMRZmOBhT3iea.png)
+
+@[code](@code/java/main/java/org/example/algorithm/SortQuick.java)
+
 ### 算法 - 动态规划
+
+“空间” 换 “时间” —— 通过避免重复计算来加速整体速度。
+
+需要用到字典来保存中间计算结果，因此也称 “记忆化搜索”（recursion with memoization） / “带备忘录的递归”（memo） / “递归树的减枝”（Pruning）。
+
+自低向上动态规划
 
 ## 参考
 

@@ -177,3 +177,36 @@ yum install zabbix-server-mysql zabbix-agent -y
 # /etc/opt/rh/ 软件包的所有配置文件都存储在目录中相应的目录中，SCL 包提供了定义使用所包含应用程序所需的环境变量的 shell 脚本。例如：PATH、LD_LIBRARY_PATH和MANPATH这些脚本存储在文件系统中，作为 /opt/rh/package-r
 yum install centos-release-scl -y
 ```
+
+## 其他（todo 整理）
+
+数据库和 Zabbix 配置修改：
+
+```txt
+一共调整了这些
+zabbix:
+StartPollers=500	               Zabbix Server 启动的轮询进程的数量 定义了同时处理监控数据的轮询进程的数量
+StartPollersUnreachable=50    用于指定在处理不可达主机（unreachable hosts）时启动的轮询进程的数量
+StartTrappers=30	              用于指定启动的 trapper 进程数量。Trapper 进程用于接收来自 Zabbix 发送程序（Zabbix sender）的主动监控数据
+StartPingers=5	              用于指定启动的 pinger 进程数量
+StartDiscoverers	              用于指定启动的发现进程数量。Discoverer 进程用于发现新的网络设备和服务，以便将其添加到监控中。
+StartAlerters=30 	              用于指定启动的告警进程数量。Alerter 进程负责发送告警通知，如电子邮件、短信等
+HousekeepingFrequency=1    HousekeepingFrequency 设置为 1。这意味着 "housekeeper" 进程将每秒运行一次。根据注释的信息，该值的范围为 0 到 24。
+MaxHousekeeperDelete=100000   "housekeeper" 每次运行时最多删除的历史数据条目数。默认是 50000。
+CacheSize=2G                       指定 Zabbix Server 的缓存大小，以便提高检索性能
+CacheUpdateFrequency=300  指定缓存更新的频率，以秒为单位。         
+StartDBSyncers=20		指定启动的 DB syncer 进程数量，用于将监控数据同步到数据库。
+HistoryCacheSize=1G	指定历史数据的缓存大小。
+TrendCacheSize=1024M	指定趋势数据的缓存大小。
+ValueCacheSize=2G		指定数值数据的缓存大小。	
+
+
+数据库：
+[mysqld]
+innodb_buffer_pool_size = 11400M           InnoDB 存储引擎使用的内存池大小     设置为物理内存的70%
+innodb_log_buffer_size = 32M	                InnoDB 存储引擎的事务日志缓冲区的大小  这个缓冲区用于存储未提交的事务日志。
+max_connections = 100		设置 MySQL 服务器允许的最大连接数  这是同时处理的客户端连接数的上限。
+thread_cache_size = 16		指定线程缓存的大小  用于缓存线程以提高线程的重用性。这可以减少创建和销毁线程的开销。
+sort_buffer_size = 2M		指定用于执行排序操作的缓冲区大小 对于大型查询，适当设置此值可能有助于提高性能
+read_buffer_size = 2M		指定用于读取数据的缓冲区大小 适当调整此值可能对特定类型的查询有性能优势
+```

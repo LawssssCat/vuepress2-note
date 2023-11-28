@@ -132,6 +132,50 @@ npm install
   </CodeGroupItem>
 </CodeGroup>
 
+### 内置组件 - `@[...](...)`
+
+<https://v2.vuepress.vuejs.org/zh/guide/markdown.html#%E5%AF%BC%E5%85%A5%E4%BB%A3%E7%A0%81%E5%9D%97>
+
+插入文件作为代码块 （拆分文件，方便编辑、统计和复用）
+
+```markdown
+<!-- 最简单的语法 -->
+@[code](../foo.js)
+<!-- 仅导入第 1 行至第 10 行 -->
+@[code{1-10}](../foo.js)
+<!-- 指定代码语言 -->
+@[code js](../foo.js)
+<!-- 行高亮 -->
+@[code js{2,4-5}](../foo.js)
+@[code{3-10} js{3}:no-line-numbers](../foo.js)
+```
+
+自定义路径
+
+```js
+import { getDirname, path } from '@vuepress/utils'
+
+const __dirname = getDirname(import.meta.url)
+
+export default {
+  markdown: {
+    importCode: {
+      handleImportPath: (str) =>
+        str.replace(/^@src/, path.resolve(__dirname, 'path/to/src')),
+    },
+  },
+}
+```
+
+```markdown
+<!-- 会被解析至 'path/to/src/foo.js' -->
+@[code](@src/foo.js)
+```
+
+## 使用 “数据” （data）
+
+todo 有没这功能？要查一下。
+
 ## Vuepress 2.x 配置 Mermaid
 
 mermaid 官网 <https://mermaid.nodejs.cn/>
