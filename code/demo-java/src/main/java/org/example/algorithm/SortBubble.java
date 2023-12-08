@@ -1,6 +1,6 @@
 package org.example.algorithm;
 
-public class SortBubble<T extends Comparable<T>> implements SortFunction<T>, ArrayShowable {
+public class SortBubble<T extends Comparable<T>> implements SortFunction<T> {
     @Override
     public void sort(T[] arr) {
         int n = arr.length;

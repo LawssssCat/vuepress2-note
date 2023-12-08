@@ -242,7 +242,7 @@ todo
     + 遍历完成后，全部出栈，写入RPN
   + 后缀计算
 
-### 实现方式 - 递归>
+### 实现方式 - 递归
 
 一些算法/数据结构遍历需要用到的实现方法。
 
@@ -278,13 +278,19 @@ int f(int n) {
 
 常用的其实就三个：
 
-+ 冒泡/插入 —— 喜欢哪个用哪个
-+ 快排
-+ 二分
++ 冒泡/插入 —— 习惯哪个用哪个
+  + 冒泡 —— 数组、链表
+  + 插入 —— 数组、双向链表
++ 归并 —— 数组，数据量大，同时内存够大
++ 快排 —— 数组，数据量中/大
 
 #### 冒泡排序（Bubble-Sort）
 
 online visual demo: <https://algorithm-visualizer.org/brute-force/bubble-sort>
+
+具体的做法就是：从左往右把相邻的两个对比，把最大/最小的移到右边，然后缩小排序范围。
+
+##### 冒泡排序for数组
 
 @[code](@code/java/main/java/org/example/algorithm/SortBubble.java)
 
@@ -301,6 +307,10 @@ online visual demo: <https://algorithm-visualizer.org/brute-force/bubble-sort>
 
 所以，“swapped为false就可以停止排序” 其实就是说 “排序正确！任务完成！”。很直白吧？
 :::
+
+##### 冒泡排序for链表
+
+@[code](@code/java/main/java/org/example/algorithm/LinkedSortBubble.java)
 
 #### 插入排序（Insertion-Sort）
 
@@ -339,6 +349,7 @@ online visual demo: <https://algorithm-visualizer.org/brute-force/insertion-sort
 
 <!-- <Badge type="tip" text="快速" vertical="top" /> -->
 
+Keywords: 分治、递归\
 online visual demo: <https://algorithm-visualizer.org/divide-and-conquer/merge-sort>
 
 ::: tip
@@ -358,6 +369,7 @@ online visual demo: <https://algorithm-visualizer.org/divide-and-conquer/merge-s
 #### 快速排序（Quicksort）✈️
 
 Alias: 快排 \
+Keywords: 分治、递归\
 Rel: 二分查找（类似） \
 online visual demo: <https://algorithm-visualizer.org/divide-and-conquer/quicksort>
 
@@ -375,16 +387,191 @@ online visual demo: <https://algorithm-visualizer.org/divide-and-conquer/quickso
 
 @[code](@code/java/main/java/org/example/algorithm/SortQuick.java)
 
+#### 线性排序 - 桶排序
+
+todo https://time.geekbang.org/column/article/42038
+
+#### 线性排序 - 计数排序
+
+todo https://time.geekbang.org/column/article/42038
+
+#### 线性排序 - 基数排序
+
+todo https://time.geekbang.org/column/article/42038
+
+### 算法 - 查找
+
+#### 二分查找（Binary-Search）
+
+Alias: 折半查找 \
+Keywords: 分治、递归 \
+online visual demo: <https://algorithm-visualizer.org/divide-and-conquer/quicksort>
+
+时间复杂度： `O(logn)`
+
+::: warning
+能使用二分查找的情况：
+
+1. 只针对数组（随机访问）数据类型。
+1. 有序！
+
+局限：
+
+1. 数据量不能太小 —— 牛刀杀鸡
+1. 数据量不能太大 —— 底层数据不连续（但是，如果是抽象的数据空间呢？）
+:::
+
+##### 二分查找问题
+
++ 如何编程实现“求一个数的平方根”？要求精确到小数点后 6 位。
+
+    ::: tip
+    在求一个数的平方根问题上，用二分查找并不是最优的。（只是这里讲到，所以提到） \
+    最优方法是用牛顿弦切法求解平方根，代码如下供大家参考：
+
+    ```c
+    double number = 15; //待求平方根的数
+    double xini = 10;//初始点
+    while(xini*xini - number > 1e-6) {
+      xini = (number + xini*xini)/2/xini;
+    }
+    ```
+
+    :::
+
++ 快速定位IP对应的省份地址
+
+### 算法 - 回溯算法
+
+回溯通常用递归实现。
+
+解决问题：
+
++ 组合
++ 切割
++ 子集
++ 排列
++ 棋盘： [N皇后](https://www.nowcoder.com/practice/c76408782512486d91eea181107293b6)、数独
+
+深度搜索 DFS / 广度搜索 BFS
+
+### 算法 - 贪心算法
+
+如： [跳跃游戏（LeedCode 55）]()、[分发饼干](https://www.bilibili.com/video/BV1MM411b7cq)
+
+::: tip
+贪心算法本质是先找每个阶段的 “局部最优”，从而推到 “全局最优”！
+
+~~贪心和动态规划非常相似，属于 “有局部最优解” 的动态规划！~~
+
+写贪心算法的核心是找到 “局部最优解”！但是，如何得知 “局部最优” 没有套路（因为需要数学证明）！ \
+💡如果判断使用贪心算法？如果发现局部最优好像能推出全局最优，就试一下！~~至于数学如何证明，做题时不需要思考，样例通过了就行！~~
+:::
+
 ### 算法 - 动态规划
 
-“空间” 换 “时间” —— 通过避免重复计算来加速整体速度。
+如： [最大背包问题]()、[最大子序列](https://www.nowcoder.com/practice/17ba5b5df1fc49ca8d6cf8ea407b1972?tpId=182&tqId=34564&rp=1&ru=/exam/oj)
 
-需要用到字典来保存中间计算结果，因此也称 “记忆化搜索”（recursion with memoization） / “带备忘录的递归”（memo） / “递归树的减枝”（Pruning）。
+::: tip
+动态规划核心思想： “空间” 换 “时间” —— 通过避免重复计算来加速整体速度。
 
-自低向上动态规划
+这个过程需要用到字典来保存中间计算结果，因此也称 “记忆化搜索”（recursion with memoization） / “带备忘录的递归”（memo） / “递归树的减枝”（Pruning）。
+
+~~自低向上动态规划~~
+
+动态规划求解步骤：
+
+1. 设计状态
+1. 确定状态转移方程
+1. 确定初始状态 （状态存到hash表，便于快速访问）
+1. 执行状态转移
+1. 计算最终的解
+
+根据问题的维度可以划分为 “一维动态规划问题”、“二维动态规划问题”、... 一步步来。
+:::
+
+#### 问题：递推
+
+如： [斐波那契数列](https://www.nowcoder.com/practice/ee5d403c1172487f8c7915b3c3d924c6)、[青蛙跳台阶](https://www.nowcoder.com/practice/bfb2a2b3cdbd4bd6bba0d4dca69aa3f0)
+
+#### 问题：编辑距离（Edit-Distance）
+
+<https://www.nowcoder.com/practice/3959837097c7413a961a135d7104c314>
+
+对比两个字符串，可以对字符串编辑（添加/替换/删除）。求最小编辑次数。
+
+参考： （按顺序，循序渐进，一个一个理解）
+
+1. [LeetCode：718.最长重复子数组](https://www.bilibili.com/video/BV178411H7hV/)
+1. [LeetCode：1143.最长公共子序列](https://www.bilibili.com/video/BV1ye4y1L7CQ/)
+1. [LeetCode：583.两个字符串的删除操作](https://www.bilibili.com/video/BV1we4y157wB/)
+1. [LeetCode：72.编辑距离](https://www.bilibili.com/video/BV1qv4y1q78f)
+
+#### 问题：背包问题
+
++ 01背包 —— n种物品，每种物品1个 <https://www.bilibili.com/video/BV1cg411g7Y6/>
++ 完全背包 —— n种物品，每种物品无限个
++ 多重背包 —— n种物品，每种物品数量各不同
+
+### 数据结构 - 跳表
+
+Keywords: 二分查找 \
+Ref: 红黑树（常用来对比）
+
+用来查找的数据结构，查找的时间复杂度`O(logn)`
+
+![image.png](https://s2.loli.net/2023/11/29/y9pEI4abQWxnO7w.png)
+
+#### 跳表问题
+
++ 为什么redis使用跳表来实现有序集合？而不是红黑树？
+
+### 数据结构 - 树
+
+todo
+
++ 题： [LeetCode：106.从中序与后序遍历序列构造二叉树](https://leetcode.cn/leetbook/read/data-structure-binary-tree/xo98qt/)
+  讲解： [代码随想录](https://www.bilibili.com/video/BV1vW4y1i7dn/)
+
+遍历
+
++ 深度优先
+  + 先序、中序、后序
++ 广度优先
+  + 队列
+
+### 数据结构 - 堆
+
+todo
+
+### 数据结构 - 图
+
+图的遍历有两种：深度优先/广度优先
+
+定义： [邻接表](https://www.bilibili.com/video/BV1cK4y197oF/)
+
+#### 遍历
+
+图的遍历有两种策略
+
++ [广度遍历 BFS](https://www.bilibili.com/video/BV1s5411M7vz/) 
+  + 队列
++ [深度遍历 DFS](https://www.bilibili.com/video/BV1py4y137rm/)
+  + 栈
+
+有递归/栈两种实现
+
+
+
 
 ## 参考
 
++ algorithm-visualizer - 算法可视化项目 🎆
+  + github - <https://github.com/algorithm-visualizer/algorithm-visualizer>
+  + 2023年11月28日 45k star
++ B站|《代码随想录》 - <https://www.bilibili.com/video/BV1fA4y1o715/> \
+  博客|《代码随想录》 - <https://programmercarl.com/>
++ 模拟题 - <https://oj.algomooc.com/>
 + [x] 极客时间王争《数据结构与算法之美》 【本文图片来源之一】
-  + [x] 基础
+  + [x] ~~基础 （全是文字，太虚 or 我太菜）~~
   + [ ] 实战

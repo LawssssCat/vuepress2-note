@@ -125,6 +125,7 @@ export const navbarConfig: NavbarConfig = [
         text: "数据库",
         children: [
           { text: "Oracle", link: "/ops/oracle/database.md" },
+          { text: "MySQL", link: "/ops/mysql/" },
           { text: "Redis", link: "/ops/redis/" },
         ],
       },

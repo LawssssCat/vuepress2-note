@@ -2,7 +2,7 @@ package org.example.algorithm;
 
 import java.util.Arrays;
 
-public class SortQuick<T extends Comparable<T>> implements SortFunction<T>, ArrayShowable {
+public class SortQuick<T extends Comparable<T>> implements SortFunction<T> {
 
     @Override
     public void sort(T[] arr) {
@@ -21,7 +21,7 @@ public class SortQuick<T extends Comparable<T>> implements SortFunction<T>, Arra
         int iraw = ir;
         int index = il;
         T value = arr[iraw];
-        for(int i=il+1; i<ir; i++) {
+        for(int i=il; i<=ir; i++) {
             if(arr[i].compareTo(value)<0) { // swap -> i值往前放
                 swap(arr, index, i);
                 index++;
