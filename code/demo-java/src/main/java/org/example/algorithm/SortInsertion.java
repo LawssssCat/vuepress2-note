@@ -1,6 +1,6 @@
 package org.example.algorithm;
 
-public class SortInsertion<T extends Comparable<T>> implements SortFunction<T>, ArrayShowable {
+public class SortInsertion<T extends Comparable<T>> implements SortFunction<T> {
 
     @Override
     public void sort(T[] arr) {

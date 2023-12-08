@@ -99,6 +99,15 @@ new LinkedHashMap<String,Integer>(); // key 按存入顺序存储
 new TreeMap<Integer, Integer>(); // key 按值有序
 ```
 
+### 大数据
+
+```java
+import java.math.BigInteger;
+BigInteger
+import java.math.BigDecimal;
+BigDecimal.valueOf(1);
+```
+
 ## 经典
 
 ### 表达式计算

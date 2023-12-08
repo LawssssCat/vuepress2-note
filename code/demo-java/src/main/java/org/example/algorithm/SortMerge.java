@@ -1,6 +1,6 @@
 package org.example.algorithm;
 
-public class SortMerge<T extends Comparable<T>> implements SortFunction<T>, ArrayShowable {
+public class SortMerge<T extends Comparable<T>> implements SortFunction<T> {
     @Override
     public void sort(T[] arr) {
         if(arr.length<=1) {

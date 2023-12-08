@@ -67,7 +67,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     },
     {
       text: "数据库",
-      children: ["oracle/database.md", "redis/"],
+      children: ["oracle/database.md", "mysql/", "redis/"],
     },
     {
       text: "容器编排",
