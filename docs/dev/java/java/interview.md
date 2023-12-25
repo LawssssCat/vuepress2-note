@@ -10,6 +10,7 @@ tags:
 + [ ] ~~精准突击！2023最新版Java面试短期突击面试题【200P】我会出手带你一周涨薪！ - <https://www.bilibili.com/video/BV1Av4y187hf/?p=2>~~
 + [x] 32小时讲完的大厂高频面试题（MySQL、Redis、Spring、算法、设计模式等） - <https://www.bilibili.com/video/BV1Ad4y1H7VA/>
 + [ ] IT老齐架构600讲 - <https://www.bilibili.com/video/BV1v44y117K9/>
++ [ ] 图灵|24版Spring全家桶面|连环60问 - <https://www.bilibili.com/video/BV1EN411g7M6>
 
 ## Java基础语法
 
@@ -96,6 +97,29 @@ char[] value //
 线程不安全
 运行快
 ```
+
+### 线上项目突发OOM ？如何快速定位OOM问题 ？
+
+https://www.bilibili.com/video/BV1Wu4y1c7N5/
+
+#### 出现OOM的可能原因
+
+出现OOM可能的原因有：
+
+1. 查询一次查太多（全表），一次创建太多对象，申请太多堆内存 —— 解决：减少申请对象的数量，如分页
+1. 内存资源耗尽，没有释放，如jdbcconnection没有释放 —— 解决：资源用完马上释放；使用池化思想（最多申请固定数量的资源，重复使用，超过的需求就排队等待）
+1. 堆内存分配不够日常大对象的开销 —— `jmap --heap`查看堆信息
+
+#### 定位OOM的问题
+
++ 如果系统已经OOM挂了 —— 启动时设置`-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=`，当出现OOM后，会dump一份堆信息到指定目录，分析OOM具体代码位置。（用Java VisualVM分析）
+
+  ::: tip
+  如果设置了上述参数，那么就要确保系统的硬盘空间足够。因为该参数会记录系统的整个运行过程中的所有对象信息，非常占用硬盘空间的！也就说导出时，文件可能会非常大！
+  :::
+
++ 系统运行中未OOM（比如，收到频繁fullgc告警、cpu load飙高告警） —— 导出dump文件：`jmap -dump:format=b,file=xxx.hprof 14660`/`jps; jmap -histo:live 24286`。然后使用`Arthas`工具进行调试。
++ 结合jvisualvm进行调试 —— 查看最多跟业务有关的对象，找到GCroot、查看线程栈
 
 ## JVM
 
@@ -334,13 +358,15 @@ PhantomReference pr = new PhantomReference(str, queue);
 System.out.println(pr.get());
 ```
 
-### Unsafe类
+### Unsafe类 todo
 
 通过 Unsafe类可以间接操作内存 —— 一般用于研究，不在生产使用！
 
 ```java
 
 ```
+
+todo
 
 ## 调试工具
 
@@ -392,6 +418,10 @@ JavaGui 监视和管理控制台
 
 非常好的 Java 运行时可视化工具
 
+### Arthas
+
+todo
+
 ## 类加载器
 
 + bootstrap ClassLoader —— `%JAVA_HOME%/lib`
@@ -402,6 +432,8 @@ JavaGui 监视和管理控制台
 
 + 向上委派
 + 向下查找
+
+![022038kx878v78z8z8l77s.png](https://s2.loli.net/2023/12/15/lrUf8DKZYQ71R3C.png)
 
 ## 异常
 
@@ -762,6 +794,104 @@ aop 面向切面编程
 + AfterReturning
 + AfterThrowing
 
+#### ioc加载过程
+
+`new ApplicationContext()` spring 上下文时开始 ioc 加载 —— bean 的创建过程
+
+Bean初始化过程的几种形态
+
++ 概念态
+
+  `@Bean`/`<bean/>`/`@Lazy`
+
++ 定义态
+
+  `BeanDefinition` 封装 Bean 的生产指标
+
++ 纯净态
+
+  二级缓存，早期暴露 Bean，循环依赖才体现纯净态的作用
+
++ 成熟态
+
+  `singletonOjects` 最终在应用中使用的 Bean
+
+##### IOC机制
+
+1. 接口依赖、具体实现类解耦
+1. 工厂设计模式 BeanFactory
+1. 反射机制
+1. BeanDefinition 配置 Bean 细节 （柔性工厂）
+
+##### 具体IOC容器的加载过程
+
++ 概念态 -- 定义态
+    1. **实例化一个ApplicationContext的对象**；
+    1. 调用bean工厂后置处理器完成扫描；
+    1. 循环解析扫描出来的类； —— 查看类上有没有`@component`注解，由的化会实例化为BeanDefinition
+    1. **实例化一个BeanDefinition对象来存储解析出来的信息**
+    1. 把实例化好的beanDefinition对象put到beanDefinitionMap中缓存起来，以便后面实例化bean；
+    1. 再次调用其他bean工厂后置处理器
++ 定义态 -- 纯净态
+    1. 当然spring还会干很多事，比如国际化，比如注册BeanPostProcessor等等，如果我们只关系如何实例化一个bean的话，那么这一步就是spring调用finishBeanFactoryInitialization方法来实例化单例的bean，实例化之前spring要做验证，需要遍历所有扫描出来的类，依次判断这个bean是否Lazy，是否prototype，是否abstract等等
+    1. 如果验证完成spring在实例化一个bean之前需要推断构造方法，因为spring实例化对象是通过构造方法反射，故而需要知道用哪个构造方法；
+    1. **推断完构造方法后spring调用构造方法反射实例化一个对象**；注意我这里说的是对象、对象、对象；这个时候对象已经实例化出来了，但是并不是一个完整的bean，最简单的体现是这个时候实例化出来的对象属性是没有注入，所以不是一个完整的bean；
++ 纯净态 -- 成熟态
+    1. spring处理合并后的beanDefinition
+    1. 判断是否需要完成属性注入
+    1. **如果需要完成属性注入，则开始注入属性** —— DI循环依赖问题
++ 初始化
+    1. **判断bean的类型回调Aware接口**
+    1. 调用生命周期回调方法
+    1. 如果需要代理完成代理
+    1. put到单例池 —— bean完成 —— 存在spring容器当中
+
+##### IOC过程中的扩展点
+
+::: tip
+记：
+
+1. 注册BeanDefinition时 —— 实现后置处理器接口，注册`@Component`
+1. 实例化bean时 —— Bean实现后置处理器接口
+1. 初始化时 —— Bean实现Aware接口
+1. 初始化时 —— Bean实现接口或者添加方法注解或者注册时指定，生命周期方法
+1. 销毁时 —— Bean实现接口或者添加方法注解或者注册时指定，生命周期方法
+
+:::
+
+1. 注册BeanDefinition时，触发invokeBeanFactoryPostProcessors方法
+    + 接口 BeanDefinitionRegistryPostProcessor
+    + 接口 BeanFactoryPostProcessor
+
+1. 加载`BeanPostProcessor`实现类：在Bean的生命周期中会调用9次Bean的后置处理器
+
+    ![image.png](https://s2.loli.net/2023/12/12/1iKxv2IReyNzkfE.png)
+
+1. 初始化阶段
+
+    1. 初始化阶段调用`XXXAware`接口的`SetXXXAware`方法
+
+        ![image.png](https://s2.loli.net/2023/12/12/XtCdBU6wkqjO5WZ.png)
+        ![image.png](https://s2.loli.net/2023/12/12/ZAPcFzNiesSQtDn.png)
+        ![image.png](https://s2.loli.net/2023/12/12/EuMn3ZBTRlcvema.png)
+
+    1. 生命周期回调：初始化
+        1. 执行`BeanPostProcessor`实现类的`postProcessBeforeInitialization`方法
+        1. 执行`@PostConstruct`注解修饰方法
+        1. 执行`InitializingBean`实现类的`afterPropertiesSet`方法
+        1. 执行`@Bean`的`init-method`属性指定的初始化方法
+        1. 执行`BeanPostProcessor`实现类的`postProcessAfterInitialization`方法
+
+        ![image.png](https://s2.loli.net/2023/12/12/gTqRIZO1SEXM9fC.png)
+
+1. 生命周期回调：销毁阶段
+
+    1. 执行`@PreDestroy`修饰的方法
+    1. 执行`DisposableBean`实现类的`destroy`方法
+    1. 执行`@Bean`的`destroy-method`属性指定的销毁方法
+
+    ![image.png](https://s2.loli.net/2023/12/12/zqnwSZxDUGOI86u.png)
+
 ### SpringBean的生命周期
 
 1. 实例化Bean的对象
@@ -813,6 +943,235 @@ todo
 1. 单例的代理bean通过setter注入的情况无法解决循环依赖问题
 1. 设置`@DependsOn`注解的Bean不能解决循环依赖问题
 
+### 事务
+
+#### 事务三个组件
+
++ PlatformTransactionManager
+  + 事务开启
+  + 事务提交
+  + 事务回滚
++ TransactionDefinition —— 事务定义
+  + 事务传播
+  + 事务隔离
+  + 事务超时
+  + 事务只读
+  + 事务回滚规则
++ TransactionStatus —— 事务状态/事务“本身”
+  + savepoint
+  + flash
+
+#### 事务隔离性
+
+参考mysql事务隔离
+
+#### 事务传播性
+
++ require —— 【默认】没有事务开，有事务加入
++ require-new —— 一律开启事务，两个事务结果相互不影响
++ nested —— 子事务，外事务回滚影响内事务，内事务回滚不影响外事务
++ mandatory —— 当前有事务加入事务，没事务抛异常
++ supports —— 当前有事务加入事务，没事务也不开事务
++ not-supported —— 以非事务方式运行，如果当前有事务也忽略（挂起）
++ never —— 非事务方式运行，如果当前有事务则抛异常
+
+#### 回滚规则
+
+默认回滚运行时异常 runtimeexecption，不回滚检查异常 ioexception
+
+可配置！ rollbackfor / norollbackfor
+
+#### 只读事务
+
+性能
+
+#### 事务超时时间
+
+默认数据库的超时时间
+
+#### 例子
+
+<https://www.bilibili.com/video/BV1Eq4y1R7Ds>
+
+依赖spring-jdbc
+
+```xml
+<dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-context</artifactId>
+  <version>5.3.10</version>
+</dependency>
+<dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-jdbc</artifactId>
+  <version>5.3.10</version>
+</dependency>
+<dependency>
+  <groupId>mysql</groupId>
+  <artifactId>mysql-connector-java</artifactId>
+  <version>8.0.26</version>
+</dependency>
+```
+
+##### 编程式事务
+
+```xml
+<context:component-scan base-package="org.example.demo"/>
+
+<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
+  <property name="password" value="123"/>
+  <property name="username" value="root"/>
+  <property name="url" value="jdbc:mysql:///xxx?serverTimezone=Asia/Shanghai"/>
+  <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+</bean>
+
+<!-- 事务管理器 -->
+<bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
+  <property name="dataSource" ref="dataSource"/>
+</bean>
+<bean class="org.springframework.transaction.support.TransactionTemplate" id="transactionTemplate">
+  <property name="transactionManager" ref="transactionManager"/>
+</bean>
+<bean class="org.springframework.jdbc.core.JdbcTemplate" id="jdbcTemplate">
+  <property name="dataSource" ref="dataSource"/>
+</bean>
+```
+
+编程式事务
+
+```java
+@Component
+public class UserService {
+  @Autowired
+  JdbcTemplate jdbcTemplate;
+
+  // 方式一
+  @Autowired
+  PlatformTransactionManager transactionManager;
+  public void transfer() {
+    DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
+    // ... 事务定义
+    TransactionStatus status = transactionManager.getTransaction(definition);
+    try {
+      jdbcTemplate.update("update user set money = ? where username = ?", 9, "zhangshang");
+      transactionManager.commit(status);
+    } catch (DataAccessException e) {
+      e.printStackTrace();
+      transactionManager.rollback(status);
+    }
+  }
+
+  // 方式二
+  @Autowired
+  TransactionTemplate transactionTemplate;
+  public void transfer2() {
+    transactionTemplate.execute(new TransactionCallbackWithoutResult*() {
+      @Override
+      protected void doInTransactionWithoutResult(TransactionStatus status) {
+        try {
+          jdbcTemplate.update("update user set money = ? where username = ?", 9, "zhangshang");
+        } catch (DataAccessException e) {
+          e.printStackTrace();
+          status.setRollbackOnly();
+        }
+      }
+    })
+  }
+}
+```
+
+##### 声明式事务
+
+```xml
+<!--续上-->
+<!-- 解析切点表达式 -->
+<dependency>
+  <groupId>org.aspectj</groupId>
+  <artifactId>aspectjweaver</artifactId>
+  <version>1.9.7</version>
+</dependency>
+<!-- 提供注解 -->
+<dependency>
+  <groupId>org.aspectj</groupId>
+  <artifactId>aspectjrt</artifactId>
+  <version>1.9.7</version>
+</dependency>
+```
+
+```xml
+<!--续上-->
+<tx:advice id="txAdvice" transaction-manager="transactionManager">
+  <tx:attributes>
+    <tx:method name="add*"/>
+    <tx:method name="insert*"/>
+    <tx:method name="delete*"/>
+    <tx:method name="update*"/>
+    <tx:method name="transfer*"/>
+  </tx:attributes>
+</tx:advice>
+<aop:config>
+  <aop:pointcut id="pc1" expression="execution(* org.javaboy.demo.UserService.*(..))" />
+  <aop:advisor advice-ref="txAdvice" pointcut-ref="pc1"/>
+</aop:config>
+```
+
+```java
+  // 方式三
+  public void transfer3() {
+    jdbcTemplate.update("update user set money = ? where username = ?", 9, "zhangshang");
+  }
+```
+
+##### 配置类方式配置
+
+```xml
+<!-- 开启事务的注解支持 or @EnableTransactionManagement -->
+<tx:annotation-driven>
+```
+
+```java
+@Configuration
+@componentScan(basePackages = "org.example.demo")
+@EnableTransactionManagement
+public class JavaConfig {
+  @Bean
+  DataSource dataSource() {
+    DriverManagerDataSource ds = new DriverManagerDataSource();
+    ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
+    ds.setUsername("root")
+    ds.setPassword("123")
+    ds.setUrl("jdbc:mysql:///xxx?serverTimezone=Asia/Shanghai")
+    return ds;
+  }
+  @Bean
+  JdbcTemplate jdbcTemplate() {
+    return new JdbcTemplate(dataSource());
+  }
+  @Bean
+  PlatformTransactionManager transactionManager() {
+    return new DataSourceTransactionManager(dataSource());
+  }
+}
+```
+
+事务方法上加 `@Transactional`
+
+## SpringMVC
+
+![image.png](https://s2.loli.net/2023/12/09/u5slz1iNmOUZao4.png)
+
+九大组件
+
+1. HandlerMapping —— 根据request找到相应的处理器。
+1. HandlerAdapter —— 调用Handler的适配器。
+1. HandlerExceptionResolver —— 处理异常
+1. ViewResolver —— 将String类型的视图名和Locale解析为View类型的视图
+1. RequestToViewNameTranslator —— 适配Handler的返回值。
+1. LocaleResolver —— 从request中解析出Locale。Locale表示一个区域，如zh-cn，做i18n
+1. ThemeResolver —— 主题解析
+1. MultipartResolver —— 处理上传请求，将普通的request封装成MultipartHttpServletRequest
+1. FlashMapManager —— 用于管理FlashMap，FlashMap用于在redirect重定向中传递参数
+
 ### 过滤器，拦截器
 
 todo
@@ -827,6 +1186,12 @@ todo
   </select>
 </mapper>
 ```
+
+### 和jdbc的区别
+
++ 关注点不同
+  + jdbc 关注如何和数据库厂商做适配
+  + mybatis 关注如何封装事务、sql解析、接口代理反射注入、分页逻辑，从而让crud程序员更好的调用
 
 ### MyBatis的分页实现
 
@@ -1788,6 +2153,17 @@ rLock.unlock();
 
 todo
 
+## 加密
+
++ AES
++ RSA 幂运算 非对称
++ ECC（Elliptic Curve Cryptography）椭圆曲线的非对称加密算法
+
+国密 \
+（参考： <https://mp.weixin.qq.com/s/phcGnGkcYPBvaxQZs33SKw>）
+
++ SM2、SM3、SM4、SM7、SM9
+
 ## 算法
 
 ### 哲学家就餐问题 —— 死锁
@@ -1936,7 +2312,3 @@ private static class MyTask extends Thread {
 ```java
 
 ```
-
-## Activiti 工作流
-
-业务流程管理 BPM Business Process Management

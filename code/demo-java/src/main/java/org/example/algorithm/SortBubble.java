@@ -1,5 +1,8 @@
 package org.example.algorithm;
 
+/**
+ * 冒泡排序
+ */
 public class SortBubble<T extends Comparable<T>> implements SortFunction<T> {
     @Override
     public void sort(T[] arr) {

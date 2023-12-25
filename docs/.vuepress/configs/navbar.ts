@@ -40,7 +40,7 @@ export const navbarConfig: NavbarConfig = [
         children: [],
       },
       {
-        text: "前端开发",
+        text: "前端技术",
         children: [
           {
             text: "JavaScript",
@@ -58,7 +58,7 @@ export const navbarConfig: NavbarConfig = [
         ],
       },
       {
-        text: "后端开发",
+        text: "后端技术",
         link: "/dev/back-end/",
         children: [
           {
@@ -70,6 +70,19 @@ export const navbarConfig: NavbarConfig = [
             link: "/dev/java/spring/",
           },
           { text: "Spring Cloud", link: "/dev/java/spring-cloud/" },
+        ],
+      },
+      {
+        text: "后端业务",
+        children: [
+          {
+            text: "工作流（workflow）",
+            link: "/dev/back-end/workflow/",
+          },
+          {
+            text: "及时通讯（IM）",
+            link: "/dev/back-end/im/",
+          },
         ],
       },
       // {
@@ -84,26 +97,13 @@ export const navbarConfig: NavbarConfig = [
       //   text: "Rust开发",
       //   children: [],
       // },
+      // {
+      //   text: "大数据开发",
+      //   link: "/dev/big-data/",
+      //   children: [],
+      // },
       {
-        text: "大数据开发",
-        link: "/dev/big-data/",
-        children: [],
-      },
-      {
-        text: "开发工具",
-        children: [
-          {
-            text: "Idea",
-            link: "/dev/tool/idea",
-          },
-          {
-            text: "Apifox",
-            link: "/dev/tool/apifox/",
-          },
-        ],
-      },
-      {
-        text: "集成项目",
+        text: "WebBC项目",
         children: [
           {
             text: "若依",
@@ -115,12 +115,39 @@ export const navbarConfig: NavbarConfig = [
           },
         ],
       },
+      {
+        text: "逆向技术",
+        children: [
+          {
+            text: "Android",
+            link: "/dev/reverse/android/",
+          },
+          {
+            text: "Web",
+            link: "/dev/reverse/web/",
+          },
+        ],
+      },
+      {
+        text: "开发工具",
+        children: [
+          {
+            text: "Idea",
+            link: "/dev/tool/idea/",
+          },
+          {
+            text: "Apifox",
+            link: "/dev/tool/apifox/",
+          },
+        ],
+      },
     ],
   },
   {
     text: "运维笔记",
     children: [
       "/ops/structure/",
+      "/dev/tool/terminal/",
       {
         text: "数据库",
         children: [

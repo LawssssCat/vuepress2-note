@@ -1,5 +1,8 @@
 package org.example.algorithm;
 
+/**
+ * 插入排序
+ */
 public class SortInsertion<T extends Comparable<T>> implements SortFunction<T> {
 
     @Override

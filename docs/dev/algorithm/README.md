@@ -379,13 +379,17 @@ online visual demo: <https://algorithm-visualizer.org/divide-and-conquer/quickso
 归并排序 | 最好 | 最坏 | 平均 | 备注
 --- | --- | --- | --- | ---
 时间复杂度 | `O(n)` | `O(n^2)` | `O(nlogn)` | 性能时好时坏 ☁️
-空间复杂度 <td colspan=3> `O(n)` </td> | 原地排序算法！✅
+空间复杂度 <td colspan=3> `O(1)`（不算递归开销） </td> | 原地排序算法！✅
 稳定性 <td colspan=4> 不稳定！❌ </td>
 :::
 
 ![image.png](https://s2.loli.net/2023/11/28/qpDMRZmOBhT3iea.png)
 
 @[code](@code/java/main/java/org/example/algorithm/SortQuick.java)
+
+#### 堆排序
+
+todo 大顶堆、小顶堆
 
 #### 线性排序 - 桶排序
 

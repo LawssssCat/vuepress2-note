@@ -1,7 +1,12 @@
 package org.example.algorithm;
 
-import java.util.Arrays;
-
+/**
+ * 快排 快速排序
+ * 递归、分治
+ * 时间：O(n)/O(nlogn)/O(n^2)
+ * 空间：O(1)（不算递归开销）
+ * 非稳定排序
+ */
 public class SortQuick<T extends Comparable<T>> implements SortFunction<T> {
 
     @Override

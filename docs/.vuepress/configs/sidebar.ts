@@ -5,7 +5,13 @@ import type { SidebarConfig } from "vuepress";
 import { generateSidebarConfig } from "./sidebarUtils";
 
 export const sidebarConfig: SidebarConfig = generateSidebarConfig({
-  "/travel/": [],
+  "/travel/": [
+    "README.md",
+    {
+      text: "中国",
+      children: ["cn/guangdong-dongguan.md"],
+    },
+  ],
   "/art/": [
     {
       text: "绘图",
@@ -18,6 +24,16 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
   ],
   "/dev/project/": ["ruoyi-vue/", "ruoyi-vue-pro/"],
   "/dev/algorithm/": ["README.md", "java.md"],
+  "/dev/reverse/": [
+    {
+      text: "Android",
+      children: ["android/"],
+    },
+    {
+      text: "Web",
+      children: ["web/"],
+    },
+  ],
   "/dev/front-end/": [
     {
       text: "JavaScript",
@@ -32,6 +48,8 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["vue/", "vue/wtf-syntax-meaning.md"],
     },
   ],
+  "/dev/back-end/workflow/": ["README.md", "activiti.md", "flowable.md"],
+  "/dev/back-end/im/": ["README.md"],
   "/dev/java/": [
     {
       text: "Java",
@@ -51,6 +69,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     },
   ],
   "/dev/tool/": [
+    "terminal/",
     {
       text: "Idea",
       children: ["idea/"],

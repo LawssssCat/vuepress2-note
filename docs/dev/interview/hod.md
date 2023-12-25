@@ -1,14 +1,19 @@
 ---
-title: hod准备、过程
+title: hod过程（准备、面试、入职）
 tags:
   - hod
   - 面试
 sidebar: auto
 ---
 
-outsourcing dispatch
+2023
 
-## 1-hj 11月25日~11月30日
+## o0-“术语”
+
++ od outsourcing dispatch
++ ITO Information Technology Outsourcing
+
+## i1-hj 11月25日~11月30日
 
 ### 准备
 
@@ -45,9 +50,9 @@ outsourcing dispatch
     + [x] 合并区间 <https://www.nowcoder.com/practice/0596b6232ce74b18b60ba0367d7f2492?tpId=182&&tqId=34827&rp=1&ru=/ta/exam-all&qru=/ta/exam-all/question-ranking>
   + [x] 链表
     + [x] 链表合并： <https://www.nowcoder.com/practice/46bda7f0570a47b6b54a29a0a6ae4c27?tpId=182&&tqId=34634&rp=1&ru=/ta/exam-all&qru=/ta/exam-all/question-ranking>
-  + [ ] 二叉树
+  + [x] 二叉树
     + [x] 从中序与后序遍历序列构造二叉树 <https://leetcode-cn.com/explore/learn/card/data-structure-binary-tree/4/conclusion/15/>
-    + [ ] 二叉树的序列化 <https://www.nowcoder.com/practice/e3a3a1a956914d8ca5688ea47a5cf9c9?tpId=182&&tqId=34761&rp=1&ru=/ta/exam-all&qru=/ta/exam-all/question-ranking>
+    + [x] 二叉树的序列化 <https://www.nowcoder.com/practice/e3a3a1a956914d8ca5688ea47a5cf9c9?tpId=182&&tqId=34761&rp=1&ru=/ta/exam-all&qru=/ta/exam-all/question-ranking>
   + [x] 动态规划
     + [x] 猴子爬山（牛客）/爬楼梯（leetcode） <https://www.nowcoder.com/practice/b178fcef3ed4448c99d7c0297312212d?tpId=182&&tqId=34365&rp=1&ru=/ta/exam-all&qru=/ta/exam-all/question-ranking>
   + [x] 数学题 <https://www.nowcoder.com/practice/caf35ae421194a1090c22fe223357dca?tpId=37&&tqId=21330&rp=1&ru=/ta/huawei&qru=/ta/huawei/question-ranking>
@@ -78,10 +83,13 @@ shuxue <--- 排名科目
 zhangsan xiaoming
 ```
 
-第三道2星题（200分）也算是简单的题，通过率90%。这个95%的通过率是通过穷举`O(n^3)`实现的。也有正解思路，但是通过率（20%）没有前者高。看不到测试案例，烦死了。 \
-（好在出题人的测试案例安排的友善，居然能用暴力穷举得出这么多答案🙏）
+第三道2星题（200分）也算是简单的题，能想到正解思路dp，但是通过率（20%）（感冒，脑梗塞；菜）。
+后面用暴力穷举`O(n^3)`有居然95%的通过率。 \
+（感谢出题人，测试案例安排的相当友善🙏）
 
 ::: details
+
+答题记录：
 
 ```java
 package org.example;
@@ -222,7 +230,7 @@ if(a==b) return a;
 throw new RuntimeException("输入："+input+"\n输出（期望）："+a+"\n输出（实际）："+b);
 ```
 
-## 2-zc 12月1日
+## i2-zc 12月1日
 
 综测
 
@@ -236,13 +244,13 @@ e.g. 不需要太健谈、不需要太多陌生朋友 —— 搞技术的人设�
 
 -->
 
-## 3-zc 12月5日
+## i3-zc 12月5日
 
-资格测试
+资格测试（hr面试）
 
 半小时左右
 
-## 4-jc2 12月7日
+## i4-jc2 12月7日
 
 先技术测试二面 （因为时间原因先二面。好像说一面面试官是本部门的，二面不是本部门的。）
 
@@ -273,7 +281,7 @@ e.g. 不需要太健谈、不需要太多陌生朋友 —— 搞技术的人设�
     1. springcloud/微服务 描述
     1. ~~描述你前端开发能做到什么程度？~~ （？）
 
-## 4-jc1 12月8日
+## i4-jc1 12月8日
 
 技术一面
 
@@ -286,6 +294,7 @@ e.g. 不需要太健谈、不需要太多陌生朋友 —— 搞技术的人设�
 1. 对比ibatis、mybatis
 1. 对比jdbc和mybatis
 1. 之前项目亮点，具体流程描述、分析、重现
+1. docker、dockerfile、dockercompose细节 e.g. env、run 指令
 1. 情景题： 页面刷新慢怎么办？
     1. 如何确定后端问题
     1. 如何优化数据库查询、分表分库
@@ -295,3 +304,110 @@ e.g. 不需要太健谈、不需要太多陌生朋友 —— 搞技术的人设�
     1. 负数的处理
     1. 如何不转字符串获取下标字符
     1. 缺省关键字protected的作用
+
+## i5-zc 12月12日
+
+综合面试（主管面试） 大概20分钟
+
+主要就是一些普通问题，主管看起来挺友善的（感觉跟我上个领导气质很像，巧合？大佬的共通气质？）。我个人回答的反而有点紧张。😅
+
+1. 自我介绍
+1. 然后挑一个项目讲讲，就介绍了我比较难的那个项目
+1. 到目前为止遇到的难点是什么
+1. 压力大如何缓解
+1. 平时有什么娱乐
+1. 未来的规划
+1. 对公司的了解
+1. 加班文化的理解 —— ~~我说high了，说“能不加班就不加班”，不知道会不会凉凉。~~
+1. 为什么接触编程；为什么写博客；
+1. 上家离职原因
+1. 你还有什么问题 —— ~~暂时没有。。~~
+
+问的有点多，大概就记得这些
+
+## i6-sp 12月13日
+
+收到口头offer，说薪资情况。正式流程还需要审批，大概2~3天才能收到邮箱正式offer。
+
+准备三甲体检、租房
+
+> 2023年12月14日 09点58分 昨天口头offer，今天早上刚上班就收到消息说审批通过了，正式offer今天或者明天，比想象中快~😀
+>
+> 2023年12月15日 收到offer~
+
+## i总结or感想
+
+整个流程从11月25日电话机试邀请，到12月14日正式收到offer，20天，半个月左右，算不算长？感觉还ok，或者说幸好有间隔的时间让我刷题和准备八股。当然，就流程而言，hod算是我见过的最长、最多流程的面试体验了（以至于后期家人朋友都叫我要有多几手准备😅）。
+
+除了流程长外，感觉跟我联系的hrs、接口人都非常尽心友善，感谢、感谢🙏。
+
+最后，下面从网络整理了些相关资料，有好的有质疑的，那就让我亲自去体验吧。可能后面断断续续会有入职/工作体验记录 for self。
+
+## iother|资料整理
+
+<disclaimer/>
+
+经验
+
++ 面试过程21 <https://www.nowcoder.com/discuss/353158075165122560>
++ 面试过程22 <https://zhuanlan.zhihu.com/p/516446294>
++ 面试过程22 <https://www.nowcoder.com/discuss/414191103039000576>
++ 面试过程23 <https://blog.csdn.net/banxia_frontend/article/details/130446311>
++ 面试过程23 <https://www.nowcoder.com/discuss/554359902274072576>
++ 面试过程23 <https://www.nowcoder.com/feed/main/detail/348f671f8f5541bcbfd5d48b34609ae5>
++ 面试过程23 <https://www.nowcoder.com/discuss/532194999023202304>
++ 面试过程23(细) <https://blog.csdn.net/m0_37138074/article/details/126140900>
++ 入职体验 <https://www.zhihu.com/question/356592219/answer/1198212042>
++ 入职体验 <https://www.zhihu.com/question/393448954/answer/2301608196>
++ 入职体验 <https://zhuanlan.zhihu.com/p/639420930>
++ 入职体验 <https://www.nowcoder.com/discuss/386840436000796672>
++ 入职体验 <https://www.zhihu.com/question/346354942>
+  + 面试过程20 <https://www.zhihu.com/question/346354942/answer/1166810638>
+  + 日记 <https://www.zhihu.com/question/346354942/answer/1844702818>
+  + OD介绍 <https://www.zhihu.com/question/346354942/answer/1199831960>
++ 其他 <https://javaguide.cn/high-quality-technical-articles/personal-experience/huawei-od-275-days.html>
+
+```txt
+https://bbs.csdn.net/topics/360211633
+```
+
+~~区别~~
+
+```txt
+周末加班有加班费
+工卡 夜宵 班车
+外网的权限，内部论坛资料 ilearning
+股票分红
+免费宿舍/租房补贴
+申请公寓/心声部门文章/公告
+D1绩效2-3k D2绩效3-4k D3绩效4-5k D4绩效5-6k D5绩效7-8k
+od离职没n＋1
+
+工资等级对照表2022|<https://maimai.cn/article/detail?fid=1736948890&efid=B-OqWZwHHZl7krcn7VRy0Q>
+```
+
+转正
+
+```txt
+基本要求：
+*入职时间：一年以上
+*绩效要求：连续两次绩效A —— 是一年里两次考评都排在部门前10%，能做到属于火车头
+*认证要求：通过可信专业级认证
+*其他条件：根据业务部门的人员需求及指标要求确定
+```
+
+## w0-rz
+
+todo 入职
+
+工作照 <!-- 白底、白衬衫、黑西装、领带 -->
+
+体检 <!-- 三甲 公务员 400报销（所在部门报销） -->
+
+填材料 <!-- 各种：身份、户籍、学历、工作经历、社保缴纳地、... -->
+
+合同
+
+## w1-kx
+
+todo 可信考试
