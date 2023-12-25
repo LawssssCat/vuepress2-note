@@ -1,5 +1,12 @@
 package org.example.algorithm;
 
+/**
+ * 归并排序
+ * 递归、分治
+ * 时间： O(nlogn)
+ * 空间： O(n)
+ * 稳定排序
+ */
 public class SortMerge<T extends Comparable<T>> implements SortFunction<T> {
     @Override
     public void sort(T[] arr) {

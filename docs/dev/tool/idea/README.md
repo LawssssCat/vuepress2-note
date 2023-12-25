@@ -88,3 +88,7 @@ title: Idea 使用笔记
 --- | ---
 隐藏窗口 | Shift + ESC
 切换窗口 🔥 | Ctrl + Tab
+
+## 参考
+
++ IDEA 高效使用指南 - <https://idea.javaguide.cn/> | 必备插件推荐 | 插件开发入门 | 重构小技巧 | 源码阅读技巧

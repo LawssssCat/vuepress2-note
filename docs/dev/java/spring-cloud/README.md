@@ -2,12 +2,57 @@
 title: Spring Cloud 使用笔记
 tags:
   - SpringCloud
+  - todo
 ---
 
 + [ ] todo <https://www.bilibili.com/video/BV1mW4y1q7h9/>
 + [ ] todo <https://www.bilibili.com/video/BV1LQ4y127n4/>
 
-Spring Cloud 由众多子项目组成，如 Spring Cloud Config、Spring Cloud Netflix、Spring Cloud Consul 等，提供了搭建分布式系统及微服务常用的工具，如配置管理、服务发现、断路器、智能路由、微代理、控制总线、一次性token、全局锁、选主、分布式会话和集群状态等，满足了构建微服务所需的所有解决方案。Spring Cloud 基于 Spring Boot, 使得开发部署极其简单。
+Spring Cloud 是一套分布式微服务的技术解决方案，提供了快速构建分布式系统的常用组件，比如配置管理、服务的注册与发现、服务调用的负载均衡、资源隔离、熔断降级等等。
+
++ 配置管理 config
++ 消息总线 bus
++ 服务管理 native
++ 集群 cluster
++ 消息驱动 stream
++ 定时任务 task
++ 服务跟踪 sleuth
++ 服务安全 Security
++ 服务网关 gateway
+
+不过，Spring Cloud 只是 Spring 官方提供的一套标准化的微服务定义，而真正的实现目前有两套方案：Spring Cloud Netflix、Spring Cloud Alibaba。
+
++ Spring Cloud Netflix 基于 Netflix 公司的开源组件集成的一套微服务解决方案，包括：
+  + Eureka 服务注册与发现
+  + Hystrix 服务熔断
+  + Zuul 网关
+  + Ribbon 负载均衡
+  + Feign 服务调用
++ Spring Cloud Alibaba 基于阿里巴巴开源组件集成的一套微服务解决方案，包含：
+  + Nacos服务注册与配置中心
+  + Sentinel 服务监控降级
+  + Dubbo RPC通讯
+  + Seata 分布式事务
+  + RocketMQ 分布式消息系统
+  + SchedulerX 分布式任务调度
+
+微服务周边配套
+
++ 应用监控的全链路自动化
+  + 如在各个微服务、中间件中埋点收集指标，然后自动化上报
++ 分布式链路追踪
+  + Dapper - Google 2010
+  + 鹰眼 - 阿里
+  + Cat - 大众，开源
+  + Zipkin - Twitter 2012开源
+  + Jaeger - Uber 2017开源
+  + Pinpoint - 2015开源
+  + 所形成的技术标准/技术规范：Opentracing+OpenCensus=OpenTelemetry（2019发布）
++ CI/CD整合
+  + service-name与CMDB（物理资源：机房、机架、机器列表等信息）的对应关系
++ 分布式日志采集
+  + ELK体系： ES，LogStash
+  + Kibana
 
 ## RPC
 
