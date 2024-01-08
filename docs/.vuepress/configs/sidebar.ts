@@ -53,7 +53,12 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
   "/dev/java/": [
     {
       text: "Java",
-      children: ["java/", "java/interview.md"],
+      children: [
+        "java/",
+        "java/jdk-io.md",
+        "java/jdk-process.md",
+        "java/interview.md",
+      ],
     },
     {
       text: "Spring",

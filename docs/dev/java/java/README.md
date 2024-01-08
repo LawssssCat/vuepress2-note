@@ -1,5 +1,5 @@
 ---
-title: Java 使用笔记
+title: Java 简介
 ---
 
 ## 工具类封装
