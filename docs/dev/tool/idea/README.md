@@ -2,6 +2,14 @@
 title: Idea 使用笔记
 ---
 
+安装
+
+ja-netfilter \
+https://zhaiblog.cn/169.html
+
+https://3.jetbra.in/ \
+https://jetbra.in/s
+
 ## 快捷键
 
 参考： <https://www.amoscloud.com/zh/attached-table/IDEA-ShortCut> （更全）
