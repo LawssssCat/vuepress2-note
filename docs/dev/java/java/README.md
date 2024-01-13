@@ -2,6 +2,34 @@
 title: Java 使用笔记
 ---
 
+## 规范
+
+记录原则： 少且精，意料之外且有用！
+
+todo
+
+## JDK
+
+### keyword
+
+switch null = NullPointerException
+
+### String
+
+todo normalizer.normalize
+
+### Process
+
+todo Process, Runtime, ProcessBuilder
+
+### JDBC
+
+todo PreparedStatement
+
+### IO/NIO
+
+todo randomaccessfile, bytebuffer.filp/rewind
+
 ## 工具类封装
 
 Hutool 谐音 “糊涂”

@@ -85,12 +85,20 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       link: "structure.md",
     },
     {
+      text: "网络中间件",
+      children: ["nginx/"],
+    },
+    {
       text: "数据库",
-      children: ["oracle/database.md", "mysql/", "redis/"],
+      children: ["oracle/database.md", "mysql/", "postgresql/", "redis/"],
+    },
+    {
+      text: "虚拟化技术",
+      children: ["vmware/", "wsl/"],
     },
     {
       text: "容器编排",
-      children: ["k8s/"],
+      children: ["podman/", "k8s/"],
     },
     {
       text: "监控",

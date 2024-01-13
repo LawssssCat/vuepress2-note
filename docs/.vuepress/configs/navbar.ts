@@ -149,16 +149,40 @@ export const navbarConfig: NavbarConfig = [
       "/ops/structure/",
       "/dev/tool/terminal/",
       {
+        text: "网络中间件",
+        children: [{ text: "Nginx", link: "/ops/nginx/" }],
+      },
+      {
         text: "数据库",
         children: [
           { text: "Oracle", link: "/ops/oracle/database.md" },
           { text: "MySQL", link: "/ops/mysql/" },
+          { text: "PostgreSQL", link: "/ops/postgresql/" },
           { text: "Redis", link: "/ops/redis/" },
         ],
       },
       {
+        text: "虚拟化技术",
+        children: [
+          {
+            text: "VMware",
+            link: "/ops/vmware/",
+          },
+          {
+            text: "WSL",
+            link: "/ops/wsl/",
+          },
+        ],
+      },
+      {
         text: "容器技术",
-        children: [{ text: "Kubernetes", link: "/ops/k8s/" }],
+        children: [
+          {
+            text: "Podman",
+            link: "/ops/podman/",
+          },
+          { text: "Kubernetes", link: "/ops/k8s/" },
+        ],
       },
       {
         text: "监控工具",
