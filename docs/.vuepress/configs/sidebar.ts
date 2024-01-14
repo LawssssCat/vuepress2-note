@@ -7,6 +7,8 @@ import { generateSidebarConfig } from "./sidebarUtils";
 export const sidebarConfig: SidebarConfig = generateSidebarConfig({
   "/travel/": [
     "README.md",
+    "common-sense.md",
+    "car.md",
     {
       text: "中国",
       children: ["cn/guangdong-dongguan.md"],
@@ -68,8 +70,23 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["spring-cloud/", "spring-cloud/interview.md"],
     },
   ],
-  "/dev/tool/": [
-    "terminal/",
+  "/tool/": [
+    {
+      text: "资源管理器",
+      children: ["explorer/onecommander.md"],
+    },
+    {
+      text: "终端界面",
+      children: ["terminal/"],
+    },
+    {
+      text: "包管理",
+      children: ["package/winget.md", "package/scoop.md"],
+    },
+    {
+      text: "版本管理",
+      children: ["git/"],
+    },
     {
       text: "Idea",
       children: ["idea/"],
@@ -117,6 +134,17 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     {
       text: "2023",
       children: ["2023/*"],
+    },
+  ],
+  "/hardware/": [
+    {
+      text: "说明",
+      link: "README.md",
+    },
+    "indicator/",
+    {
+      text: "GPU",
+      children: ["gpu/"],
     },
   ],
 });

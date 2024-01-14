@@ -133,11 +133,11 @@ export const navbarConfig: NavbarConfig = [
         children: [
           {
             text: "Idea",
-            link: "/dev/tool/idea/",
+            link: "/tool/idea/",
           },
           {
             text: "Apifox",
-            link: "/dev/tool/apifox/",
+            link: "/tool/apifox/",
           },
         ],
       },
@@ -147,7 +147,6 @@ export const navbarConfig: NavbarConfig = [
     text: "运维笔记",
     children: [
       "/ops/structure/",
-      "/dev/tool/terminal/",
       {
         text: "网络中间件",
         children: [{ text: "Nginx", link: "/ops/nginx/" }],
@@ -196,17 +195,57 @@ export const navbarConfig: NavbarConfig = [
   },
   {
     text: "硬件笔记",
-    children: ["/hardware/gpu/"],
+    children: ["/hardware/indicator/", "/hardware/gpu/"],
   },
   {
     text: "脑洞工具",
     children: [
       {
+        text: "资源管理器",
+        children: [
+          {
+            text: "OneCommander",
+            link: "/tool/explorer/onecommander.md",
+          },
+        ],
+      },
+      {
+        text: "终端界面",
+        children: [
+          {
+            text: "Terminal",
+            link: "/tool/terminal/",
+          },
+        ],
+      },
+      {
+        text: "包管理",
+        children: [
+          {
+            text: "WinGet",
+            link: "/tool/package/winget.md",
+          },
+          {
+            text: "Scoop",
+            link: "/tool/package/scoop.md",
+          },
+        ],
+      },
+      {
+        text: "版本管理",
+        children: [
+          {
+            text: "Git",
+            link: "/tool/git/",
+          },
+        ],
+      },
+      {
         text: "博客",
         children: [
           {
             text: "Vuepress",
-            link: "/dev/tool/vuepress/",
+            link: "/tool/vuepress/",
           },
           {
             text: "Hugo",
