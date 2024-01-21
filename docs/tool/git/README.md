@@ -2,4 +2,13 @@
 title: Git 使用笔记
 ---
 
-todo 配置
+```bash
+#配置用户名
+git config --global user.name "test"
+#配置邮箱
+git config --global user.email  abc@163.com
+#生成密钥对
+ssh-keygen -t rsa
+#登录验证
+ssh -T git@github.com
+```
