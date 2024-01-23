@@ -24,6 +24,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["ffmpeg/"],
     },
   ],
+  "/dev/overview/": ["test.md"],
   "/dev/project/": ["ruoyi-vue/", "ruoyi-vue-pro/"],
   "/dev/algorithm/": ["README.md", "java.md"],
   "/dev/reverse/": [
@@ -56,6 +57,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     {
       text: "Java",
       children: ["java/", "java/interview.md"],
+    },
+    {
+      text: "构建工具",
+      children: ["maven/"],
     },
     {
       text: "Spring",
@@ -100,6 +105,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     {
       text: "体系架构",
       link: "structure.md",
+    },
+    {
+      text: "DevOps",
+      children: ["cicd/github-actions.md"],
     },
     {
       text: "网络中间件",

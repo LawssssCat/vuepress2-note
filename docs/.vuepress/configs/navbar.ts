@@ -40,6 +40,15 @@ export const navbarConfig: NavbarConfig = [
         children: [],
       },
       {
+        text: "项目管理",
+        children: [
+          {
+            text: "测试",
+            link: "/dev/overview/test.md",
+          },
+        ],
+      },
+      {
         text: "前端技术",
         children: [
           {
@@ -147,6 +156,12 @@ export const navbarConfig: NavbarConfig = [
     text: "运维笔记",
     children: [
       "/ops/structure/",
+      {
+        text: "DevOps",
+        children: [
+          { text: "Github Actions", link: "/ops/cicd/github-actions.md" },
+        ],
+      },
       {
         text: "网络中间件",
         children: [{ text: "Nginx", link: "/ops/nginx/" }],
