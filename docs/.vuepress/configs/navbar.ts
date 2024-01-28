@@ -32,21 +32,16 @@ export const navbarConfig: NavbarConfig = [
     ],
   },
   {
+    text: "硬件笔记",
+    children: ["/hardware/indicator/", "/hardware/gpu/"],
+  },
+  {
     text: "开发笔记",
     children: [
       {
         text: "算法与数据结构",
         link: "/dev/algorithm/",
         children: [],
-      },
-      {
-        text: "项目管理",
-        children: [
-          {
-            text: "测试",
-            link: "/dev/overview/test.md",
-          },
-        ],
       },
       {
         text: "前端技术",
@@ -111,19 +106,6 @@ export const navbarConfig: NavbarConfig = [
       //   link: "/dev/big-data/",
       //   children: [],
       // },
-      {
-        text: "WebBC项目",
-        children: [
-          {
-            text: "若依",
-            link: "/dev/project/ruoyi-vue/",
-          },
-          {
-            text: "芋道（若依pro）",
-            link: "/dev/project/ruoyi-vue-pro/",
-          },
-        ],
-      },
       {
         text: "逆向技术",
         children: [
@@ -209,8 +191,26 @@ export const navbarConfig: NavbarConfig = [
     ],
   },
   {
-    text: "硬件笔记",
-    children: ["/hardware/indicator/", "/hardware/gpu/"],
+    text: "管理笔记",
+    children: [
+      {
+        text: "测试管理",
+        link: "/management/test/",
+      },
+      {
+        text: "Web项目",
+        children: [
+          {
+            text: "若依",
+            link: "/management/project/ruoyi-vue/",
+          },
+          {
+            text: "芋道（若依pro）",
+            link: "/management/project/ruoyi-vue-pro/",
+          },
+        ],
+      },
+    ],
   },
   {
     text: "脑洞工具",

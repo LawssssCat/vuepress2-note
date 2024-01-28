@@ -1,10 +1,14 @@
 ---
-title: Jacoco 使用笔记
-tags:
-  - 代码覆盖率
+title: Jacoco 测试覆盖率插件
 ---
 
 参考： https://www.bilibili.com/video/BV1tr4y1i7f1/
+
+Java 的 UT 代码覆盖率框架。
+
+todo https://www.bilibili.com/video/BV1tr4y1i7f1/
+
+todo surefire/jacoco/codecov/jenkins
 
 代码覆盖率
 
