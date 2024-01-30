@@ -9,15 +9,16 @@
     <version>1.0-SNAPSHOT</version>
 
     <parent>
-        <artifactId>spring-boot-dependencies</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>2.3.3.RELEASE</version>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.12.RELEASE</version>
     </parent>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.platform.version>1.5.2</junit.platform.version>
     </properties>
 
     <dependencies>
@@ -25,6 +26,96 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- DT测试相关 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <!-- 排除Junit4依赖 -->
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- DT测试相关 end -->
+
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <!-- 执行测试用例的插件（默认配置） -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                </configuration>
+            </plugin>
+            <!-- 代码覆盖率 -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.8</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <!-- 准备阶段，该阶段可以提供生成结果的配置信息 -->
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <!-- 默认生成在 target/jacoco.exec, prepare-agent 生成的执行数据 -->
+<!--                            <destFile>target/site/jacoco/jacoco.exec</destFile>-->
+                            <!-- 只统计这里指定的包的覆盖率 -->
+<!--                            <includes>-->
+<!--                                <include>org/example/**</include>-->
+<!--                            </includes>-->
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <!-- 指定生成时机为 test 时执行该行动 -->
+                        <phase>test</phase>
+                        <goals>
+                            <!-- 生成报告阶段 -->
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+<!--                            <dataFile>target/site/jacoco/jacoco.exec</dataFile>-->
+<!--                            <includes>-->
+<!--                                <include>org/example/**</include>-->
+<!--                            </includes>-->
+                            <!-- 生成报告的类型，默认生成所有格式 -->
+                            <formats>
+                                <format>HTML</format>
+                                <format>XML</format>
+                                <format>CSV</format>
+                            </formats>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

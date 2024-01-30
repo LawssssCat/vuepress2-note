@@ -82,6 +82,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
             "java/test/native.md",
             "java/test/junit.md",
             "java/test/mockito.md",
+            "java/test/surefire.md",
             "java/test/jacoco.md",
           ],
         },

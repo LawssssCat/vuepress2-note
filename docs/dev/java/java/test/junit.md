@@ -2,6 +2,49 @@
 title: Junit 单元测试
 ---
 
+## 版本
+
+参考： 
+
++ [在Maven项目中运行JUnit 5测试用例](https://waylau.com/running-junit5-tests-with-maven/)
++ [为什么默认排除 junit-vintage-engine ？](https://www.liujiajia.me/2021/5/14/why-exclude-junit-vintage-engine-by-default)
+
+### Junit5
+
+相比较JUnit 4而言，JUnit 5一个比较大的改变是JUnit 5拥有与JUnit 4不同的全新的API。JUnit 5分成了三部分：
+
+JUnit 5 = JUnit Platform + JUnit Jupiter + JUnit Vintage
+
++ **JUnit Platform** 【基础】 —— 是在JVM上启动测试框架的基础。 它还定义了TestEngine API，用于开发在平台上运行的测试框架。 此外，该JUnit Platform还提供了一个控制台启动器（用于从命令行启动该平台）和一个基于JUnit 4的运行器，用于在基于JUnit 4的环境中在该平台上运行任何TestEngine。 流行的IDE（IntelliJ IDEA，Eclipse，NetBeans和Visual Studio Code等）和构建工具（Gradle，Maven和Ant等）中也存在对JUnit平台的一流支持。
++ **JUnit Jupiter** 【Junit5】 —— 是新编程模型和扩展模型的组合，用于在JUnit 5中编写测试和扩展。Jupiter子项目提供了一个TestEngine，用于在平台上运行基于Jupiter的测试。
++ **JUnit Vintage** 【Junit4】 —— 提供了一个TestEngine，用于在平台上运行基于JUnit 3和基于JUnit 4的测试。
+
+简单的来说： 只使用 Junit5 就使用 JUnit Jupiter；需要向上兼容则使用 JUnit Jupiter + JUnit Vintage；
+
+::: warning
+Junit5 的 `@Test` 在 `org.junit.jupiter.api.*` 包下，别选择错了，否则新版的注释将不生效！
+:::
+
+::: tip
+对于 spring-boot-starter-test 的 2.2.x 和 2.3.x 的用户，如果只想使用 Junit5 则需要像如下方法把 JUnit Vintage 排除。
+因为这两个版本同时包含 JUnit Jupiter 和 JUnit Vintage，如果不排除的话，一个不小心就会把引用写错。
+
+```xml
+<!-- Test -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+    <exclusions>
+        <exclusion>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+:::
+
 ## 关于 `@ExtendWith(SpringExtension.class)` 注解的解释
 
 参考： [解析“@ExtendWith注解“](https://blog.csdn.net/ll1042668699/article/details/128069286)
