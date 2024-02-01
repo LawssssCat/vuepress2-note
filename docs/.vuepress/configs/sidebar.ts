@@ -76,6 +76,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       text: "Java",
       children: [
         "java/",
+        "java/lambda.md",
         {
           text: "Java 测试笔记",
           children: [
@@ -91,7 +92,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     },
     {
       text: "构建工具",
-      children: ["maven/"],
+      children: ["build/", "build/maven.md"],
     },
     {
       text: "Spring",
