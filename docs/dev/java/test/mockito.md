@@ -4,6 +4,10 @@ title: Mockito 代码打桩、检测
 
 Get - When - Then
 
+todo mockito/powermock/BaizeTest for java dt
+
+todo cloudsop/springboot
+
 ## 初始化
 
 注解方式

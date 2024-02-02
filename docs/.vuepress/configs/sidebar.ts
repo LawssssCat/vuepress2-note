@@ -80,11 +80,11 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
         {
           text: "Java 测试笔记",
           children: [
-            "java/test/native.md",
-            "java/test/junit.md",
-            "java/test/mockito.md",
-            "java/test/surefire.md",
-            "java/test/jacoco.md",
+            "test/native.md",
+            "test/junit.md",
+            "test/mockito.md",
+            "test/surefire.md",
+            "test/jacoco.md",
           ],
         },
         "java/interview.md",
