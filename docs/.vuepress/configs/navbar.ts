@@ -127,52 +127,37 @@ export const navbarConfig: NavbarConfig = [
       {
         text: "操作系统",
         link: "/ops/os/",
+        children: [],
       },
       {
         text: "软件包管理",
-        link: "/ops/pkg/",
+        link: "/ops/pkg/yum.md",
+        children: [],
       },
       {
         text: "DevOps",
-        children: [
-          { text: "Github Actions", link: "/ops/cicd/github-actions.md" },
-        ],
+        link: "/ops/cicd/github-actions.md",
+        children: [],
       },
       {
         text: "网络中间件",
-        children: [{ text: "Nginx", link: "/ops/nginx/" }],
+        link: "/ops/nginx/",
+        children: [],
       },
       {
         text: "数据库",
-        children: [
-          { text: "Oracle", link: "/ops/oracle/database.md" },
-          { text: "MySQL", link: "/ops/mysql/" },
-          { text: "PostgreSQL", link: "/ops/postgresql/" },
-          { text: "Redis", link: "/ops/redis/" },
-        ],
+        link: "/ops/oracle/database.md",
+        children: [],
       },
       {
         text: "虚拟化技术",
-        children: [
-          {
-            text: "VMware",
-            link: "/ops/vmware/",
-          },
-          {
-            text: "WSL",
-            link: "/ops/wsl/",
-          },
-        ],
+        link: "/ops/vmware/",
+        children: [],
       },
       {
         text: "容器技术",
-        children: [
-          {
-            text: "Podman",
-            link: "/ops/podman/",
-          },
-          { text: "Kubernetes", link: "/ops/k8s/" },
-        ],
+        link: "/ops/podman/",
+        children: [],
       },
       {
         text: "监控工具",
