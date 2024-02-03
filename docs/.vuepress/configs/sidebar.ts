@@ -107,6 +107,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["spring-cloud/", "spring-cloud/interview.md"],
     },
   ],
+  "/dev/python/": ["README.md"],
   "/tool/": [
     {
       text: "资源管理器",
@@ -137,6 +138,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     {
       text: "体系架构",
       link: "structure.md",
+    },
+    {
+      text: "操作系统",
+      children: ["os/", "os/fedora.md", "os/open-euler.md"],
     },
     {
       text: "DevOps",

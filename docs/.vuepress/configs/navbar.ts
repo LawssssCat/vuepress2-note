@@ -50,15 +50,6 @@ export const navbarConfig: NavbarConfig = [
             text: "JavaScript",
             link: "/dev/front-end/js/",
           },
-          {
-            text: "TypeScript",
-            link: "/dev/front-end/ts/",
-          },
-          {
-            text: "Vue",
-            ariaLabel: "Vue 开发笔记",
-            link: "/dev/front-end/vue/",
-          },
         ],
       },
       {
@@ -70,10 +61,9 @@ export const navbarConfig: NavbarConfig = [
             link: "/dev/java/java/",
           },
           {
-            text: "Spring",
-            link: "/dev/java/spring/",
+            text: "Python",
+            link: "/dev/python/",
           },
-          { text: "Spring Cloud", link: "/dev/java/spring-cloud/" },
         ],
       },
       {
@@ -89,10 +79,6 @@ export const navbarConfig: NavbarConfig = [
           },
         ],
       },
-      // {
-      //   text: "Python开发",
-      //   children: [],
-      // },
       // {
       //   text: "Go开发",
       //   children: [],
@@ -138,6 +124,10 @@ export const navbarConfig: NavbarConfig = [
     text: "运维笔记",
     children: [
       "/ops/structure/",
+      {
+        text: "操作系统",
+        link: "/ops/os/",
+      },
       {
         text: "DevOps",
         children: [
