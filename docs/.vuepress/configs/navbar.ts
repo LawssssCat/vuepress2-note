@@ -129,6 +129,10 @@ export const navbarConfig: NavbarConfig = [
         link: "/ops/os/",
       },
       {
+        text: "软件包管理",
+        link: "/ops/pkg/",
+      },
+      {
         text: "DevOps",
         children: [
           { text: "Github Actions", link: "/ops/cicd/github-actions.md" },

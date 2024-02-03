@@ -144,6 +144,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["os/", "os/fedora.md", "os/open-euler.md"],
     },
     {
+      text: "软件包管理",
+      children: ["pkg/yum.md"],
+    },
+    {
       text: "DevOps",
       children: ["cicd/github-actions.md"],
     },
