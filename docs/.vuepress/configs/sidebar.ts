@@ -26,6 +26,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
   ],
   "/management/": [
     {
+      text: "软件设计",
+      children: ["design/uml.md"],
+    },
+    {
       text: "测试管理",
       children: ["test/"],
     },
@@ -105,6 +109,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     {
       text: "Spring Cloud",
       children: ["spring-cloud/", "spring-cloud/interview.md"],
+    },
+    {
+      text: "Mybatis",
+      children: ["mybatis/"],
     },
   ],
   "/dev/python/": ["README.md"],

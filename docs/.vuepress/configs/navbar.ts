@@ -173,8 +173,12 @@ export const navbarConfig: NavbarConfig = [
     text: "管理笔记",
     children: [
       {
+        text: "软件设计",
+        children: ["/management/design/uml.md"],
+      },
+      {
         text: "测试管理",
-        link: "/management/test/",
+        children: ["/management/test/"],
       },
       {
         text: "Web项目",

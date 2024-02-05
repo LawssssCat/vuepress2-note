@@ -45,6 +45,31 @@ Junit5 的 `@Test` 在 `org.junit.jupiter.api.*` 包下，别选择错了，否�
 ```
 :::
 
+
+## 生命周期
+
+每个 Test Class 执行一次
+
+```java
+@ClassRule
+@ClassBefore
+
+... methods ...
+
+@ClassAfter
+@ClassRule
+```
+
+每个 Test Method 执行一次
+
+```java
+@Rule
+@Before
+@Test
+@After
+@Rule
+```
+
 ## 关于 `@ExtendWith(SpringExtension.class)` 注解的解释
 
 参考： [解析“@ExtendWith注解“](https://blog.csdn.net/ll1042668699/article/details/128069286)
@@ -107,3 +132,35 @@ Before / After
 每个方法前执行 —— @Before、@BeforeEach（Junit5后改名为这个，原方法名依然可用）
 
 测试类中所有方法执行前执行 —— @BeforeClass、@BeforeAll（Junit5后改名为这个，原方法名依然可用）
+
+### `@Rule`
+
+修饰方法前后的处理器。
+
+e.g.
+
+下面例子的处理器 ExceptedException 可以处理方法后抛出的异常：
+
+```java
+@RunWith(SpringJunit4ClassRunner.class)
+public class DaTransferTest {
+    @Rule
+    public ExceptedException exceptedExceptionRule = new ExceptedException();
+
+    @Before void setup() {...}
+    @After void teardown() {...}
+
+    @Test
+    public void doTransfer_GivenExceptionOccuredTest() {
+        DaTransfer spy = Mockito.spy(daTransfer);
+        spy.setHaPoolManager(haPoolManager);
+
+        when(haPoolManager.getSlotHashSize()).thenReturn(100);
+        when(haPoolManager.getBucketHa(any(String.class))).thenThrow(new Exception("Invalid bucket!"));
+
+        exceptedExceptionRule.expect(Exception.class);
+
+        spy.doTransfer(dataSource);
+    }
+}
+```
