@@ -2,6 +2,10 @@
 title: Python 使用笔记
 ---
 
+todo https://www.bilibili.com/video/BV1ZP4y1o7Sc?p=3
+
+官网： https://www.python.org/
+
 ```bash
 $ python -c 'print("hello world")'
 hello world
@@ -129,4 +133,135 @@ pip list -o # 列出可升级安装包
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package
 # 永久使用
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+```
+
+### 安装 IDE PyCharm
+
+todo ja-netfilter https://zhaiblog.cn/169.html
+
+## 基础
+
+```py
+# 格式
+if 2>1:
+  print(123)
+```
+
+#### 注释
+
+```py
+# aaa
+```
+
+#### 字符串
+
+```py
+a = "xxx"
+b = 'xxx'
+c = "xx" \
+    "xx"
+# 多行
+d = """
+xxxxxx
+bbbbb
+"""
+```
+
+字符串运算
+
+```py
+name = "hello world!"
+
+# 切片
+print(name[0:3]) # hel
+print(name[:3]) # hel
+print(name[:3]) # hel
+print(name[-2]) # d!
+print(name[-2:]) # d!
+print(name[-2:-1]) # d
+```
+
+#### 标准输入/输出
+
+```py
+print(1)
+print("1")
+# 转义符
+\n —— 换行
+\r —— 清空行
+\t
+\b
+\\
+# 关闭转义符
+print(r"xxx")
+print(R"xxx")
+
+
+name = input("请输入：")
+```
+
+#### 关键字
+
+```py
+# 关键字
+import keyword
+print(keyword.kwlist) # 列出 python 所有关键字
+
+a = None # 空值 / 内置函数返回值（默认为None）
+```
+
+#### 变量定义/运算
+
+```py
+a = 1
+ddd = a + \
+      b + \
+      c 
+
+# 约定： 大写为常量
+PI = 3.14
+
+
+# 整数 Int
+a = 100
+a = +100
+a = -100
+
+# 浮点 float
+a = 99.99
+
+
+# 布尔 boolean
+bb = True # 值 1
+cc = False # 值 0
+
+
+# 运算
+print(4+5) # 9
+print(4-5) # -1
+print(4*5) # 20 
+print(4/5) # 0.8
+print(4//5) # 0 —— 向下取整
+print(7 % 3) # 1 —— 取余
+print(2 ** 10) # 1024 —— 乘方
+
+print(1+True) # 2
+print(1+False) # 1
+
+# 判断
+print(6>3) # True
+# > 大于
+# >= 大于等于
+# < 小于
+# <= 小于等于
+# != 不等于
+# == 等于
+
+# 逻辑运算
+print(True and True) # True
+print(not True) # False
+a = 3>1 or 2<1
+# and
+# or
+# not
 ```
