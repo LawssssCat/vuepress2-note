@@ -36,6 +36,10 @@ export const navbarConfig: NavbarConfig = [
     children: ["/hardware/indicator/", "/hardware/gpu/"],
   },
   {
+    text: "网络笔记",
+    link: "/network/",
+  },
+  {
     text: "开发笔记",
     children: [
       {

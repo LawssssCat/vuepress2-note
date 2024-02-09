@@ -205,4 +205,5 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["gpu/"],
     },
   ],
+  "/network/": ["README.md"],
 });
