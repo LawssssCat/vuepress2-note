@@ -179,6 +179,73 @@ print(name[:3]) # hel
 print(name[-2]) # d!
 print(name[-2:]) # d!
 print(name[-2:-1]) # d
+# 开始:结尾:步长
+print(name[0:6:2]) # hlo
+print(name[0::2]) # hlowrd 
+print(name[0:len(name):2]) # hlowrd 
+# 反转
+print(name[::-1]) # !dlrow olleh
+
+# 拼接
+print('hello'+' '+'world')
+print(','.join(('hello', 'world','python')))
+print('0'*3) # 000
+
+# 定位
+print('hello world!'.find('o')) # 4
+print('hello world!'.find('o', 5,10)) # 7
+print('hello world!'.find('z')) # -1 —— 找不到！
+print('hello world!'.count('0')) # 2
+
+# 分割
+print("hello world!".split('o')) # ['hell', ' w', 'rld!']
+
+# 替换
+print("hello world!".replace('o', 'Z'))    # hellZ wZrld!
+print("hello world!".replace('o', 'Z', 1)) # hellZ world!
+"    v   ".strip() # trim
+"666    v   ".strip('6') # trim 6
+
+# 大写/小写
+s = "Aa"
+s.upper()
+s.lower()
+```
+
+格式化输出
+
+```py
+"""
+传统的格式化输出方法： %
+%s: 为字符占位，任意类型
+%d: 为整数占位
+%f: 为浮点数占位
+"""
+s1 = '你好，我叫%s！！！今年%d岁！'%('Eason', 18.5) # 18.5 -> 18
+
+"""
+format函数
+"""
+print("你好，我叫{}，今年{}，性别{}".format('鸡哥','练习两年半','男'))    # 你好，我叫鸡哥，今年练习两年半，性别男
+print("你好，我叫{0}，今年{2}，性别{1}".format('鸡哥','练习两年半','男')) # 你好，我叫鸡哥，今年男，性别练习两年半
+
+"""
+语法糖：
+F表达式（F、f均可，python3.6以上支持）
+"""
+name="eason"
+s3=F'你好，我叫{name}！！！'
+print(s3)
+
+
+# 格式化输出格式
+
+# 指定小数点后几位 —— 四舍五入！
+print("橘子： {:.2f}元/斤".format(3.6666)) # 橘子： 3.67元/斤
+
+# 百分比输出
+percent=0.472352
+print(f"占比： {percent:.2%}") # 占比： 47.23%
 ```
 
 #### 标准输入/输出
@@ -264,4 +331,89 @@ a = 3>1 or 2<1
 # and
 # or
 # not
+```
+
+#### 列表
+
+```py
+# 不要求统一数据类型
+list = [1,2,3,"hello world!",[1,2,3,4]]
+
+print(list[0]) # 1
+print(list[4][3]) # 4
+```
+
+运算
+
+```py
+# 加法
+list_1 = [1,2,3]
+list_2 = [4,2,3]
+print(list_1 + list_2) # [1, 2, 3, 4, 2, 3]
+
+# 乘法
+list_1 = [1,2,3]
+print(list_1 * 3) # [1, 2, 3, 1, 2, 3, 1, 2, 3]
+
+# 提取
+list_1 = [1,2,3]
+print(list_1[1:2]) # [2]
+
+# 反转
+list_1 = [1,2,3]
+print(list_1[::-1]) # [3, 2, 1]
+print(list_1.reverse()) # None
+print(list_1) # [3, 2, 1]
+```
+
+增加/删除
+
+```py
+# append —— 加到最后
+a = [1,2,3]
+a.append(4)
+print(a)
+
+# extend —— 添加（多个）到最后
+a = [1,2,3]
+a.extend([4,5,6])
+print(a) # [1, 2, 3, 4, 5, 6]
+# 与 [1,2,3] + [4,5,6] 效果类似
+
+# insert
+a = [1,2,3]
+a.insert(2,99)
+print(a) # [1, 2, 99, 3]
+
+# pop —— 弹出最后
+a = [1,2,3]
+print(a.pop()) # 3
+print(a) # [1, 2]
+
+# del —— 删除关键字 （在计算机内存层面删除）
+a = [1,2,3]
+del a[1] # 删除元素
+del a # 删除数组
+
+# remove —— 删除匹配的
+a = [1,2,3,1]
+print(a.remove(1)) # None
+print(a) # [2, 3, 1]
+
+# clear
+a.clear()
+```
+
+定位
+
+```py
+a = [1,2,99,3,4]
+print(a.index(99)) # 2
+```
+
+复制
+
+```py
+a = [1,2,3]
+b = a.copy()
 ```
