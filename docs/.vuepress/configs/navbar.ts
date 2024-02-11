@@ -32,6 +32,10 @@ export const navbarConfig: NavbarConfig = [
     ],
   },
   {
+    text: "硬件笔记",
+    children: ["/hardware/indicator/", "/hardware/gpu/"],
+  },
+  {
     text: "开发笔记",
     children: [
       {
@@ -46,15 +50,6 @@ export const navbarConfig: NavbarConfig = [
             text: "JavaScript",
             link: "/dev/front-end/js/",
           },
-          {
-            text: "TypeScript",
-            link: "/dev/front-end/ts/",
-          },
-          {
-            text: "Vue",
-            ariaLabel: "Vue 开发笔记",
-            link: "/dev/front-end/vue/",
-          },
         ],
       },
       {
@@ -66,10 +61,9 @@ export const navbarConfig: NavbarConfig = [
             link: "/dev/java/java/",
           },
           {
-            text: "Spring",
-            link: "/dev/java/spring/",
+            text: "Python",
+            link: "/dev/python/",
           },
-          { text: "Spring Cloud", link: "/dev/java/spring-cloud/" },
         ],
       },
       {
@@ -86,10 +80,6 @@ export const navbarConfig: NavbarConfig = [
         ],
       },
       // {
-      //   text: "Python开发",
-      //   children: [],
-      // },
-      // {
       //   text: "Go开发",
       //   children: [],
       // },
@@ -102,19 +92,6 @@ export const navbarConfig: NavbarConfig = [
       //   link: "/dev/big-data/",
       //   children: [],
       // },
-      {
-        text: "WebBC项目",
-        children: [
-          {
-            text: "若依",
-            link: "/dev/project/ruoyi-vue/",
-          },
-          {
-            text: "芋道（若依pro）",
-            link: "/dev/project/ruoyi-vue-pro/",
-          },
-        ],
-      },
       {
         text: "逆向技术",
         children: [
@@ -133,11 +110,11 @@ export const navbarConfig: NavbarConfig = [
         children: [
           {
             text: "Idea",
-            link: "/dev/tool/idea/",
+            link: "/tool/idea/",
           },
           {
             text: "Apifox",
-            link: "/dev/tool/apifox/",
+            link: "/tool/apifox/",
           },
         ],
       },
@@ -147,18 +124,40 @@ export const navbarConfig: NavbarConfig = [
     text: "运维笔记",
     children: [
       "/ops/structure/",
-      "/dev/tool/terminal/",
+      {
+        text: "操作系统",
+        link: "/ops/os/",
+        children: [],
+      },
+      {
+        text: "软件包管理",
+        link: "/ops/pkg/yum.md",
+        children: [],
+      },
+      {
+        text: "DevOps",
+        link: "/ops/cicd/github-actions.md",
+        children: [],
+      },
+      {
+        text: "网络中间件",
+        link: "/ops/nginx/",
+        children: [],
+      },
       {
         text: "数据库",
-        children: [
-          { text: "Oracle", link: "/ops/oracle/database.md" },
-          { text: "MySQL", link: "/ops/mysql/" },
-          { text: "Redis", link: "/ops/redis/" },
-        ],
+        link: "/ops/oracle/database.md",
+        children: [],
+      },
+      {
+        text: "虚拟化技术",
+        link: "/ops/vmware/",
+        children: [],
       },
       {
         text: "容器技术",
-        children: [{ text: "Kubernetes", link: "/ops/k8s/" }],
+        link: "/ops/podman/",
+        children: [],
       },
       {
         text: "监控工具",
@@ -171,18 +170,76 @@ export const navbarConfig: NavbarConfig = [
     ],
   },
   {
-    text: "硬件笔记",
-    children: ["/hardware/gpu/"],
+    text: "管理笔记",
+    children: [
+      {
+        text: "测试管理",
+        link: "/management/test/",
+      },
+      {
+        text: "Web项目",
+        children: [
+          {
+            text: "若依",
+            link: "/management/project/ruoyi-vue/",
+          },
+          {
+            text: "芋道（若依pro）",
+            link: "/management/project/ruoyi-vue-pro/",
+          },
+        ],
+      },
+    ],
   },
   {
     text: "脑洞工具",
     children: [
       {
+        text: "资源管理器",
+        children: [
+          {
+            text: "OneCommander",
+            link: "/tool/explorer/onecommander.md",
+          },
+        ],
+      },
+      {
+        text: "终端界面",
+        children: [
+          {
+            text: "Terminal",
+            link: "/tool/terminal/",
+          },
+        ],
+      },
+      {
+        text: "包管理",
+        children: [
+          {
+            text: "WinGet",
+            link: "/tool/package/winget.md",
+          },
+          {
+            text: "Scoop",
+            link: "/tool/package/scoop.md",
+          },
+        ],
+      },
+      {
+        text: "版本管理",
+        children: [
+          {
+            text: "Git",
+            link: "/tool/git/",
+          },
+        ],
+      },
+      {
         text: "博客",
         children: [
           {
             text: "Vuepress",
-            link: "/dev/tool/vuepress/",
+            link: "/tool/vuepress/",
           },
           {
             text: "Hugo",

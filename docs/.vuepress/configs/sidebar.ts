@@ -7,6 +7,8 @@ import { generateSidebarConfig } from "./sidebarUtils";
 export const sidebarConfig: SidebarConfig = generateSidebarConfig({
   "/travel/": [
     "README.md",
+    "common-sense.md",
+    "car.md",
     {
       text: "中国",
       children: ["cn/guangdong-dongguan.md"],
@@ -20,6 +22,25 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     {
       text: "音视频",
       children: ["ffmpeg/"],
+    },
+  ],
+  "/management/": [
+    {
+      text: "测试管理",
+      children: ["test/"],
+    },
+    {
+      text: "Web项目",
+      children: [
+        {
+          text: "若依",
+          link: "project/ruoyi-vue/",
+        },
+        {
+          text: "芋道（若依pro）",
+          link: "project/ruoyi-vue-pro/",
+        },
+      ],
     },
   ],
   "/dev/project/": ["ruoyi-vue/", "ruoyi-vue-pro/"],
@@ -57,8 +78,23 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
         "java/",
         "java/jdk-io.md",
         "java/jdk-process.md",
+        "java/lambda.md",
+        {
+          text: "Java 测试笔记",
+          children: [
+            "test/native.md",
+            "test/junit.md",
+            "test/mockito.md",
+            "test/surefire.md",
+            "test/jacoco.md",
+          ],
+        },
         "java/interview.md",
       ],
+    },
+    {
+      text: "构建工具",
+      children: ["build/", "build/maven.md"],
     },
     {
       text: "Spring",
@@ -73,8 +109,24 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["spring-cloud/", "spring-cloud/interview.md"],
     },
   ],
-  "/dev/tool/": [
-    "terminal/",
+  "/dev/python/": ["README.md"],
+  "/tool/": [
+    {
+      text: "资源管理器",
+      children: ["explorer/onecommander.md"],
+    },
+    {
+      text: "终端界面",
+      children: ["terminal/"],
+    },
+    {
+      text: "包管理",
+      children: ["package/winget.md", "package/scoop.md"],
+    },
+    {
+      text: "版本管理",
+      children: ["git/"],
+    },
     {
       text: "Idea",
       children: ["idea/"],
@@ -90,12 +142,32 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       link: "structure.md",
     },
     {
+      text: "操作系统",
+      children: ["os/", "os/fedora.md", "os/open-euler.md"],
+    },
+    {
+      text: "软件包管理",
+      children: ["pkg/yum.md"],
+    },
+    {
+      text: "DevOps",
+      children: ["cicd/github-actions.md"],
+    },
+    {
+      text: "网络中间件",
+      children: ["nginx/"],
+    },
+    {
       text: "数据库",
-      children: ["oracle/database.md", "mysql/", "redis/"],
+      children: ["oracle/database.md", "mysql/", "postgresql/", "redis/"],
+    },
+    {
+      text: "虚拟化技术",
+      children: ["vmware/", "wsl/"],
     },
     {
       text: "容器编排",
-      children: ["k8s/"],
+      children: ["podman/", "k8s/"],
     },
     {
       text: "监控",
@@ -114,6 +186,17 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     {
       text: "2023",
       children: ["2023/*"],
+    },
+  ],
+  "/hardware/": [
+    {
+      text: "说明",
+      link: "README.md",
+    },
+    "indicator/",
+    {
+      text: "GPU",
+      children: ["gpu/"],
     },
   ],
 });
