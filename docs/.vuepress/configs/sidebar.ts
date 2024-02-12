@@ -199,4 +199,19 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["gpu/"],
     },
   ],
+  "/network/": [
+    "README.md",
+    {
+      text: "路由系统（ROS）",
+      children: ["openwrt.md"],
+    },
+    {
+      text: "虚拟私人网络（VPN）",
+      children: ["openvpn.md"],
+    },
+    {
+      text: "防火墙（Firewall）",
+      children: ["pfsense.md"],
+    },
+  ],
 });
