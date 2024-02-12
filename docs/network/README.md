@@ -2,8 +2,10 @@
 title: 网络笔记
 ---
 
-todo ping
+todo 概述
 
-todo traceroute/tracepath
+todo ping 参数
 
-todo wireguard
+todo traceroute/tracepath 参数、解释
+
+todo wireguard、openvpn

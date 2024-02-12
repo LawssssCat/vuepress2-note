@@ -80,6 +80,8 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       text: "Java",
       children: [
         "java/",
+        "java/jdk-io.md",
+        "java/jdk-process.md",
         "java/lambda.md",
         {
           text: "Java 测试笔记",
@@ -205,5 +207,19 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["gpu/"],
     },
   ],
-  "/network/": ["README.md"],
+  "/network/": [
+    "README.md",
+    {
+      text: "路由系统（ROS）",
+      children: ["openwrt.md"],
+    },
+    {
+      text: "虚拟私人网络（VPN）",
+      children: ["openvpn.md"],
+    },
+    {
+      text: "防火墙（Firewall）",
+      children: ["pfsense.md"],
+    },
+  ],
 });
