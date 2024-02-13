@@ -267,16 +267,6 @@ print(R"xxx")
 name = input("请输入：")
 ```
 
-#### 关键字
-
-```py
-# 关键字
-import keyword
-print(keyword.kwlist) # 列出 python 所有关键字
-
-a = None # 空值 / 内置函数返回值（默认为None）
-```
-
 #### 变量定义/运算
 
 ```py
@@ -601,4 +591,195 @@ fromkeys = {}.fromkeys(("key1", "key2"), obj)
 print(fromkeys) # {'key1': [1, 2, 3], 'key2': [1, 2, 3]}
 obj.append(4)
 print(fromkeys) # {'key1': [1, 2, 3, 4], 'key2': [1, 2, 3, 4]}
+```
+
+#### 关键字
+
+```py
+# 关键字
+import keyword
+print(keyword.kwlist) # 列出 python 所有关键字
+
+a = None # 空值 / 内置函数返回值（默认为None）
+```
+
+#### 关键字： in
+
+判断“集合”是否包含元素
+
+```py
+# in —— 判断对象是否在序列（列表/字符串/元组/字典）中
+print("4" in "1234") # True
+print(4 in (1,2,3,4)) # True
+print("name" in {"name": "xxx"}) # True —— 判断 keys 集合，不判断 values 集合
+# not in
+print("4" not in "1234") # False
+```
+
+#### 关键字： is （有坑❗）
+
+判断两个对象是否相同
+
+```py
+###############################
+# 数字 / 【字符串】 / 【元组】 —— 所见即所得！
+###############################
+
+a = "111"
+b = "222"
+c = "111"
+
+print(a is b) # False
+print(a is c) # True —— 相当于 Equals ？
+
+###############################
+# 列表 / 字典 / 集合 —— 对象比较
+###############################
+
+# 对象比较 False
+
+print([1] is [1]) # False —— 列表
+print({"name":"haha"} is {"name":"haha"}) # False —— 字典
+print({1} is {1}) # False —— 集合
+
+# 对象指向一致时，才是 True!
+a = {}
+b = a
+print(a is b) # True
+```
+
+#### 数据类型
+
+```py
+print(type(None)) # <class 'NoneType'>
+print(type(True)) # <class 'bool'>
+print(type(1)) # <class 'int'>
+print(type(1.1)) # <class 'float'>
+print(type('1')) # <class 'str'>
+print(type((1,))) # <class 'tuple'>
+print(type({1})) # <class 'set'>
+print(type({"a":1})) # <class 'dict'>
+```
+
+#### 数据类型转换
+
+由于不同的数据类型之间时不能进行运算的，所以我们需要数据类型的转换。
+
+数据类型转换有两种：
+
+1. 自动类型转换 —— Python 在计算中会自动按不同类型的数据转换为同类型的数据（根据优先级）后再进行运算 —— 不推荐！会出现奇奇怪怪的问题；
+1. 强制类型转换 —— 开发者显式地进行数据转换 —— 推荐！诸多开发规范甚至要求在相应场景进行强制类型转换；
+
+##### 自动类型转换
+
+```py
+# 精度等级： 布尔 < 整型 < 浮点型
+
+a = True
+b = 1
+c = 3.14
+
+print(a + b) # 2
+print(b + c) # 4.140000000000001 —— 不推荐！
+
+from decimal import Decimal
+a = Decimal('1')
+b = Decimal('3.14')
+print(a + b) # 4.14 —— 推荐！ python 浮点数计算方式！
+```
+
+##### 强制转换
+
+```py
+#########################
+# 字符串：
+# 1. 所有类型都可以转化为字符串类型
+#########################
+
+# str() —— 把其他类型数据转化为字符串类型
+
+#########################
+# 数字类型： 
+# 1. 数字类型之间可以相互转换
+# 1. 只有字符串可以转换为数字类型
+#########################
+
+# int()
+# float()
+
+print(int("1")) # 1
+# print(int("1.5")) # ValueError: invalid literal for int() with base 10: '1.5'
+print(int(1.1)) # 1
+print(int(1.5)) # 1 —— 向下取整！不是四舍五入！不是！
+print(float(1)) # 1.0
+print(float("1.5"))
+
+#########################
+# 布尔类型：
+# 
+# 转换结果有如下情况：
+# 1. “集合”类型： 字符串、列表、元组、字典、集合
+#     + 内容空 --> False
+#     + 内容非空 --> True
+# 1. 数字类型： int、float
+#     + 0 --> False
+#     + 非0 --> True
+#########################
+
+# bool()
+
+print(bool("")) # False
+print(bool(" ")) # True
+print(bool([])) # False
+print(bool([1])) # True
+print(bool(())) # False
+print(bool((0,))) # True
+print(bool({})) # False
+print(bool({"0":0})) # True
+print(bool(set())) # False
+print(bool(set([0]))) # True
+
+print(bool(0)) # False
+print(bool(1)) # True
+print(bool(0.0)) # False
+print(bool(0.1)) # True
+
+#########################
+# 列表类型：
+# 1. 数字（int、float）类型不能转换为列表❌
+# 1. 字符串（string）类型 —— 每个字符会被转换为列表元素
+# 1. 元组（tuple）类型 —— 一比一对应
+# 1. 字典（dict）类型 —— 保留键
+# 1. 集合（set）类型 —— 一比一对应，但是无序
+#########################
+
+# list()
+
+print(list("1234")) # ['1', '2', '3', '4']
+
+#########################
+# 元组类型： 同 list() ，但无法修改
+#########################
+
+# tuple()
+
+#########################
+# 集合类型： 同 list() ，但无序
+#########################
+
+# set()
+
+#########################
+# 字典类型： 
+# 1. 数字（int、float）类型不能转换为字典❌
+# 1. 字符串（string）类型不能转换为字典❌
+# 1. 列表（list）、元组（tuple）类型 —— [(key,val),...] 形式
+# 1. 集合（set）类型不能转换为字典❌
+#########################
+
+# dict()
+
+print(dict([["k1","v1"], ["k2","v2"]])) # {'k1': 'v1', 'k2': 'v2'}
+print(dict((["k1","v1"], ["k2","v2"]))) # {'k1': 'v1', 'k2': 'v2'}
+print(dict((("k1","v1"), ["k2","v2"]))) # {'k1': 'v1', 'k2': 'v2'}
 ```
