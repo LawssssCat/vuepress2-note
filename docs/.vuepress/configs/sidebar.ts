@@ -158,6 +158,15 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["pkg/yum.md"],
     },
     {
+      text: "文件同步",
+      children: [
+        "sync/",
+        "sync/rsync.md",
+        "sync/freefilesync.md",
+        "sync/syncthing.md",
+      ],
+    },
+    {
       text: "DevOps",
       children: ["cicd/github-actions.md"],
     },
