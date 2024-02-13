@@ -333,7 +333,7 @@ a = 3>1 or 2<1
 # not
 ```
 
-#### 列表
+#### 列表（List）
 
 ```py
 # 不要求统一数据类型
@@ -364,6 +364,18 @@ list_1 = [1,2,3]
 print(list_1[::-1]) # [3, 2, 1]
 print(list_1.reverse()) # None
 print(list_1) # [3, 2, 1]
+
+# 排序
+# ASCII 编码排序： 0~9<A~Z<a~z
+list_1 = ["hello", "world", "hw", "python"]
+list_1.sort()
+print(list_1) # ['hello', 'hw', 'python', 'world']
+list_1.sort(reverse=True)
+print(list_1) # ['world', 'python', 'hw', 'hello']
+
+# 计数
+list_1 = ["hello", "world", "hw", "python", "hello"]
+print(list_1.count("hello")) # 2
 ```
 
 增加/删除
@@ -416,4 +428,177 @@ print(a.index(99)) # 2
 ```py
 a = [1,2,3]
 b = a.copy()
+```
+
+#### 元组（Tuple）
+
+元组与列表类似，不同之处在于元组的元素不能修改。
+
+```py
+# list
+a = [1,2,99,3,4]
+# tuple
+a = (1,2,99,3,4)
+
+# 报错：修改元素
+a = (1,2,3,4)
+a[1] = 99
+
+Traceback (most recent call last):
+  File "xxxx\vuepress2-note\code\demo-python\list-test.py", line 49, in <module>
+    a[1] = 99
+    ~^^^
+TypeError: 'tuple' object does not support item assignment
+
+# 拼接 —— 不允许修改，但是其他可行
+a = (1,2,3)
+b = (4,[1,2])
+print(a + b) # (1, 2, 3, 4, [1, 2])
+```
+
+坑： 只有一个值时，会被识别为普通值，而不是元组
+
+```py
+print((1)) # 1
+print((1,)) # (1,) —— 单值时，元组的写法❗
+print((1,2)) # (1, 2)
+```
+
+#### 集合（Set）
+
+集合是无序的，元素唯一的！ —— 集合用于去重
+
+```py
+print(set("123321")) # {'1', '3', '2'}
+print(set([1,2,3,3,2,1])) # {1, 2, 3}
+d = {
+  "年龄": 18,
+  "名字": "橘子"
+}
+print(set(d)) # {'名字', '年龄'}
+
+# 语法糖
+# tips： 使用这种形式时，不能传入列表/字典
+print({1,2,3,3,2,1}) # {1, 2, 3}
+```
+
+操作
+
+```py
+# add
+a = {1,2,3}
+print(a.add(6)) # None
+print(a.add(2)) # None
+print(a) # {1, 2, 3, 6}
+
+# update —— 合并两个集合
+a = {1,2,3}
+b = {3,4,5}
+print(a.update(b)) # None
+print(a) # {1, 2, 3, 4, 5}
+
+# remove —— 删除，没有就报错
+# discard —— 删除，没有就忽略
+# pop —— 随机删除
+
+# 交集/并集
+a = {1,2,3}
+b = {3,4,5}
+# & —— 交集
+print(a & b) # {3}
+# | —— 并集
+print(a | b) # {1, 2, 3, 4, 5}
+```
+
+#### 字典（Dict）
+
+字典是一种映射类型，它的元素是键值对。
+字典的键必须为不可变类型，且不能重复。
+
+```py
+d = {
+  "年龄": 18,
+  "名字": "橘子",
+  1: 18,
+  (1,2,3): "123"
+}
+print(d) # {'年龄': 18, '名字': '橘子', 1: 18, (1, 2, 3): '123'}
+
+# 另一种定义方式
+d = dict((["年龄", 18], ["姓名", "橘子"], [1, 18], [(1,2,3), "123"]))
+print(d) # {'年龄': 18, '姓名': '橘子', 1: 18, (1, 2, 3): '123'}
+```
+
+操作
+
+```py
+# 增加
+d = {"name": "橘子"}
+d["技能"] = ("python", "java", "js")
+print(d) # {'name': '橘子', '技能': ('python', 'java', 'js')}
+
+# 删除
+d = {"name": "橘子", "技能": ("python", "java", "js")}
+del d['技能']
+print(d) # {'name': '橘子'}
+# pop —— 从字典中移除指定键，并返回该键所对应的值
+d = {"name": "橘子", "age": 18}
+print("pop: " + str(d.pop("age"))) # pop: 18
+print("pop: " + str(d.pop("age", None))) # pop: None
+# popitem —— 用于从字典中删除最后一项，并以元组形式返回该项对应的键值
+obj = {
+  "name": "橘子",
+  "age": 18
+}
+item = obj.popitem()
+print(item) # ('age', 18) —— 删除项
+print(obj) # {'name': '橘子'} —— 剩余字典内容
+
+# setdefault —— 设置键的默认值。若字典中该键已经存在，则忽略设置；若不存在，则添加键、值；
+obj = {
+  "name": "橘子",
+  "age": 18
+}
+obj.setdefault("age", 35)
+obj.setdefault("技能", ("python",))
+print(obj) # {'name': '橘子', 'age': 18, '技能': 'python'}
+# update —— 更新值
+obj = {
+  "name": "橘子",
+  "age": 18
+}
+obj.update({"age": 35, "skill": ("python", "java")})
+print(obj) # {'name': '橘子', 'age': 35, 'skill': ('python', 'java')}
+
+# 查 —— 不安全，会报错
+print(d["name"]) # 橘子
+# print(d["无"]) # 报错： KeyError: '无'
+# 查 —— 安全，不报错，且能设定默认值
+print(d.get("无")) # None
+print(d.get("无", "没有啦~")) # 没有啦~
+
+# 遍历字典
+d = {"name": "橘子", "age": 18}
+# 获取所有键值（key）
+print(d.keys()) # dict_keys(['name', 'age'])
+# 获取所有键值对（item）
+print(d.keys()) # dict_items([('name', '橘子'), ('age', 18)])
+# 获取所有值（value）
+print(d.values()) # dict_values(['橘子', 18])
+
+# 清空（clear） —— 将字典清空
+# 复制（copy） —— 创建字典的副本，修改原字典对象，不会影响其副本
+
+# fromkeys —— 创建一个新字典，默认值 None。注意：并不会看方法对象的内容。
+d = {"name": "橘子", "age": 18}
+print(d.fromkeys(("name", "skill"))) # {'name': None, 'skill': None}
+print({}.fromkeys(("name", "skill"))) # {'name': None, 'skill': None}
+# 可以设定统一的默认值
+print({}.fromkeys(("name", "skill"), 12)) # {'name': 12, 'skill': 12}
+# ❗但是需要注意，值为对象类型时，指向同一个对象
+obj = [1,2,3]
+fromkeys = {}.fromkeys(("key1", "key2"), obj)
+print(fromkeys) # {'key1': [1, 2, 3], 'key2': [1, 2, 3]}
+obj.append(4)
+print(fromkeys) # {'key1': [1, 2, 3, 4], 'key2': [1, 2, 3, 4]}
 ```

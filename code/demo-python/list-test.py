@@ -32,3 +32,22 @@ print(list_1)
 a = [1,2,3]
 a.extend([4,5,6])
 print(a) #
+
+# 排序
+# ASCII 编码排序： 0~9<A~Z<a~z
+list_1 = ["hello", "world", "hw", "python"]
+list_1.sort()
+print(list_1)
+list_1.sort(reverse=True)
+print(list_1)
+
+list_1 = ["hello", "world", "hw", "python", "hello"]
+print(list_1.count("hello"))
+
+a = (1,2,3)
+b = (4,[1,2])
+print(a + b)
+
+print((1))
+print((1,))
+print((1,2))
