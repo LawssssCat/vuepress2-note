@@ -26,6 +26,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
   ],
   "/management/": [
     {
+      text: "软件设计",
+      children: ["design/uml.md"],
+    },
+    {
       text: "测试管理",
       children: ["test/"],
     },
@@ -76,6 +80,8 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       text: "Java",
       children: [
         "java/",
+        "java/jdk-io.md",
+        "java/jdk-process.md",
         "java/lambda.md",
         {
           text: "Java 测试笔记",
@@ -105,6 +111,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     {
       text: "Spring Cloud",
       children: ["spring-cloud/", "spring-cloud/interview.md"],
+    },
+    {
+      text: "Mybatis",
+      children: ["mybatis/"],
     },
   ],
   "/dev/python/": ["README.md"],
@@ -146,6 +156,15 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     {
       text: "软件包管理",
       children: ["pkg/yum.md"],
+    },
+    {
+      text: "文件同步",
+      children: [
+        "sync/",
+        "sync/rsync.md",
+        "sync/freefilesync.md",
+        "sync/syncthing.md",
+      ],
     },
     {
       text: "DevOps",
@@ -195,6 +214,21 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     {
       text: "GPU",
       children: ["gpu/"],
+    },
+  ],
+  "/network/": [
+    "README.md",
+    {
+      text: "路由系统（ROS）",
+      children: ["openwrt.md"],
+    },
+    {
+      text: "虚拟私人网络（VPN）",
+      children: ["openvpn.md"],
+    },
+    {
+      text: "防火墙（Firewall）",
+      children: ["pfsense.md"],
     },
   ],
 });

@@ -36,6 +36,10 @@ export const navbarConfig: NavbarConfig = [
     children: ["/hardware/indicator/", "/hardware/gpu/"],
   },
   {
+    text: "网络笔记",
+    link: "/network/",
+  },
+  {
     text: "开发笔记",
     children: [
       {
@@ -122,59 +126,18 @@ export const navbarConfig: NavbarConfig = [
   },
   {
     text: "运维笔记",
-    children: [
-      "/ops/structure/",
-      {
-        text: "操作系统",
-        link: "/ops/os/",
-        children: [],
-      },
-      {
-        text: "软件包管理",
-        link: "/ops/pkg/yum.md",
-        children: [],
-      },
-      {
-        text: "DevOps",
-        link: "/ops/cicd/github-actions.md",
-        children: [],
-      },
-      {
-        text: "网络中间件",
-        link: "/ops/nginx/",
-        children: [],
-      },
-      {
-        text: "数据库",
-        link: "/ops/oracle/database.md",
-        children: [],
-      },
-      {
-        text: "虚拟化技术",
-        link: "/ops/vmware/",
-        children: [],
-      },
-      {
-        text: "容器技术",
-        link: "/ops/podman/",
-        children: [],
-      },
-      {
-        text: "监控工具",
-        children: [{ text: "Zabbix", link: "/ops/zabbix/" }],
-      },
-      {
-        text: "堡垒机",
-        children: [{ text: "JumpServer", link: "/ops/jumpserver/" }],
-      },
-    ],
+    link: "/ops/structure/",
   },
   {
     text: "管理笔记",
     children: [
       {
+        text: "软件设计",
+        children: ["/management/design/uml.md"],
+      },
+      {
         text: "测试管理",
-        link: "/management/test/",
+        children: ["/management/test/"],
       },
       {
         text: "Web项目",
