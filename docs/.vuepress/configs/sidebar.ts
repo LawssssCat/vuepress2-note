@@ -231,4 +231,5 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["pfsense.md"],
     },
   ],
+  "/security/": ["README.md"],
 });

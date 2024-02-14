@@ -129,6 +129,10 @@ export const navbarConfig: NavbarConfig = [
     link: "/ops/structure/",
   },
   {
+    text: "安全笔记",
+    link: "/security/",
+  },
+  {
     text: "管理笔记",
     children: [
       {
