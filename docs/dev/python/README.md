@@ -636,13 +636,13 @@ print(a is c) # True —— 相当于 Equals ？
 # 列表 / 字典 / 集合 —— 对象比较
 ###############################
 
-# 对象比较 False
+# 对象比较 False❗
 
 print([1] is [1]) # False —— 列表
 print({"name":"haha"} is {"name":"haha"}) # False —— 字典
 print({1} is {1}) # False —— 集合
 
-# 对象指向一致时，才是 True!
+# 对象指向一致时，才是 True❗
 a = {}
 b = a
 print(a is b) # True
@@ -782,4 +782,70 @@ print(list("1234")) # ['1', '2', '3', '4']
 print(dict([["k1","v1"], ["k2","v2"]])) # {'k1': 'v1', 'k2': 'v2'}
 print(dict((["k1","v1"], ["k2","v2"]))) # {'k1': 'v1', 'k2': 'v2'}
 print(dict((("k1","v1"), ["k2","v2"]))) # {'k1': 'v1', 'k2': 'v2'}
+```
+
+#### 数据类型判断
+
+```py
+# isinstance(对象, 对象类型)
+
+print(isinstance(1, bool)) # False
+print(isinstance(True, bool)) # True
+print(isinstance(1, int)) # True
+print(isinstance(1.1, int)) # False
+print(isinstance(1.1, (int,float,bool))) # True
+```
+
+#### 关键字： if/elif/else —— 条件语句❗
+
+```py
+a = int(input("输入你的成绩："))
+if a<60:
+  print("不及格！")
+else:
+  if a>=90:
+    print("牛逼")
+  elif a>=80:
+    print("棒")
+  else:
+    print("及格")
+```
+
+#### 关键字： for —— 循环❗
+
+```py
+for i in "123":
+  print(i)
+for i in [1,2,3]:
+  print(i)
+for i in range(0,10):
+  print(i)
+for i in range(0,10,2): # 0 2 4 6 8
+  print(i)
+```
+
+遍历字典
+
+```py
+d = {
+  "name": "oracle",
+  "age": 18,
+  "skill": ("python", "java")
+}
+
+'''
+name oracle
+age 18
+skill ('python', 'java')
+'''
+for k in d:
+    print(k, d[k])
+
+"""
+('name', 'oracle')
+('age', 18)
+('skill', ('python', 'java'))
+"""
+for i in d.items():
+    print(i)
 ```

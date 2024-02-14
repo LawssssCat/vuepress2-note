@@ -57,3 +57,22 @@ print(list("1234"))
 print(dict([["k1","v1"], ["k2","v2"]]))
 print(dict((["k1","v1"], ["k2","v2"])))
 print(dict((("k1","v1"), ["k2","v2"])))
+
+print(isinstance(1, bool))
+print(isinstance(True, bool))
+print(isinstance(1, int))
+print(isinstance(1.1, int))
+print(isinstance(1.1, (int,float,bool)))
+
+for i in range(0,10,2): #
+  print(i)
+
+d = {
+  "name": "oracle",
+  "age": 18,
+  "skill": ("python", "java")
+}
+for k in d:
+    print(k, d[k])
+for i in d.items():
+    print(i)
