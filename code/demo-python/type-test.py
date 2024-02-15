@@ -76,3 +76,64 @@ for k in d:
     print(k, d[k])
 for i in d.items():
     print(i)
+
+i = 1
+while i<100:
+    i = i + 1
+    print(i)
+
+def abc(a=1,b=2,c=3):
+  print(a+b+c)
+
+abc() #
+abc(100)
+abc(b=200)
+
+def abc(a,*,b,c):
+  print(a+b+c)
+
+# abc(1,2,3)
+# abc(1)
+abc(1,b=2,c=3)
+
+def abc(a,*b):
+    print(a,b)
+abc(1)
+abc(1,2,3)
+
+def abc(a, **b):
+  print(a,b)
+abc(1) # 1 {}
+abc(1,x=2,y=3)
+
+def abc(a,b,c):
+  print(a,b,c)
+abc(*"123")
+abc(*[1,2,3])
+abc(*{
+    "a":1,
+    "b":2,
+    "c":3
+})
+abc(**{
+    "a":1,
+    "b":2,
+    "c":3
+})
+
+try:
+    c = 1 / 0 # ZeroDivisionError: division by zero
+except ZeroDivisionError:
+    print("wtf")
+print("done.")
+
+import traceback
+try:
+    print(1/0)
+except:
+    traceback.print_exc()
+print("hello world!")
+
+s = "1 2 3 4 5"
+l = list(map(int, s.split()))
+print(l)

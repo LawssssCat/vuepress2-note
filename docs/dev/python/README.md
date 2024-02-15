@@ -141,12 +141,6 @@ todo ja-netfilter https://zhaiblog.cn/169.html
 
 ## 基础
 
-```py
-# 格式
-if 2>1:
-  print(123)
-```
-
 #### 注释
 
 ```py
@@ -167,7 +161,7 @@ bbbbb
 """
 ```
 
-字符串运算
+##### 字符串运算
 
 ```py
 name = "hello world!"
@@ -186,35 +180,48 @@ print(name[0:len(name):2]) # hlowrd
 # 反转
 print(name[::-1]) # !dlrow olleh
 
+# 分割
+print("hello world!".split('o')) # ['hell', ' w', 'rld!']
+
 # 拼接
 print('hello'+' '+'world')
 print(','.join(('hello', 'world','python')))
 print('0'*3) # 000
 
 # 定位
+# "hello world!".index("x") # 找不到时报错 —— 不推荐，改为 find 方法❗
 print('hello world!'.find('o')) # 4
 print('hello world!'.find('o', 5,10)) # 7
 print('hello world!'.find('z')) # -1 —— 找不到！
 print('hello world!'.count('0')) # 2
-
-# 分割
-print("hello world!".split('o')) # ['hell', ' w', 'rld!']
+# 类似方法还有： startwith、endwith
 
 # 替换
 print("hello world!".replace('o', 'Z'))    # hellZ wZrld!
 print("hello world!".replace('o', 'Z', 1)) # hellZ world!
-"    v   ".strip() # trim
-"666    v   ".strip('6') # trim 6
+```
 
+##### 格式化输出
+
+::: tip
+参考： 
+
++ https://blog.csdn.net/moqisaonianqiong/article/details/114674204
+:::
+
+```py
 # 大写/小写
 s = "Aa"
 s.upper()
 s.lower()
-```
 
-格式化输出
+# 左右优化
+print("v".center(7, "*")) # ***v*** —— 居中，填充
+"    v   ".strip() # trim —— 清空左右空格
+"666    v   ".strip('6') # trim 6
+# 类似还有 lstrip、rstrip
+# 另外，后面提到的 format 函数可以实现同样的功能！
 
-```py
 """
 传统的格式化输出方法： %
 %s: 为字符占位，任意类型
@@ -237,8 +244,9 @@ name="eason"
 s3=F'你好，我叫{name}！！！'
 print(s3)
 
-
+######################
 # 格式化输出格式
+######################
 
 # 指定小数点后几位 —— 四舍五入！
 print("橘子： {:.2f}元/斤".format(3.6666)) # 橘子： 3.67元/斤
@@ -246,6 +254,149 @@ print("橘子： {:.2f}元/斤".format(3.6666)) # 橘子： 3.67元/斤
 # 百分比输出
 percent=0.472352
 print(f"占比： {percent:.2%}") # 占比： 47.23%
+
+# 对齐/居中
+s = "hello"
+print("{0:*<20}".format(s)) # hello*************** —— 左对齐
+print("{0:*>20}".format(s)) # ***************hello —— 右对齐
+print("{0:*^20}".format(s)) # *******hello******** —— 居中
+
+# 数字格式
+print("{0:,}".format(123456789.123456)) # 123,456,789.123456 —— 千位分隔符
+print("{0:,.2f}".format(123456789.123456)) # 123,456,789.12 —— 浮点数小数部分的精度
+print("{0:,.2}".format(123456789.123456)) # 1.2e+08 —— 最大显示长度
+print("{0:.2}".format("123.456")) # 12
+
+# 类型：
+"""
+整数：
+s —— 字符串
+b —— 二进制
+c —— Unicode字符
+d —— 十进制
+o —— 八进制
+x or X —— 十六进制
+"""
+b = 1024
+print("{0:b}".format(b)) # 10000000000
+print("{0:c}".format(b)) # Ѐ
+print("{0:d}".format(b)) # 1024
+print("{0:o}".format(b)) # 2000
+print("{0:x}".format(b)) # 400
+print("{0:X}".format(b)) # 400
+"""
+浮点数：
+f
+%
+e or E —— 科学计数法
+g or G —— 在 e / f 中切换
+"""
+b = 10000000003.1415926
+print("{0:.2f}".format(b)) # 10000000003.14
+print("{0:.2%}".format(b)) # 1000000000314.16%
+print("{0:.2e}".format(b)) # 1.00e+10
+print("{0:.2E}".format(b)) # 1.00E+10
+```
+
+##### 编码/解码
+
+```py
+str.encode(encoding='utf-8',errors='strict/ignore/replace')
+bytes.decode(encoding='utf-8',errors='strict/ignore/replace')
+# strict —— 抛出报错
+# ignore —— 忽略
+# replace —— 错误解析换成 ? 问号
+
+# 编码
+s = "你好".encode('gbk', errors="ignore")
+print(s) # b'\xc4\xe3\xba\xc3'
+
+# 解码
+b = bytes.decode(s, 'gbk')
+print(b) # 你好
+```
+
+##### 数据验证
+
+```py
+"""
+str.isdigit() —— 所有字符都是数字（阿拉伯数字，1=True，一=False）
+str.isnumeric() —— 所有字符都是数字（1、一、壹、Ⅰ（罗马数字）、①=True，one（不是一个字符）=False）
+str.isalpha() —— 所有字符都是字母（包含中文字符）
+str.isalnum() —— 所有字符都是数字或者字母（包含中文字符）
+str.islower() —— 所有字符都是小写
+str.isupper() —— 所有字符都是大写
+str.istitle() —— 所有字符都是首字母大写
+str.isspace() —— 所有字符都是空白字符（\n,\t,...）
+"""
+```
+
+##### 正则表达式
+
+正则表达式是一个特殊的字符序列，它能帮助用户便捷地检查一个字符串是否符合某种规则/模式
+
+```py
+# 位置
+$
+^
+
+# 字符
+. —— 任意
+\w —— 字母、数字、下划线
+\W —— 非\w
+\s —— 空白字符，如 \t
+\S —— 非\s
+\b —— 空格
+\d —— 任意十进制
+
+# 次数
+? —— 0~1
++ —— 1~n
+* —— 0~n
+{n} —— n
+{n,} —— n~∞
+{n,m} —— n~m
+
+# 分组
+() —— 分组
+| —— 或者
+[] —— 包含其一
+[^] —— 排除全部
+[\u4e00-\u9fa5] —— 任意一个汉字
+```
+
+re模块： 用于实现正则表达式的操作。内置模块，不需要安装，导入即可使用。
+
+```py
+import re
+
+#######################
+# 查找
+#######################
+
+# re.match(pattern,string,flags=0) —— 从字符串开始位置进行匹配。如果匹配成功，结果为Match对象；否则结果为None。
+pattern = "python\d\.\d+"
+match = re.match(pattern,"Python3.10 ever day!",re.IGNORECASE)
+print(match) # <re.Match object; span=(0, 10), match='Python3.10'>
+
+print(match.start()) # 0
+print(match.end()) # 10
+print(match.span()) # (0, 10)
+print(match.group()) # Python3.10
+print(match.string) # Python3.10 ever day!
+
+# re.search(pattern,string,flags=0) —— 用于在整个字符串中搜索第一个匹配的值。如果匹配成功，返回Match对象；否则返回None
+pattern = "python\d\.\d+"
+search = re.search(pattern,"I study Python3.10 ever day!",re.IGNORECASE)
+print(search) # <re.Match object; span=(8, 18), match='Python3.10'>
+
+# re.findall(pattern,string,flags=0) —— 用于在整个字符串搜索所有符合正则表达式的值。返回list
+
+#######################
+# 加工
+#######################
+# re.sub(pattern,repl,string,count,flags=0) —— 实现字符串的替换
+# re.split(pattern,string,maxsplit,flags=0)
 ```
 
 #### 标准输入/输出
@@ -784,6 +935,13 @@ print(dict((["k1","v1"], ["k2","v2"]))) # {'k1': 'v1', 'k2': 'v2'}
 print(dict((("k1","v1"), ["k2","v2"]))) # {'k1': 'v1', 'k2': 'v2'}
 ```
 
+批量转换
+
+```py
+s = "1 2 3 4 5"
+l = list(map(int, s.split()))
+```
+
 #### 数据类型判断
 
 ```py
@@ -797,6 +955,12 @@ print(isinstance(1.1, (int,float,bool))) # True
 ```
 
 #### 关键字： if/elif/else —— 条件语句❗
+
+```py
+# 格式
+if 2>1:
+  print(123)
+```
 
 ```py
 a = int(input("输入你的成绩："))
@@ -824,6 +988,14 @@ for i in range(0,10,2): # 0 2 4 6 8
   print(i)
 ```
 
+遍历数组
+
+```py
+list_1 = [1,2,3,4]
+for i in range(len(list_1)):
+  print(i, list_1[i])
+```
+
 遍历字典
 
 ```py
@@ -848,4 +1020,356 @@ for k in d:
 """
 for i in d.items():
     print(i)
+```
+
+#### 关键字： while —— 循环❗
+
+```py
+i = 1
+while i<100:
+    i = i + 1
+    print(i)
+```
+
+#### 关键字： break/continue
+
+```py
+for i in "python":
+  if i == "t":
+    break
+  elif i == "n":
+    continue
+  print("当前的字符：", i)
+```
+
+#### 关键字： pass
+
+空语句，用于一些语法上需要做什么，但程序不需要做做什么的场景。
+使用 pass 保持程序结构的完整性。
+
+```py
+def abc(a, name="hel", *args, **kwargs):
+  pass
+```
+
+#### 函数（Function）
+
+关键字： def
+
+```py
+def say():
+  print("hello world!")
+
+say() # hello world!
+```
+
+参数定义
+
+```py
+# 默认参数
+def abc(a=1,b=2,c=3):
+  print(a+b+c)
+abc() # 6
+abc(100) # 105
+abc(b=200) # 204
+
+# 可变参数 —— 元组 args
+def abc(a,*b):
+  print(a,b)
+abc(1) # 1 ()
+abc(1,2,3) # 1 (2, 3)
+
+# 可变参数 —— 字典 kwargs
+def abc(a, **b):
+  print(a,b)
+abc(1) # 1 {}
+abc(1,x=2,y=3) # 1 {'x': 2, 'y': 3}
+
+# 变量名参数 —— * 号后的参数值必须通过变量名传入
+def abc(a,*,b,c):
+  print(a+b+c)
+# abc(1) # TypeError: abc() missing 2 required keyword-only arguments: 'b' and 'c'
+# abc(1,2,3) # TypeError: abc() takes 1 positional argument but 3 were given
+abc(1,b=2,c=3) # 6
+```
+
+参数拆包
+
+```py
+def abc(a,b,c):
+  print(a,b,c)
+abc(*"123") # 1 2 3
+abc(*[1,2,3]) # 1 2 3
+# 字典key❗
+abc(*{
+    "a":1,
+    "b":2,
+    "c":3
+}) # a b c
+# 字典value❗
+abc(**{
+    "a":1,
+    "b":2,
+    "c":3
+}) # 1 2 3
+```
+
+返回值：
+
+```py
+def abc():
+  pass # 默认返回 None
+def abc():
+  return 1 # 指定返回值
+def abc():
+  return 1,2,3 # 返回元组
+```
+
+#### 关键字： try/except/else/finally —— 异常❗
+
+```py
+try:
+  c = 1 / 0 # ZeroDivisionError: division by zero
+except ZeroDivisionError:
+  print("wtf!")
+else:
+  print("ok~")
+finally:
+  print("done.")
+```
+
+常见异常
+
+异常 | 描述
+--- | ---
+ZeroDivisionError | 0除/0取模
+IndexError | 数组越界
+KeyError | 没有key
+NameError | 没声明变量
+SyntaxError | 语法错误
+ValueError | 无效传参
+
+##### traceback模块
+
+打印异常的堆栈信息
+
+```py
+import traceback
+try:
+    print(1/0)
+except:
+    traceback.print_exc()
+print("hello world!")
+
+打印：
+# Traceback (most recent call last):
+#   File "***\vuepress2-note\code\demo-python\type-test.py", line 132, in <module>
+#     print(1/0)
+#           ~^~
+# ZeroDivisionError: division by zero
+# hello world!
+```
+
+#### 关键字： class —— 类❗
+
+##### 定义类
+
+关键字 class
+
+```py
+class Student: # 要求首字母大写！
+  pass
+```
+
+类的组成：
+
++ 属性
++ 构造方法
++ 静态方法
++ 类方法
+
+```py
+class Student:
+  name = "小明"
+
+  # 构造方法
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+    self.__xx = 1 # 私有
+
+  # 构造方法/工具方法，自定义方法名 —— 方便封装为工具方法，内部编写类的工作函数调用❗
+  @classmethod
+  def customInit(cls):
+    t = cls("custom", 99)
+    t.__xx = 2
+    print("custom done.")
+    # 调用工作函数...
+    # t.eat()
+    return t
+
+  # 类方法
+  def eat(self):
+    print("eating...",self.__xx)
+
+  # 静态方法
+  @staticmethod
+  def id():
+    print("1313123123")
+```
+
+##### 创建类实例
+
+```py
+Student.id() # 1313123123
+stu = Student("理想",19)
+cstu = Student.customInit() # custom done.
+
+print(stu, cstu) # <__main__.Student object at 0x0000023D69E34EF0> <__main__.Student object at 0x0000023D69E34F80>
+print(id(stu), id(cstu)) # 2462792765168 2462792765312
+print(type(stu), type(cstu)) # <class '__main__.Student'> <class '__main__.Student'>
+print(stu.age, cstu.age) # 19 99
+print(stu.name, cstu.name) # 理想 custom
+# stu.__xx # AttributeError: 'Student' object has no attribute '__xx'
+stu.eat() # eating... 1
+cstu.eat() # eating... 2
+```
+
+##### 私有属性
+
+通过添加 `__` 前缀声明属性私有
+
+::: tip
+内置函数 `dir()` 可以查看指定对象所有属性
+:::
+
+```py
+# 前提：
+# __xx 是私有属性
+
+print(dir(stu)) # ['_Student__xx', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getstate__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'age', 'customInit', 'eat', 'id', 'name']
+print(stu._Student__xx, cstu._Student__xx) # 1 2
+```
+
+通过 `dir(obj)` 方法查看到 `_Student__xx` 是私有属性的具体名称
+
+##### 特殊属性、特殊方法
+
+特殊属性
+
+名称 | 描述
+--- | ---
+`__dict__` | 获得类对象或实例对象所绑定的所有属性和方法的字典
+`__class__` | 对象所属的类
+`__bases__` | 对象所属的父类类型（列表）
+`__base__` | 对象所属的父类类型（第一个）
+`__mro__` | 对象所属的类的层次结构
+`__subclasses__` | 对象所属的类的子类列表
+
+特殊方法
+
+名称 | 描述
+--- | ---
+`__len__()` | 长度计算
+`__add__()` | 加法计算
+`__new__()` | 用于创建对象，需要返回对象；先于 `__init__()` 被调用
+`__init__()` | 对创建的对象进行初始化
+
+```py
+class Person(object):
+  def __new__(cls, *args, **kwargs):
+    print("__new__", id(cls))
+    obj = super().__new__(cls)
+    print("__new__", id(obj))
+    return obj
+  def __init__(self, name, age):
+    print("__init__", id(self))
+    self.name = name
+    self.age = age
+
+print("pre", id(object)) # pre 140710997362448
+print("pre", id(Person)) # pre 2558888675456
+# __new__ 2558888675456
+# __new__ 2558890830128
+# __init__ 2558890830128
+print("post", id(Person("xx", 19))) # post 2558890830128
+```
+
+##### 继承
+
+python 支持多继承！
+
+```py
+class Person(object):
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+  def __str__(self):
+    return str((self.name, self.age))
+class Student(Person): # 多继承： Student(A,B,C,...)
+  def __init__(self, name, age, stu_no):
+    super().__init__(name, age)
+    self.stu_no = stu_no
+stu_1 = Student("s1", 18, 1)
+print(stu_1) # ('s1', 18)
+```
+
+::: tip
+object 类： 
+
+1. object 类是所有类的父类
+1. object 类有 `__str__()` 方法 —— java 中的 `toString()`
+:::
+
+##### 浅拷贝、深拷贝
+
+概念：
+
++ **浅拷贝** —— 源对象与拷贝对象的属性值引用至同一个对象
++ **深拷贝** —— 使用 copy 模块的 deepcopy 函数，递归拷贝对象中包含的对象
+
+浅拷贝
+
+```py
+class A:
+  def __init__(self, b):
+    self.b = b
+class B:
+  pass
+
+import copy
+
+a = A(B())
+ca = copy.copy(a)
+print(id(a), id(ca))
+print(id(a.b), id(ca.b), a.b == ca.b)
+```
+
+深拷贝
+
+```py
+da = copy.deepcopy(a)
+print(id(a), id(da))
+print(id(a.b), id(da.b), a.b == da.b)
+```
+
+## 场景
+
+### 去重
+
+方式一（低效）
+
+```py
+s = "asfj;lenlbans;fisajf;sacxzv"
+n = "" # or [] and append
+for t in s:
+    if t not in n:
+        n = n + t
+print(n)
+```
+
+方式二：set（推荐，但是乱序）
+
+```py
+print(set("sdfsfsfasfsdfs"))
 ```
