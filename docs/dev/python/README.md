@@ -2,8 +2,6 @@
 title: Python 使用笔记
 ---
 
-todo https://www.bilibili.com/video/BV1ZP4y1o7Sc?p=3
-
 官网： https://www.python.org/
 
 ```bash
@@ -1170,6 +1168,39 @@ print("hello world!")
 # hello world!
 ```
 
+#### 关键字： with
+
+with 语句可以自动管理上下文资源。
+不论什么原因跳出 with 块，都能确保文件正确的关闭，以此来达到释放资源的目的。
+
+```py
+with open("a.txt", "r") as file:
+  print(file.read())
+```
+
+::: tip
+open 方法遵守了上下文管理协议，实现了 `__enter()` 方法和 `__exit__()` 方法。
+进入 with 块前，会调用 `__enter__()` 方法并将返回值赋值给 `as` 后的变量。
+推出 with 快后，会调用 `__exit__()` 方法释放该变量引用的资源。 
+
+上下文管理器： 遵循上下文管理器协议，实现了 `__enter__()` 方法和 `__exit__()` 方法的类对象。
+
+```py
+# 定义
+class MyContextMgr(object):
+  def __enter__(self):
+    print("__enter__")
+    return self
+  def __exit__(self, exc_type, exc_val, exc_tb):
+    print("__exit__", exc_type, exc_val, exc_tb)
+  def show():
+    print("show")
+# 调用
+with MyContextMgr() as file:
+  file.show()
+```
+:::
+
 #### 关键字： class —— 类❗
 
 ##### 定义类
@@ -1351,6 +1382,196 @@ print(id(a.b), id(ca.b), a.b == ca.b)
 da = copy.deepcopy(a)
 print(id(a), id(da))
 print(id(a.b), id(da.b), a.b == da.b)
+```
+
+#### 模块（Module）
+
+在 Python 中一个扩展名为 `.py` 的文件就是一个模块。一个模块中可以包含多个函数。
+
+使用模块的好处：
+
++ 方便其他程序和脚本的导入并使用
++ 避免函数名和变量名冲突
++ 提高代码的可维护性
++ 提高代码的可重用性
+
+```py
+# 导入模块
+import 模块名
+import 模块名 as 别名
+from 模块名 import 函数/变量/类
+```
+
+##### 常用的内置模块
+
+模块名 | 描述
+--- | ---
+sys | 与 Python 解析器及其环境操作相关的标准库
+time | 提供与时间相关的各种函数的标准库
+os | 提供了访问操作系统服务功能的标准库
+calendar | 提供与日期相关的各种函数的标准库
+urllib | 提供读取来自网上（服务器）的数据标准库
+json | 提供用于使用 json 序列化和反序列化对象的标准库
+re | 提供用于在字符串中执行正则表达式匹配和替换的标准库
+math | 提供标准算术运算函数的标准库
+decimal | 提供用于进行精确控制运算精度、有效数位和四舍五入操作的十进制运算标准库
+logging | 提供了灵活的记录事件、错误、警告和调试等日志信息的功能
+
+```py
+import sys
+print(sys.getsizeof(24))
+print(sys.getsizeof(True))
+
+import time
+print(time.time())
+print(time.localtime(time.time()))
+
+import urllib
+print(urllib.request.urlopen("http://www.baidu.com").read())
+```
+
+##### 以主程序形式运行
+
+在每个模块的定义中都包括一个记录模块名称的变量 `__name__`。程序可以检查该变量，以确定他们在哪个模块中执行。
+如果一个模块不是被导入到其他程序中执行的，那么它可能在解释器的顶级模块中执行。顶级模块的 `__name__` 变量的值为 `__main__`。
+
+```py
+def add(a,b):
+  return a+b
+
+if __name__ = '__main__':
+  # test add() method
+  pass
+```
+
+##### 包结构
+
+Python 中的包是一个分层次的目录结构，它将一组功能相近的模块组织在一个目录下。
+
+```py
+test/
+├── __init__.py
+├── set-test.py
+└── type-test.py
+```
+
+作用：
+
++ 规范代码
++ 避免模块名称冲突
+
+包与目录的区别： 包含 `__init__.py` 文件的目录称为 “包”
+
+```py
+import 包名.模块名
+```
+
+##### 第三方模块的安装
+
+```bash
+pip install 模块名
+```
+
+```py
+import 模块名
+```
+
+e.g.
+
+```py
+import schedule
+
+def job()
+  print("test".center(10, "-"))
+
+schedule.every(3).seconds.do(job)
+while True:
+  schedule.run_pending()
+  time.sleep(1)
+```
+
+#### 模块： IO流
+
+```py
+# file = open(filename, [, mode, encoding])
+
+file = open('a.txt', 'r')
+print(file.readlines())
+file.close()
+
+# write/read
+
+src_file = open("logo.png", "rb")
+tar_file = open("copylogo.png", "wb")
+tar_file.write(src_file.read())
+tar_file.close()
+src_file.close()
+```
+
+::: tip
+文件类型： 按文件中数据的组织形式，文件分为两大类：
+
+1. 文本文件 —— 存储的是普通 “字符” 文本，默认为 unicode 字符集。
+1. 二进制文件 —— 把数据内容用 “字节” 进行存储，无法用笔记本打开，如：mp3、jpg、doc、...
+:::
+
+文件打开模式 | 描述
+--- | ---
+r | 以只读模式打开文件。文件的指针将会放在文件的开头。
+w | 以只写模式打开文件。如果文件不存在则创建；如果文件存在则覆盖原有内容，文件指针在文件的开头。
+a | 以追加模式打开文件。如果文件不存在则创建，文件指针在文件开头；如果文件存在则在文件末尾追加内容，文件指针在原文件末尾。
+b | 以二进制方式打开文件。不能单独使用，需要与其他模式一起使用，如：`rb`、`wb`、...
+\+ | 以读写方式打开文件。不能单独使用，需要与其他模式一起使用，如：`a+`
+
+文件对象的常用方法 | 说明
+--- | ---
+`read([size])`
+`readline()`
+`readlines()`
+`write(str)`
+`writelines(s_list)`
+`seek(offset[,whence])` | 把文件指针移到最新的位置。<br> offset 表示相对于 whence 的位置。<br><br> whence 不同值代表的不同含义： <ul><li>0: 从文件头开始计算（默认） </li><li>1: 从当前位置开始计算</li><li>2: 从文件尾开始计算</li></ul>
+`tell()` | 返回文件指针的当前位置
+`flush()` | 把缓冲区的内容写入文件，但不关闭文件
+`close()` | 把缓冲区的内容写入文件，且关闭文件，释放文件对象相关资源
+
+#### 模块： os —— 系统命令执行、目录操作
+
+os 模块是 Python 内置的与操作系统功能和文件系统相关的模块。
+该模块中的语句的执行结果通常与操作系统有关，在不同的操作系统上运行，得到的结果可能不一样。
+
+```py
+import os
+os.system("notepad")
+os.startfile("C:\\Program Files\\Tencent\\QQ\\Bin\\qq.exe") # 调用可执行文件
+```
+
+os 模块与 os.path 模块用于对目录或文件进行操作。
+
+目录相关函数 | 说明
+--- | ---
+`getcwd()` | 返回当前的工作目录
+`listdir(path)`
+`mkdir(path[,mode])`
+`makedirs(path1/path2/...[,mode])`
+`rmdir(path)`
+`removedirs(path1/path2/...)`
+`chdir(path)` | 将 path 设置为当前工作目录
+`abspath(path)`
+`exists(path)`
+`join(path, name)` | 将路径与目录或者文件名拼接起来
+`splitext()` | 分离文件名和扩展名
+`basename(path)` | 从一个路径中提取文件名
+`dirname(path)` | 从一个路径中提取文件路径，不包含文件名
+`isdir(path)`
+
+```py
+import os
+path = os.getcwd()
+lst = os.listdir(path)
+for filename in lst:
+  if filename.endwith('.py')
+    print(filename)
 ```
 
 ## 场景
