@@ -2,6 +2,11 @@
 title: Python 使用笔记
 ---
 
+todo 《Python 程序设计入门到实战》 by 何敏煌
+todo 《Python 网络编程攻略》 by Dr.M.O.Faruque Sarker
+todo 《Python 绝技 —— 运用 Python 成为顶级黑客》 by TJ.O' Connor
+todo 《完全学会 Git · Github · Git Server 的 24 堂课》 by 孙宏明
+
 官网： https://www.python.org/
 
 ```bash
@@ -1593,4 +1598,15 @@ print(n)
 
 ```py
 print(set("sdfsfsfasfsdfs"))
+```
+
+### 项目打包
+
+编译 py 文件生成 exe 文件
+
+```bash
+# 安装工具
+pip install PyInstaller
+# 生成 exe 文件
+pyinstaller -F stusystem.py # stusystem.exe
 ```
