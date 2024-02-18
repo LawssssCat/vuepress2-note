@@ -89,3 +89,32 @@ print(id(a.b), id(ca.b), a.b == ca.b)
 da = copy.deepcopy(a)
 print(id(a), id(da))
 print(id(a.b), id(da.b), a.b == da.b)
+
+print('---------------')
+
+class Person:
+  def __init__(self):
+    print("__init__")
+  def __del__(self):
+    print("__del__")
+
+p = Person()
+print("....")
+p  = 1 # 不再引用时 __del__
+p = Person()
+# 程序退出时 __del__
+del p
+
+print('---------------')
+
+class A:
+  def xx(self):
+    print("A")
+class B:
+  def xx(self):
+    print("B")
+class C(A,B):
+  def __init__(self):
+    super().xx() # A
+    B.xx(self) # B
+c = C()

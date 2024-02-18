@@ -55,3 +55,12 @@ print((1,2))
 list_1 = [1,2,3,4]
 for i in range(len(list_1)):
   print(i, list_1[i])
+
+list_1 = [1,2,3]
+print(sum(list_1))
+from functools import reduce
+print(reduce(lambda x,y:x+y, list_1))
+
+list_1 = [1,2,3,4]
+for i,v in enumerate(list_1):
+  print(i,v)

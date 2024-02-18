@@ -477,6 +477,63 @@ a = 3>1 or 2<1
 # not
 ```
 
+##### 变量作用范围：global/nonlocal
+
+默认 —— 方法内部的修改不影响外部变量
+
+```py
+a = 1 # 全局变量
+
+def abc():
+  a = 2 # 局部变量
+  print(a)
+
+abc() # 2
+print(a) # 1
+```
+
+global（全局变量） —— 获得最外层变量
+
+```py
+a = 1 # 全局变量
+def abc():
+  global a
+  print(a)
+  a = 2 # 局部变量
+abc() # 1
+print(a) # 2
+
+################
+
+a = 1
+def abc():
+  a = 2
+  def xxxx():
+    global a # 获取最外层变量
+    print(a)
+    a = 3
+  xxxx()
+  print(a)
+abc() # 1 \n 2
+print(a) # 3
+```
+
+nonlocal —— 外层变量
+
+```py
+a = 1
+def abc():
+  a = 2
+  def xxxx():
+    nonlocal a # 获取上一层变量
+    print(a)
+    a = 3
+  xxxx()
+  print(a)
+abc() # 2 \n 3
+print(a) # 1
+```
+
 #### 列表（List）
 
 ```py
@@ -520,6 +577,12 @@ print(list_1) # ['world', 'python', 'hw', 'hello']
 # 计数
 list_1 = ["hello", "world", "hw", "python", "hello"]
 print(list_1.count("hello")) # 2
+
+# 求和
+list_1 = [1,2,3]
+print(sum(list_1)) # 6
+from functools import reduce
+print(reduce(lambda x,y:x+y, list_1)) # 6
 ```
 
 增加/删除
@@ -745,6 +808,20 @@ fromkeys = {}.fromkeys(("key1", "key2"), obj)
 print(fromkeys) # {'key1': [1, 2, 3], 'key2': [1, 2, 3]}
 obj.append(4)
 print(fromkeys) # {'key1': [1, 2, 3, 4], 'key2': [1, 2, 3, 4]}
+```
+
+拉链函数： 将对象中对应的元素打包成一个个元组，然后返回这些元组组成的内容
+
+```py
+k = [1,2,3]
+v = ['a','b','c']
+print(list(zip(k,v))) # [(1, 'a'), (2, 'b'), (3, 'c')]
+
+# 元素个数不一致时，返回最短的
+s = ['s']
+k = [1,2]
+v = ['a','b','c']
+print(list(zip(s, k,v))) # [('s', 1, 'a')]
 ```
 
 #### 关键字
@@ -997,6 +1074,19 @@ for i in range(0,10,2): # 0 2 4 6 8
 list_1 = [1,2,3,4]
 for i in range(len(list_1)):
   print(i, list_1[i])
+# 0 1
+# 1 2
+# 2 3
+# 3 4
+
+# enumerate 美剧
+list_1 = [1,2,3,4]
+for i,v in enumerate(list_1):
+  print(i,v)
+# 0 1
+# 1 2
+# 2 3
+# 3 4
 ```
 
 遍历字典
@@ -1128,17 +1218,57 @@ def abc():
   return 1,2,3 # 返回元组
 ```
 
-#### 关键字： try/except/else/finally —— 异常❗
+##### 内置函数
+
+查看内置函数
+
+```py
+import builtins
+print(dir(builtins)) # ['ArithmeticError', 'AssertionError', 'AttributeError', 'BaseException', 'BaseExceptionGroup', 'BlockingIOError', 'BrokenPipeError', 'BufferError', 'BytesWarning', 'ChildProcessError', 'ConnectionAbortedError', 'ConnectionError', 'ConnectionRefusedError', 'ConnectionResetError', 'DeprecationWarning', 'EOFError', 'Ellipsis', 'EncodingWarning', 'EnvironmentError', 'Exception', 'ExceptionGroup', 'False', 'FileExistsError', 'FileNotFoundError', 'FloatingPointError', 'FutureWarning', 'GeneratorExit', 'IOError', 'ImportError', 'ImportWarning', 'IndentationError', 'IndexError', 'InterruptedError', 'IsADirectoryError', 'KeyError', 'KeyboardInterrupt', 'LookupError', 'MemoryError', 'ModuleNotFoundError', 'NameError', 'None', 'NotADirectoryError', 'NotImplemented', 'NotImplementedError', 'OSError', 'OverflowError', 'PendingDeprecationWarning', 'PermissionError', 'ProcessLookupError', 'RecursionError', 'ReferenceError', 'ResourceWarning', 'RuntimeError', 'RuntimeWarning', 'StopAsyncIteration', 'StopIteration', 'SyntaxError', 'SyntaxWarning', 'SystemError', 'SystemExit', 'TabError', 'TimeoutError', 'True', 'TypeError', 'UnboundLocalError', 'UnicodeDecodeError', 'UnicodeEncodeError', 'UnicodeError', 'UnicodeTranslateError', 'UnicodeWarning', 'UserWarning', 'ValueError', 'Warning', 'WindowsError', 'ZeroDivisionError', '__build_class__', '__debug__', '__doc__', '__import__', '__loader__', '__name__', '__package__', '__spec__', 'abs', 'aiter', 'all', 'anext', 'any', 'ascii', 'bin', 'bool', 'breakpoint', 'bytearray', 'bytes', 'callable', 'chr', 'classmethod', 'compile', 'complex', 'copyright', 'credits', 'delattr', 'dict', 'dir', 'divmod', 'enumerate', 'eval', 'exec', 'exit', 'filter', 'float', 'format', 'frozenset', 'getattr', 'globals', 'hasattr', 'hash', 'help', 'hex', 'id', 'input', 'int', 'isinstance', 'issubclass', 'iter', 'len', 'license', 'list', 'locals', 'map', 'max', 'memoryview', 'min', 'next', 'object', 'oct', 'open', 'ord', 'pow', 'print', 'property', 'quit', 'range', 'repr', 'reversed', 'round', 'set', 'setattr', 'slice', 'sorted', 'staticmethod', 'str', 'sum', 'super', 'tuple', 'type', 'vars', 'zip']
+```
+
+##### 匿名函数：lambda
+
+语法： `函数名 = lambda 形参:返回值`
+
+```py
+# 标准形式
+def func(a,b):
+  return a+b
+print(func(1,2))
+
+# lambda 形式
+func = lambda a,b:a+b
+print(func(1,2))
+
+```
+
+#### 关键字： try/except/as/else/finally/raise —— 异常❗
 
 ```py
 try:
   c = 1 / 0 # ZeroDivisionError: division by zero
-except ZeroDivisionError:
+except ZeroDivisionError as e:
   print("wtf!")
 else:
   print("ok~")
 finally:
   print("done.")
+```
+
+```py
+# 万能捕获 Exception
+try:
+  pass
+except Exception as e:
+  pass
+```
+
+```py
+# 主动抛出异常
+def funa():
+  raise Exception("主动抛出一个异常")
+funa()
 ```
 
 常见异常
@@ -1217,6 +1347,26 @@ class Student: # 要求首字母大写！
   pass
 ```
 
+::: tip
+在 Python3 中，类定义有三种写法：
+
+```py
+class person(object):
+  pass
+class Person():
+  pass
+class Person:
+  pass
+```
+
+在 Python2 中，只有下面这种写法：
+
+```py
+class Person(object):
+  pass
+```
+:::
+
 类的组成：
 
 + 属性
@@ -1273,7 +1423,7 @@ cstu.eat() # eating... 2
 
 ##### 私有属性
 
-通过添加 `__` 前缀声明属性私有
+通过添加 `__` 前缀声明属性私有/方法私有
 
 ::: tip
 内置函数 `dir()` 可以查看指定对象所有属性
@@ -1310,6 +1460,9 @@ print(stu._Student__xx, cstu._Student__xx) # 1 2
 `__add__()` | 加法计算
 `__new__()` | 用于创建对象，需要返回对象；先于 `__init__()` 被调用
 `__init__()` | 对创建的对象进行初始化
+`__del__()` | 析构函数。析构函数用于在对象被清除后清除它所占用的内存空间。删除对象时，python解析器默认会调用该方法
+
+创建函数 `__new__`、`__init__`
 
 ```py
 class Person(object):
@@ -1329,6 +1482,30 @@ print("pre", id(Person)) # pre 2558888675456
 # __new__ 2558890830128
 # __init__ 2558890830128
 print("post", id(Person("xx", 19))) # post 2558890830128
+```
+
+析构函数 `__del__`
+
+```py
+class Person:
+  def __init__(self):
+    print("__init__")
+  def __del__(self):
+    print("__del__")
+
+p = Person()
+print("....")
+p  = 1 # 不再引用时 __del__
+# del p 也会调用 __del__
+p = Person()
+# 程序退出时 __del__
+
+# 打印
+# __init__
+# ....
+# __del__
+# __init__
+# __del__
 ```
 
 ##### 继承
@@ -1356,6 +1533,26 @@ object 类：
 1. object 类是所有类的父类
 1. object 类有 `__str__()` 方法 —— java 中的 `toString()`
 :::
+
+多继承时，如果父类有相同的属性名/方法名，则调用先继承的那个父类的东西。
+
+```py
+class A:
+  def xx(self):
+    print("A")
+class B:
+  def xx(self):
+    print("B")
+class C(A,B):
+  def __init__(self):
+    super().xx() # A
+    B.xx(self) # B
+c = C()
+
+# 输出
+# A
+# B
+```
 
 ##### 浅拷贝、深拷贝
 
@@ -1466,6 +1663,10 @@ test/
 + 避免模块名称冲突
 
 包与目录的区别： 包含 `__init__.py` 文件的目录称为 “包”
+
+::: tip
+引入模块时，会执行 `__init__.py` 中的代码。
+:::
 
 ```py
 import 包名.模块名
@@ -1598,6 +1799,50 @@ print(n)
 
 ```py
 print(set("sdfsfsfasfsdfs"))
+```
+
+### 日志装饰器
+
+```py
+def logger(func):
+  def wrapper(*args):
+    print("--------------")
+    func(*args)
+    print("--------------")
+  return wrapper
+
+def add(x,y):
+  print('{} + {} = {}'.format(x,y,x+y))
+
+te = logger(add)
+te(1,1)
+
+# 输出：
+# --------------
+# 1 + 1 = 2
+# --------------
+```
+
+语法糖 `@装饰器方法`
+
+```py
+def logger(func):
+  def wrapper(*args):
+    print("--------------")
+    func(*args)
+    print("--------------")
+  return wrapper
+
+@logger
+def add(x,y):
+  print('{} + {} = {}'.format(x,y,x+y))
+
+add(1,1)
+
+# 输出：
+# --------------
+# 1 + 1 = 2
+# --------------
 ```
 
 ### 项目打包
