@@ -188,6 +188,263 @@ mvn encrypt:encrypt
 
 ### 常用插件
 
+#### deploy
+
+```bash
+[INFO] --- deploy:2.8.2:help (default-cli) @ demo-java ---
+[INFO] Apache Maven Deploy Plugin 2.8.2
+  Uploads the project artifacts to the internal remote repository.
+```
+
+##### 区别 deploy 和 deploy-file
+
++ `deploy:deploy` 用于自动安装工件、其 POM 和特定项目生成的附加工件。与部署相关的大多数（如果不是全部）信息都存储在项目的 pom 中。
++ `deploy:deploy-file` 用于安装单个工件及其 pom。
+
+::: details
+
+deploy:deploy
+
+```bash
+deploy:deploy
+  Deploys an artifact to remote repository.
+
+  Available parameters:
+
+    altDeploymentRepository
+      Specifies an alternative repository to which the project artifacts should
+      be deployed ( other than those specified in <distributionManagement> ).
+      Format: id::layout::url
+      id
+        The id can be used to pick up the correct credentials from the
+        settings.xml
+      layout
+        Either default for the Maven2 layout or legacy for the Maven1 layout.
+        Maven3 also uses the default layout.
+      url
+        The location of the repository
+
+    altReleaseDeploymentRepository
+      The alternative repository to use when the project has a final version.
+
+    altSnapshotDeploymentRepository
+      The alternative repository to use when the project has a snapshot version.
+
+    deployAtEnd
+      Whether every project should be deployed during its own deploy-phase or at
+      the end of the multimodule build. If set to true and the build fails, none
+      of the reactor projects is deployed. (experimental)
+
+    retryFailedDeploymentCount
+      Parameter used to control how many times a failed deployment will be
+      retried before giving up and failing. If a value outside the range 1-10 is
+      specified it will be pulled to the nearest value within the range 1-10.
+
+    skip
+      Set this to 'true' to bypass artifact deploy
+
+    updateReleaseInfo
+      Parameter used to update the metadata to make the artifact as release.
+```
+
+deploy:deploy-file
+
+```bash
+deploy:deploy-file
+  Installs the artifact in the remote repository.
+
+  Available parameters:
+
+    artifactId
+      ArtifactId of the artifact to be deployed. Retrieved from POM file if
+      specified.
+
+    classifier
+      Add classifier to the artifact
+
+    classifiers
+      A comma separated list of classifiers for each of the extra side artifacts
+      to deploy. If there is a mis-match in the number of entries in files or
+      types, then an error will be raised.
+
+    description
+      Description passed to a generated POM file (in case of generatePom=true)
+
+    file
+      File to be deployed.
+      Required: Yes
+
+    files
+      A comma separated list of files for each of the extra side artifacts to
+      deploy. If there is a mis-match in the number of entries in types or
+      classifiers, then an error will be raised.
+
+    generatePom
+      Upload a POM for this artifact. Will generate a default POM if none is
+      supplied with the pomFile argument.
+
+    groupId
+      GroupId of the artifact to be deployed. Retrieved from POM file if
+      specified.
+
+    javadoc
+      The bundled API docs for the artifact.
+
+    packaging
+      Type of the artifact to be deployed. Retrieved from the <packaging>
+      element of the POM file if a POM file specified. Defaults to the file
+      extension if it is not specified via command line or POM.
+      Maven uses two terms to refer to this datum: the <packaging> element for
+      the entire POM, and the <type> element in a dependency specification.
+
+    pomFile
+      Location of an existing POM file to be deployed alongside the main
+      artifact, given by the ${file} parameter.
+
+    repositoryId
+      Server Id to map on the <id> under <server> section of settings.xml In
+      most cases, this parameter will be required for authentication.
+      Required: Yes
+
+    repositoryLayout
+      The type of remote repository layout to deploy to. Try legacy for a Maven
+      1.x-style repository layout.
+
+    retryFailedDeploymentCount
+      Parameter used to control how many times a failed deployment will be
+      retried before giving up and failing. If a value outside the range 1-10 is
+      specified it will be pulled to the nearest value within the range 1-10.
+
+    sources
+      The bundled sources for the artifact.
+
+    types
+      A comma separated list of types for each of the extra side artifacts to
+      deploy. If there is a mis-match in the number of entries in files or
+      classifiers, then an error will be raised.
+
+    uniqueVersion
+      Whether to deploy snapshots with a unique version or not.
+
+    updateReleaseInfo
+      Parameter used to update the metadata to make the artifact as release.
+
+    url
+      URL where the artifact will be deployed.
+      ie ( file:///C:/m2-repo or scp://host.com/path/to/repo )
+      Required: Yes
+
+    version
+      Version of the artifact to be deployed. Retrieved from POM file if
+      specified.
+```
+
+:::
+
+##### 使用 deploy 目标
+
+settings.xml 设置私服位置
+
+```xml
+<mirror>
+  <id>nexus-mine</id>
+  <mirrorOf>central</mirrorOf>
+  <name>Nexus mine</name>
+  <url>http://localhost:8081/repository/maven-public/</url>
+</mirror>
+```
+
+settings.xml 设置私服认证信息
+
+```xml
+<server>
+  <id>nexus-mine</id>
+  <username>admin</username>
+  <password>xxx</password>
+</server>
+```
+
+pom.xml 设置部署位置
+
+```xml
+<distributionManagement>
+  <snapshotRepository>
+    <!-- id 需要与 settings.xml 上一致 -->
+    <id>nexus-mine</id>
+    <url>http://localhost:8081/repository/maven-snapshots/</url>
+  </snapshotRepository>
+</distributionManagement>
+```
+
+pom.xml 设置坐标。
+
+```xml
+<!-- 上传的坐标 -->
+<groupId>...</groupId>
+<!-- 上传的包名 -->
+<artifactId>...</artifactId>
+<!-- 上传的版本 -->
+<version>...</version>
+```
+
+::: tip
+Maven 制品是按照 groupId/artifactId/version 路径存储的
+:::
+
+上传命令
+
+```bash
+mvn clean deploy -s ./settings.xml -gs ./settings.xml
+
+# -s,--settings <arg> —— Alternate path for the user settings file 
+# -gs,--global-settings <arg> —— Alternate path for the global settings file
+```
+
+##### 使用 deploy 目标的密码加密方案
+
+上传私服需要设置明文密码，这一般是不被允许的。
+
+```xml
+<server>
+  <id>nexus-mine</id>
+  <username>admin</username>
+  <password>xxx</password>
+</server>
+```
+
+加密方案： 
+
++ 配置环境变量
++ https://maven.apache.org/guides/mini/guide-encryption.html
+
+todo
+
+##### 使用 deploy-file 目标
+
+```bash
+mvn deploy:deploy-file \
+-Dfile=D:\xxx\com.xxx.test-1.0.0.jar \
+-DpomFile=./pom.xml \
+-DgroupId=com.example.xxx \
+-DartifactId=test \
+-Dversion=1.0.0-SNAPSHOT \
+-Dpackaging=jar \
+-DrepositoryId=nexus-mine \
+-Durl=http://localhost:8081/repository/maven-snapshots/ \
+-s ./settings.xml -gs ./settings.xml \
+-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ignore.validity.dates=true \
+
+参数说明：
+-Dfile 要上传包的本地路径
+-DpomFile 本地 pom 文件路径。如果没有pom文件，maven会让你生成一个简易的pom文件
+-DgroupId -DartifactId -Dversion 要上传的坐标名称
+-Dpackaging 要上传包的格式。如 jar、rar、war、zip、... 
+-DrepositoryId 用于查找 settings 中配置的仓库设置，从而找到 server 中要使用的账号、密码
+-Durl 要上传的仓库地址
+-s ./settings.xml -gs ./settings.xml 本地 settings 文件绝对路径
+-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ignore.validity.dates=true 证书校验（可忽略）
+```
+
 ### 自定义
 
 编写 pom.xml 文件
@@ -242,3 +499,116 @@ todo `maven-compiler-plugin`
 + Findbugs —— 将编译后的字节码与一组错误模型对比，识别出代码中的缺陷。如：未使用的错误方法、空指针引用、资源泄露等
 
 todo
+
+## Maven 私服
+
+常见的 Maven 私服产品：
+
++ Apache 的 Archiva
++ JFrog 的 Artifactory
++ Sonatype 的 Nexus （关系；联系；） —— 最流行、最广泛
+
+### Nexus 安装、使用
+
+官网： <https://help.sonatype.com/repomanager3/product-information>
+
+下载： <https://help.sonatype.com/en/download.html>
+
+选择版本下载，管理员启动
+
+```bash
+./nexus /run
+```
+
+`localhost:8081`
+
+初始配置
+
+```bash
+# 更改默认密码！
+右上角 login in
+默认账户/密码
+admin/按操作提示
+```
+
+默认仓库： 我们关心 maven 开头的仓库即可
+
+```
+maven-central（proxy） —— proxy=远程中心仓库的代理。设置界面可以设置代理的远程中心仓库地址
+maven-public（group） —— group=主仓库。远程下载的jar包会存放在这个地址。
+maven-releases（hosted） —— hosted=本地仓库。存放公司内部上传的jar包。releases=发布，正式版本。
+maven-snapshots（hosted） —— snapshots=快照，测试版本。
+nuget-group
+nuget-hosted
+nuget.org-proxy
+```
+
+#### 配置maven仓库
+
+settings.xml
+
+```xml
+<mirror>
+  <id>nexus-mine</id>
+  <mirrorOf>central</mirrorOf>
+  <name>Nexus mine</name>
+  <url>http://localhost:8081/repository/maven-public/</url>
+</mirror>
+```
+
+如果禁用了匿名访问，需要添加用户设置
+
+```xml
+<server>
+  <id>nexus-mine</id>
+  <username>admin</username>
+  <password>xxx</password>
+</server>
+```
+
+下载依赖、编译工程
+
+```bash
+mvn clean compile
+```
+
+##### 部署jar包
+
+pom.xml
+
+```xml
+<!-- 管理工程部署位置配置 -->
+<distributionManagement>
+  <snapshotRepository>
+    <!-- id 需要与 settings.xml 上一致 -->
+    <id>nexus-mine</id>
+    <name>Nexus mine</name>
+    <url>http://localhost:8081/repository/maven-snapshots/</url>
+  </snapshotRepository>
+</distributionManagement>
+```
+
+```bash
+mvn clean deploy
+```
+
+#### 引用部署的jar包
+
+pom.xml
+
+```xml
+<repositories>
+  <repository>
+    <id>nexus-mine</id>
+    <name>nexus-mine</name>
+    <url>http://localhost:8081/repository/maven-snapshots/</url>
+    <!-- 是否使用 snapshot/relase 版本依赖 -->
+    <snapshots>
+      <enabled>true</enabled>
+    </snapshots>
+    <releases>
+      <enabled>true</enabled>
+    </releases>
+  </repository>
+</repositories>
+```

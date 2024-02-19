@@ -2,6 +2,12 @@
 title: Python 使用笔记
 ---
 
+todo All Algorithms implemented in Python https://github.com/TheAlgorithms/Python
+
+todo Python Examples https://github.com/geekcomputers/Python
+
+todo Python 教程 https://github.com/walter201230/Python
+
 官网： https://www.python.org/
 
 ```bash
