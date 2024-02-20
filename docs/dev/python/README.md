@@ -2,17 +2,24 @@
 title: Python 使用笔记
 ---
 
-todo 《Python 程序设计入门到实战》 by 何敏煌
-todo 《Python 网络编程攻略》 by Dr.M.O.Faruque Sarker
-todo 《Python 绝技 —— 运用 Python 成为顶级黑客》 by TJ.O' Connor
-todo 《完全学会 Git · Github · Git Server 的 24 堂课》 by 孙宏明
-
 官网： https://www.python.org/
+
+在线编写Python：
+
++ tutorialspoint —— <https://www.tutorialspoint.com/codingground.htm>
++ repl.it —— <https://repl.it/languages/python3>
 
 ```bash
 $ python -c 'print("hello world")'
 hello world
 ```
+
+Python 生态：（完整：<https://en.wikipedia.org/wiki/List_of_Python_software>）
+
++ 网站后端 —— 框架：Django；产品：Pinterest、Instagram、Disqus、BitTorrent（BT下载器）
++ 图像处理 —— 框架：OpenCV
++ 矩阵运算 —— 框架：NumPy
++ 3D动画 —— Maya 的 Python Script 支持
 
 ## 环境配置
 
@@ -1843,6 +1850,14 @@ add(1,1)
 # --------------
 # 1 + 1 = 2
 # --------------
+```
+
+### 网络请求
+
+```py
+import requests
+www = requests.get("http://mobile.sina.com.cn/")
+print(www.text)
 ```
 
 ### 项目打包
