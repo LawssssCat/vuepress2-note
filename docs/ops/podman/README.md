@@ -3,7 +3,12 @@ title: Podman 使用笔记
 tags:
   - podman
   - docker
+  - k8s
 ---
+
+```bash
+docker run --name foo --rm -d --memory='512MB' --cpus='0.5' nginx
+```
 
 ## 使用Dockerfile构建Alpine镜像
 
@@ -76,11 +81,32 @@ podman history nginx --no-trunc
 podman inspect --format='{{json.config}}' nginx
 ```
 
+### 压缩镜像分层
+
+Docker 分层 = 基础镜像分层 + Dockerfile 引入分层
+
++ `--squash` 压缩 Dockerfile 层为一层
++ `--squash-all` 压缩基础镜像分层和 Dockerfile 引入分层为一层！
+
 ## podman pod
 
 todo podman pod
 
-参考 https://ithelp.ithome.com.tw/articles/10239822
+参考 
+
++ Pod 功能介绍 - https://ithelp.ithome.com.tw/articles/10239822
++ Pod 与容器的区别 - https://zhuanlan.zhihu.com/p/650682331 todo
+  + Pod 是如何在底层实现的
+  + Pod 和 Container 之间的实际区别是什么
+  + 如何使用 Docker 创建 Pod
+
+::: tip
+刚开始接触 Kubernetes 时，你学到的第一件事就是每个 Pod 都有一个唯一的 IP 和主机名，并且在同一个 Pod 中，容器可以通过 localhost 相互通信。所以，显而易见，一个 Pod 就像一个微型的服务器。
+
+但是，过段时间，你会发现 Pod 中的每个容器都有一个隔离的文件系统，并且从一个容器内部，你看不到在同一 Pod 的其他容器中运行的进程。好吧！也许 Pod 不是一个微型的服务器，而只是一组具有共享网络堆栈的容器。
+
+但随后你会了解到，Pod 中的容器可以通过共享内存进行通信！所以，在容器之间，网络命名空间不是唯一可以共享的东西……
+:::
 
 Pod 概念由 Kubernetes 引入。一个 Pod 管理多个容器，其中所有容器共享网络，可以轻松通过 localhost 相互通信，而无需设定任何额外的服务端口。
 

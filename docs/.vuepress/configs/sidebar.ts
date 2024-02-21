@@ -180,11 +180,11 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     },
     {
       text: "虚拟化技术",
-      children: ["vmware/", "wsl/"],
+      children: ["vmware/", "vagrant/", "wsl/"],
     },
     {
       text: "容器编排",
-      children: ["podman/", "k8s/"],
+      children: ["docker.md", "podman/", "k8s/"],
     },
     {
       text: "监控",
