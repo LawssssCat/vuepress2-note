@@ -138,6 +138,30 @@ system | ✔ | ✔ | ❌ | ❌ | asm
 
 todo 优先级、版本范围指定、版本固定之类的东西
 
+使用 dependencyManagement 管理依赖版本。
+在 dependencyManagement 中申明的 dependencies 不会被实际下载 jar 包，只有当该 jar 包被实际依赖后，才会去下载对应的 jar 包版本。
+
+```xml
+<!-- 只是对版本进行管理，不会实际引入jar -->
+<dependencyManagement>  
+      <dependencies>  
+            <dependency>  
+                <groupId>org.springframework</groupId>  
+                <artifactId>spring-core</artifactId>  
+                <version>3.2.7</version>  
+            </dependency>  
+    </dependencies>  
+</dependencyManagement>  
+  
+<!-- 会实际下载jar包 -->
+<dependencies>  
+       <dependency>  
+                <groupId>org.springframework</groupId>  
+                <artifactId>spring-core</artifactId>  
+       </dependency>  
+</dependencies>  
+```
+
 ## Maven 仓库
 
 Maven 仓库是用来存放项目中依赖的软件包（jar、war、pom）和元素据（坐标信息、源码、作者、SCM、许可证）等信息
