@@ -117,7 +117,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["mybatis/"],
     },
   ],
-  "/dev/python/": ["README.md"],
+  "/dev/python/": ["README.md", "jupyter.md", "books.md"],
   "/tool/": [
     {
       text: "资源管理器",

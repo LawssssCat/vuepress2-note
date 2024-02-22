@@ -72,3 +72,12 @@ obj = {
 }
 obj.update({"age": 35, "skill": ("python", "java")})
 print(obj)
+
+k = [1,2,3]
+v = ['a','b','c']
+print(list(zip(k,v))) # [(1, 'a'), (2, 'b'), (3, 'c')]
+
+s = ['s']
+k = [1,2]
+v = ['a','b','c']
+print(list(zip(s, k,v))) # [('s', 1, 'a')]
