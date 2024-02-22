@@ -8,6 +8,8 @@ todo Python Examples https://github.com/geekcomputers/Python
 
 todo Python 教程 https://github.com/walter201230/Python
 
+todo pandas数据分析 ~~https://www.bilibili.com/video/BV1q2421L7XR~~ （Pandas、Seaborn、Numpy、Matplotlib四大Python数据科学必备工具）
+
 官网： https://www.python.org/
 
 在线编写Python：
