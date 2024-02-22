@@ -63,12 +63,55 @@ wget https://www.python.org/ftp/python/3.12.1/Python-3.12.1.tgz
 # 安装依赖
 yum -y install make gcc gcc-c++
 # 解压
-tar -xf Python-3.11.6.tgz 
+tar -xfv Python-3.12.1.tgz && cd ${_%.*}
 # 编译安装
 # 默认在 /usr/local | 通过 ./configure --prefix=/usr/local/python3 指定安装目录
 ./configure
 make && make install
 ```
+
+💡 python3.10编译安装报SSL失败解决方法： <https://blog.csdn.net/mdh17322249/article/details/123966953>
+
+::: details
+说明： python3.10之后版本不在支持libressl使用ssl，需要使用openssl安装来解决编译安装
+
+编译、安装、配置 openssl
+
+```bash
+# 编译、安装
+wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz
+tar -zxvf openssl-1.1.1w.tar.gz
+cd openssl-1.1.1w
+# ./config --prefix=/usr/local/openssl
+./config
+make 
+make install
+
+# 修改链接文件
+mv /usr/bin/openssl /usr/bin/openssl.bak
+ln -sf /usr/local/openssl/bin/openssl /usr/bin/openssl
+
+# 添加路径至ld.so.conf
+## 路径最后不带“/”，否则报错
+echo "/usr/local/openssl/lib" >> /etc/ld.so.conf
+ldconfig -v
+
+openssl version
+```
+
+修改Python编译源文件的Module/Setup链接，修改如下： （每个人的文件可能不一样，以自己的为准）
+
+1. 第211行路径修改为OpenSSL编译的路径
+1. 第212-214解除注释
+
+```make
+210 # socket line above, and edit the OPENSSL variable:
+211  OPENSSL=/usr/local/openssl
+212  _ssl _ssl.c \
+213      -I$(OPENSSL)/include -L$(OPENSSL)/lib \
+214      -lssl -lcrypto
+```
+:::
 
 ```bash
 $ python3 --version
