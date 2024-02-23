@@ -82,8 +82,8 @@ make && make install
 wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz
 tar -zxvf openssl-1.1.1w.tar.gz
 cd openssl-1.1.1w
-# ./config --prefix=/usr/local/openssl
-./config
+# ./config
+./config --prefix=/usr/local/openssl
 make 
 make install
 
@@ -153,9 +153,33 @@ python -m ensurepip
 ::: danger
 旧版安装方式
 
+参考：
+
++ python3 安装pip <https://blog.csdn.net/lsx6766/article/details/88106114>
+
+方式一：
+
 ```bash
 $ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py   # 下载安装脚本
 $ sudo python get-pip.py    # 运行安装脚本
+```
+
+方式二：先setuptools,再pip （2024年2月24日 报错）
+
+```bash
+# --no-check-certificate
+wget https://pypi.python.org/packages/source/s/setuptools/setuptools-19.6.tar.gz#md5=c607dd118eae682c44ed146367a17e26
+tar -zxvf setuptools-19.6.tar.gz
+cd setuptools-19.6
+python3 setup.py build
+sudo python3 setup.py install
+
+# --no-check-certificate
+wget https://pypi.python.org/packages/source/p/pip/pip-8.0.2.tar.gz#md5=3a73c4188f8dbad6a1e6f6d44d117eeb
+tar -zxvf pip-8.0.2.tar.gz
+cd pip-8.0.2
+python3 setup.py build
+sudo python3 setup.py install
 ```
 :::
 
