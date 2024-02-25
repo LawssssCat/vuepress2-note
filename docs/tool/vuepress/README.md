@@ -67,6 +67,20 @@ awesome-vuepress： <https://github.com/vuepress/awesome-vuepress>
 `{{ This will be displayed as-is }}`
 :::
 
+### 内置组件 - 代码引用
+
+其中 `@code/java` 为用户配置内容（配置在 `.vuepress/config.ts` 中） 
+
+```vue
+@[code](@code/java/main/java/org/example/algorithm/SortBubble.java)
+```
+
+::: details
+可以引用文件内容作为代码块
+
+@[code](@code/java/main/java/org/example/algorithm/SortBubble.java)
+:::
+
 ### 内置组件 - Badge
 
 <https://v2.vuepress.vuejs.org/zh/reference/default-theme/components.html#badge>

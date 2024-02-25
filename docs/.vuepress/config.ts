@@ -28,6 +28,10 @@ export default defineUserConfig({
           /^@code\/java/,
           path.resolve(appRoot.path, "code/demo-java/src")
         );
+        str = str.replace(
+          /^@code\/python/,
+          path.resolve(appRoot.path, "code/demo-python/")
+        );
         return str;
       },
     },
