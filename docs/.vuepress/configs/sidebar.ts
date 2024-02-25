@@ -176,7 +176,16 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     },
     {
       text: "数据库",
-      children: ["oracle/database.md", "mysql/", "postgresql/", "redis/"],
+      children: [
+        "oracle/database.md",
+        "mysql/",
+        "postgresql/",
+        "redis/",
+        {
+          text: "内存数据库",
+          children: ["sqlite.md", "h2.md"],
+        },
+      ],
     },
     {
       text: "虚拟化技术",

@@ -69,6 +69,7 @@ pip install SomePackage              # 最新版本
 pip install SomePackage==1.0.4       # 指定版本
 pip install 'SomePackage>=1.0.4'     # 最小版本
 pip install --upgrade SomePackage # 升级
+pip install -U SomePackage # 升级
 pip uninstall SomePackage # 卸载
 
 pip search SomePackage # 搜索
@@ -76,6 +77,9 @@ pip show # 安装包信息
 pip show -f SomePackage # 安装包详情
 pip list # 列出已安装包
 pip list -o # 列出可升级安装包
+pip freeze # 同 list，但输出格式不同
+pip freeze > requirements.txt # 常用于导出当前环境的外加模块名称和版本，以便其他环境了解程序使用了哪些模块。一般存放在项目目录 requirements.txt 中
+pip install -r requrements.txt
 ```
 
 ## PIP 更换镜像源
@@ -86,3 +90,9 @@ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package
 # 永久使用
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 ```
+
+## PyPI 网站
+
+https://pypi.python.org/pypi
+
+几乎所有主流的软件包都集中在这里
