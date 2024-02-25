@@ -41,6 +41,10 @@ awesome-vuepress： <https://github.com/vuepress/awesome-vuepress>
 ::: details
 这是一个 details 标签
 :::
+
+::: v-pre
+`{{ This will be displayed as-is }}`
+:::
 ```
 
 ::: tip
@@ -57,6 +61,10 @@ awesome-vuepress： <https://github.com/vuepress/awesome-vuepress>
 
 ::: details
 这是一个 details 标签
+:::
+
+::: v-pre
+`{{ This will be displayed as-is }}`
 :::
 
 ### 内置组件 - Badge

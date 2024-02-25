@@ -24,7 +24,7 @@ ls
 # 执行python命令
 print("hello world!")
 # 创建文件，记录执行过程，方便后续复用命令
-ecit 3-1.py
+edit 3-1.py
 ```
 
 todo
