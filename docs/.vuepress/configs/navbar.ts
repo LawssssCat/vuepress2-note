@@ -160,60 +160,6 @@ export const navbarConfig: NavbarConfig = [
   },
   {
     text: "脑洞工具",
-    children: [
-      {
-        text: "资源管理器",
-        children: [
-          {
-            text: "OneCommander",
-            link: "/tool/explorer/onecommander.md",
-          },
-        ],
-      },
-      {
-        text: "终端界面",
-        children: [
-          {
-            text: "Terminal",
-            link: "/tool/terminal/",
-          },
-        ],
-      },
-      {
-        text: "包管理",
-        children: [
-          {
-            text: "WinGet",
-            link: "/tool/package/winget.md",
-          },
-          {
-            text: "Scoop",
-            link: "/tool/package/scoop.md",
-          },
-        ],
-      },
-      {
-        text: "版本管理",
-        children: [
-          {
-            text: "Git",
-            link: "/tool/git/",
-          },
-        ],
-      },
-      {
-        text: "博客",
-        children: [
-          {
-            text: "Vuepress",
-            link: "/tool/vuepress/",
-          },
-          {
-            text: "Hugo",
-            link: "https://lawsssscat.github.io/hugo-usage-doc/",
-          },
-        ],
-      },
-    ],
+    link: "/tool/mediaplayer/mpv.md",
   },
 ];

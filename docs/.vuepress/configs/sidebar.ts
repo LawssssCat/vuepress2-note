@@ -124,6 +124,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["explorer/onecommander.md"],
     },
     {
+      text: "媒体播放器",
+      children: ["mediaplayer/mpv.md", "mediaplayer/vlc.md"],
+    },
+    {
       text: "终端界面",
       children: ["terminal/"],
     },
@@ -141,7 +145,13 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     },
     {
       text: "博客",
-      children: ["vuepress/"],
+      children: [
+        "vuepress/",
+        {
+          text: "Hugo",
+          link: "https://lawsssscat.github.io/hugo-usage-doc/",
+        },
+      ],
     },
   ],
   "/ops/": [
