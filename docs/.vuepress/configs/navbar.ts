@@ -68,6 +68,10 @@ export const navbarConfig: NavbarConfig = [
             text: "Python",
             link: "/dev/python/",
           },
+          {
+            text: "Shell",
+            link: "/dev/shell/",
+          },
         ],
       },
       {
