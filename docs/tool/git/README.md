@@ -12,3 +12,9 @@ ssh-keygen -t rsa
 #登录验证
 ssh -T git@github.com
 ```
+
+hub 选择
+
++ github —— 默认选择
++ BitBucket —— 私人小项目
++ gitee —— ！？....

@@ -117,7 +117,13 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["mybatis/"],
     },
   ],
-  "/dev/python/": ["README.md", "jupyter.md", "books.md"],
+  "/dev/python/": [
+    "README.md",
+    "syntax.md",
+    "pip.md",
+    "jupyter.md",
+    "python-network.md",
+  ],
   "/tool/": [
     {
       text: "资源管理器",
@@ -186,7 +192,16 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     },
     {
       text: "数据库",
-      children: ["oracle/database.md", "mysql/", "postgresql/", "redis/"],
+      children: [
+        "oracle/database.md",
+        "mysql/",
+        "postgresql/",
+        "redis/",
+        {
+          text: "内存数据库",
+          children: ["sqlite.md", "h2.md"],
+        },
+      ],
     },
     {
       text: "虚拟化技术",
