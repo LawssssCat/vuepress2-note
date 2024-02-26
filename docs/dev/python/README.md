@@ -10,10 +10,12 @@ title: Python 使用笔记
 
 ![image.png](https://s2.loli.net/2023/11/20/c9O82XwApqsyuBb.png)
 
-doing 《Python 程序设计入门到实战》 by 何敏煌
-todo 《Python 网络编程攻略》 by Dr.M.O.Faruque Sarker
-todo 《Python 绝技 —— 运用 Python 成为顶级黑客》 by TJ.O' Connor
-todo 《完全学会 Git · Github · Git Server 的 24 堂课》 by 孙宏明
+待看：
+
++ ~~done80% 《Python 程序设计入门到实战》 by 何敏煌~~
++ todo 《Python 网络编程攻略》 by Dr.M.O.Faruque Sarker
++ todo 《Python 绝技 —— 运用 Python 成为顶级黑客》 by TJ.O' Connor
++ todo 《完全学会 Git · Github · Git Server 的 24 堂课》 by 孙宏明
 
 ---
 
@@ -452,6 +454,14 @@ for eq in earthquakes['features']:
   print("时间：{}".format(d))
 ```
 
+### 中文
+
+todo 中文分词模块 jieba
+
+### 图像绘制
+
+todo matplotlib, pillow
+
 ### 日志装饰器
 
 ```py
@@ -526,6 +536,27 @@ import requests
 www = requests.get("http://mobile.sina.com.cn/")
 print(www.text)
 ```
+
+爬虫 [link](./python-network.md)
+
+### Facebook graph api
+
+todo
+
+```bash
+pip install facebook-sdk
+```
+
+### Web 框架
+
+todo Django
+
+todo 部署
+
++ ngrok —— 代理本地网络到外网访问，测试用
++ cloud9 ide —— 云工作空间
++ DigitalOcean —— 云虚拟机
++ Heroku —— 云计算服务
 
 ### 项目打包
 

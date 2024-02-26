@@ -95,3 +95,104 @@ import hashlib
 r = requests.get('http://target.web.site.page')
 sig = hashlib.md5(r.text.encode('utf-8')).hexdigets()
 ```
+
+## 操作浏览器
+
+request 只能获取 html。但是有的操作需要解析 html 并执行 js 脚本。
+
+解决上述问题需要 selenium 模块，它可以直接操作系统中的浏览器，就好像人工在操作一样！
+
+```py
+pip install selenium
+```
+
+::: tip
+如果是 firefox 浏览器，可以下载 firebug 附加组件。它能帮我们更加方便地分析网页！
+:::
+
+```py
+from selenium import webdriver
+web = webdriver.Firefox()
+web.get('https://www.sina.com.cn')
+web.quit()
+```
+
+webdriver 方法 | 说明
+--- | ---
+`get_window_position()` | 获取窗口位置（左上角）
+`set_window_position(x,y)` | 设置窗口位置（左上角）
+`maximize_window()`
+`get_window_size()`
+`set_window_size(x,y)`
+`refresh()`
+`back()` | 返回上一页
+`forward()` | 前往下一页
+`close()` | 关闭窗口
+`quit()` | 结束浏览器的执行
+`get(url)` | 浏览这个网页
+`save_screenshot(filename)` | 以 png 格式保存当前浏览器屏幕截图（存储完整的页面截图，不受窗口大小限制）
+`current_url`
+`page_source`
+`title`
+
+```py
+# _*_ coding: utf-8 _*_
+# 下载页面截图
+
+from selenium import webdriver
+urls = [
+    "https://www.sina.com.cn",
+    "https://www.sohu.com",
+    "https://www.eastmoney.com",
+    "https://www.newone.com.cn",
+    "https://www.baidu.com"
+]
+web = webdriver.Firefox()
+web.set_window_position(0,0)
+web.set_window_size(800,600) # 窗口大小不限制截图大小
+i = 0
+for url in urls:
+    web.get(url)
+    web.save_screenshot("webpage{}.png".format(i))
+    i = i + 1
+web.quit()
+```
+
+不需要 BeautifulSoup， Selenium 的 webdriver 本身就能检索页面的元素
+
+webdirver 方法 | 说明
+--- | ---
+`find_element(by, value)` | 使用 by 方法查询第一个符合 value 的元素
+`find_element_by_class_name(name)`
+`find_element_by_css_selector(selector)`
+`find_element_by_id(id)`
+`find_element_by_link_text(text)`
+`find_element_by_name(name)`
+`find_element_by_tag_name(name)`
+
+对于找到的页面元素，有以下方法
+
+页面元素方法 | 说明
+--- | ---
+`clear()` | 清除内容 content
+`click()` |
+`is_display()` | 是否可见状态
+`is_enabled()` | 是否可用状态
+`is_selected()` | 是否被选中的状态
+`send_keys(value)` | 对此元素送出一串字符，也可以是特定的按键
+
+```py
+# _*_ coding: utf-8 _*_
+# 模拟登录
+
+from selenium import webdriver
+
+web = webdriver.Firefox()
+web.get("https://www.jd.com")
+web.find_element_by_id('ttbar-login').click()
+web.find_element_by_name('loginname').clear()
+web.find_element_by_name('loginname').send_keys('your account')
+web.find_element_by_name('nloginpwd').clear()
+web.find_element_by_name('nloginpwd').send_keys('you password')
+web.find_element_by_id('loginsubmit').click()
+```
