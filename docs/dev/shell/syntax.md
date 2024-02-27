@@ -376,6 +376,52 @@ file1
 
 ## 字符串（扩展）
 
+### 打印
+
+#### echo
+
+`set -H` 可以打印 `!`
+
+`echo -e` 转义字符
+
+#### printf
+
+格式替代符（format substitution character）
+
+```bash
+printf "%-5s %-10s %-4s\n" No Name Mark
+printf "%-5s %-10s %-4.2f\n" 1 Sarath 80.2455
+printf "%-5s %-10s %-4.2f\n" 1 James 12.321312
+printf "%-5s %-10s %-4.2f\n" 1 Jeff 44.12313
+```
+
+### 颜色（color）
+
+<https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux>
+
+```bash
+Black        0;30     Dark Gray     1;30
+Red          0;31     Light Red     1;31
+Green        0;32     Light Green   1;32
+Brown/Orange 0;33     Yellow        1;33
+Blue         0;34     Light Blue    1;34
+Purple       0;35     Light Purple  1;35
+Cyan         0;36     Light Cyan    1;36
+Light Gray   0;37     White         1;37
+```
+
+```bash
+#    .---------- constant part!
+#    vvvv vvvv-- the code from above
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+printf "I ${RED}love${NC} Stack Overflow\n"
+```
+
+```bash
+echo -e "\e[1;42m Green Background \e[0m"
+```
+
 ### 列提取
 
 ```bash
@@ -568,29 +614,6 @@ qmgr      unix  n       -       n       300     1       qmgr
 ```bash
 $ echo "" | awk '!a[$0]++{print}' | grep  -v "^$" && echo ok
 $ echo "" | grep  -v "^$" && echo ok
-```
-
-### 颜色（color）
-
-<https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux>
-
-```bash
-Black        0;30     Dark Gray     1;30
-Red          0;31     Light Red     1;31
-Green        0;32     Light Green   1;32
-Brown/Orange 0;33     Yellow        1;33
-Blue         0;34     Light Blue    1;34
-Purple       0;35     Light Purple  1;35
-Cyan         0;36     Light Cyan    1;36
-Light Gray   0;37     White         1;37
-```
-
-```bash
-#    .---------- constant part!
-#    vvvv vvvv-- the code from above
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-printf "I ${RED}love${NC} Stack Overflow\n"
 ```
 
 ## 数组（array）

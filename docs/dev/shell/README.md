@@ -6,6 +6,8 @@ tags:
   - profile
 ---
 
+Bash（Bourne Again Shell）
+
 ## 语法
 
 [link](./syntax.md)
@@ -31,6 +33,12 @@ todo
 ::: tip
 总结：profile for 用户（登录）、bashrc for bash（非登录）
 :::
+
+## 历史记录
+
+`~/.bash_history`
+
+`history` 查看
 
 ## 调试
 
