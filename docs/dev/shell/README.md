@@ -34,6 +34,50 @@ todo
 总结：profile for 用户（登录）、bashrc for bash（非登录）
 :::
 
+查看其他进程环境变量
+
+```bash
+$ sudo cat /proc/1/environ
+WSL2_CROSS_DISTRO=/wslkCcfnf
+$ sleep 10000 &
+[1] 87
+$ pgrep sleep
+87
+# 下面变量彼此用 \0 分割，而不是用 \n 分割
+$ cat /proc/87/environ
+SHELL=/bin/bashWSL_DISTRO_NAME=UbuntuNAME=lpc19PWD=/mnt/c/Users/xxxxLOGNAME=uv01MOTD_SHOWN=.....PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files (x86)/......5/bin:/snap/binHOSTTYPE=x86_64_=/usr/bin/sleep
+# 换行
+$ cat /proc/87/environ | tr '\0' '\n'
+SHELL=/bin/bash
+WSL_DISTRO_NAME=Ubuntu
+NAME=lpc19
+PWD=/mnt/c/Users/xxxx
+LOGNAME=uv01
+MOTD_SHOWN=update-motd
+HOME=/home/uv01
+LANG=C.UTF-8
+....
+```
+
+检查当前shell版本
+
+```bash
+echo $SHELL
+echo $0
+```
+
+检查是否为超级用户
+
+```bash
+if [ $UID -ne 0 ]; then
+  echo Non root user. Please run as root.
+else
+  echo Root user
+fi
+```
+
+todo 用 PS1 改变提示文本
+
 ## 历史记录
 
 `~/.bash_history`
@@ -77,6 +121,47 @@ for i in $(cat $hostfile); do
     cat disk.log | mail -s "$i: disk is greater than 80%" root@localhost
   fi 
 done
+```
+
+## 终端处理工具
+
+### tput
+
+```bash
+# 终端列数、行数
+$ tput cols # 120
+$ tput lines # 30
+# 打印当前终端名称
+$ tput longname # xterm with 256 colors
+
+# 将光标位置移动
+$ tput cup 100 100 # 移动
+$ tput cup 0 0     # 复原
+# 删除光标到行尾的内容
+$ tput ed
+
+# 设置终端背景色
+$ tput setb no # no值可以在0~7之间
+# 设置文本样式为粗体
+$ tput bold
+# 设置下划线的开关
+$ tput smul
+$ tput rmul
+```
+
+### stty
+
+在输入密码时，不能让输入的内容显示出来
+
+```bash
+#!/bin/bash
+#Filename: password.sh
+echo -e "Enter password: "
+stty -echo
+read password
+stty echo
+echo
+echo "password read"
 ```
 
 ## 例子
@@ -182,3 +267,7 @@ else
     echo "Nginx configuration is invalid. Deployment failed."
 fi
 ```
+
+## 参考
+
++ 《Linux Shell Scripting Cookbook》 by Sarath Lakshman | 译-中 《Linux Shell 脚本攻略》 by 门佳 

@@ -210,6 +210,52 @@ todo
 
 `bash` - `export`
 
+## 数学运算
+
+### 基础运算 —— 整数运算
+
+可以利用 `let`/`(())`/`[]` 执行数学运算。在高级操作时，`expr`/`bc` 两个工具也非常有用！
+
+```bash
+a=1
+b=2
+let c=a+b
+echo $c # 3
+let c--; echo $c # 2
+let c++; echo $c # 3
+let c+=6; echo $c # 9
+```
+
+```bash
+a=1
+b=2
+c=$[ a + b ]; echo $c # 3
+c=$[ a + 100 ]; echo $c # 101
+c=$(( a + b )); echo $c # 3
+c=$(( a + 100 )); echo $c # 101
+c=`expr $a + $b`; echo $c # 3
+c=`expr $a + 100`; echo $c # 101
+```
+
+::: warnning
+以上方法只能用于整数，不支持浮点数！
+:::
+
+### bc —— 精确运算
+
+bc 至此精确的数学运算，包含了大量的高级选项。
+
+```bash
+a=2.2
+echo "1.3 + $a" | bc # 2.8 —— 默认 scale=2
+echo "scale=3;1.3 * $a" | bc # 2.86 —— 更改 scale
+# 乘方
+echo "2^10" | bc # 1024
+echo "sqrt(4)" | bc # 2
+# 进制转换
+echo "obase=2;7" | bc # 111
+```
+
 ## 字符串（基础）
 
 ### 截取 —— `#`、`##`、`%`、`%%`
@@ -821,14 +867,43 @@ for (( i=1; i<=100; i++ ))
 for (( i=1; i<=$a; i++ ))
 ```
 
-#### 数组
+#### 普通数组（array）
 
 ```bash
+# 方式1
 a=("1 222" 2 3); echo ${a[@]} ; for i in "${a[@]}" ; do  echo $i ; done 
+
+# 方式2
+array_var[0]="test0"
+array_var[1]="test1"
+array_var[2]="test2"
+array_var[3]="test3"
+# 打印所有值
+echo ${array_var[@]} # test0 test1 test2 test3
+echo ${array_var[*]} # test0 test1 test2 test3
+# 长度
+echo ${#array_var[@]} # 4
+echo ${#array_var[*]} # 4
 ```
 
-
 <https://blog.csdn.net/weixin_44324367/article/details/111312156>
+
+#### 关联数组（map）
+
+在普通数组中只能使用整数作为数组索引；在关联数组中可以使用任意文本作为数组索引。
+
+```bash
+# 声明关联数组
+$ declare -A ass_array
+# 定义
+$ ass_array=([index1]=val1 [index2]=val2)
+$ echo ${ass_array[index1]} # val1
+# 独立赋值
+$ ass_array[index1]=xxxxx
+# 列出所有键、值
+$ echo ${!ass_array[@]} # index1 index2
+$ echo ${ass_array[@]} # xxxxx val2
+```
 
 ### while
 
@@ -1411,6 +1486,12 @@ input word2 []
 >/<         —— 输出/输入重定向到“文件”（覆盖）
 >>/<<        —— 输出/输入重定向到“文件”（追加）
 <<<       —— 输入重定向到字符串，同"|"
+```
+
+### 管道
+
+```bash
+cmd1 | cmd2 | cmd3 -
 ```
 
 ### 管道传递
