@@ -124,6 +124,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     "jupyter.md",
     "python-network.md",
   ],
+  "/dev/shell/": ["README.md", "syntax.md"],
   "/tool/": [
     {
       text: "资源管理器",
