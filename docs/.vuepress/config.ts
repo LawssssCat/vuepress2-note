@@ -42,7 +42,7 @@ export default defineUserConfig({
     "/": {
       lang: "zh-CN",
       title: "浮世随记",
-      description: "浮沉聚散不定于世，随心记录不尽琐事",
+      description: "浮沉聚散于世，随心记录琐事",
     },
     "/en/": {
       lang: "en-US",
