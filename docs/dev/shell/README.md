@@ -84,11 +84,81 @@ todo 用 PS1 改变提示文本
 
 `history` 查看
 
+## 系统时间
+
+在 UNIX 系统中，时间被存储为一个整数，其大小为自世界标准时间（UTC）时间1970年1月1日0时0分0秒起所流逝的秒数。
+
+::: tip
+UTC（Coordinated Universal Time，世界标准时间或世界协调时间）是以原子时秒长为基础，在时刻上尽量接近于世界时的一种时间计量系统。
+
+UNIX 认为 UTC 1979年1月1日0点 是纪元时间或UNIX时间。POSIX标准 推出后，这个时间也被称为 POSIX时间。
+:::
+
+```bash
+# 时间格式化
+$ date
+Wed Feb 28 22:01:52 CST 2024
+$ date +%s
+1709128922
+$ date --date "Wed Feb 28 22:01:52 CST 2024" +%s
+1709128912
+$ date +"%s %B %Y"
+1709129831 February 2024
+
+# 设置时间
+$ date -s "Wed Feb 28 22:01:52 CST 2024"
+date: cannot set date: Operation not permitted
+Wed Feb 28 22:01:52 CST 2024
+
+# 时间差
+$ start=$(date +%s)
+$ sleep 10
+$ end=$(date +%s)
+$ echo "Time taken to execute commands is $(( end - start)) seconds."
+```
+
+内容 | 格式
+--- | ---
+星期（Sat） | `%a`
+星期（Saturday） | `%A`
+月（Nov） | `%b`
+月（November） | `%B`
+日（28） | `%d`
+固定格式日期（`mm/dd/yy`） | `%D`
+年（10） | `%y`
+年（2010） | `%Y`
+小时（08） | `%H`/`%I`
+分钟（33） | `%M`
+秒（10） | `%S`
+纳秒（695208515） | `%N`
+UNIX纪元时（以秒为单位，1709128922） | `%s`
+
 ## 调试
 
 + `bash -n` 不执行，检查语法
 + `bash -v` 将脚本内容打印到屏幕，再执行
++ `bash +v` 禁止打印输入
 + `bash -x` 将脚本内容和输出都打印到屏幕，再执行
++ `bash +x` 关闭调试
+
+::: tip
+上述时命令行执行时添加（shebang方式）的形式。另外也可以在脚本文件中添加上诉参数。
+
+```bash
+set -xe
+```
+:::
+
++ `:` 不执行任何操作
++ 自定义调试方法
+  ```bash
+  function DEBUG() {
+    [ "$_DEBUG" == "on" ] && $@ || :
+  }
+  for i in {1..10}; do
+    DEBUG echo $i
+  done
+  ```
 
 e.g. 扫描机器是否在线
 
@@ -147,6 +217,27 @@ $ tput bold
 # 设置下划线的开关
 $ tput smul
 $ tput rmul
+```
+
+计时
+
+```bash
+#!/bin/bash
+echo -n Count:
+tput sc # 保留光标当前的位置
+
+count=0;
+while true; do
+  if [ $count -lt 40 ]; then
+    let count++;
+    sleep 1;
+    tput rc # 回到sc保存的位置
+    tput ed # 删除光标到行尾的内容
+    echo -n $count;
+  else 
+    exit 0;
+  fi
+done
 ```
 
 ### stty

@@ -430,6 +430,24 @@ file1
 
 `echo -e` 转义字符
 
+::: tip
+echo 有一个技巧，可能经常被用到，就是将多行输出为当行
+
+e.g.
+
+```bash
+$ a="a
+> b
+> c"
+$ echo "$a"
+a
+b
+c
+$ echo $a # 当没有""（双引号）时，以单行输出
+a b c
+```
+:::
+
 #### printf
 
 格式替代符（format substitution character）
@@ -708,6 +726,10 @@ ${#a[@]}
 + `[[]]` 中能用 `==` 进行模式匹配
 + `=~` 正则 `[[ "expression" =~ "string" ]]`
 
+::: tip
+`[]` 和 `[[]]` 的区别： 前者更早出现，后者更晚出现。后者是前者的功能增强版，语法更兼容，但可能不是全部系统都能用。（实际上现在都2024年了，全部系统都能用了！）
+:::
+
 ```bash
 sudo systemctl is-active mariadb > /dev/null 2>&1
 MARIADB_ACTIVE=$?
@@ -957,6 +979,13 @@ while IFS= read -r line
 do
     echo "$line"
 done <<< "$the_list"
+# -r 屏蔽\，如果没有该选项，则\作为一个转义字符，有的话 \就是个正常的字符了。
+# -d delim 结束符
+# IFS=flag 指定分隔符
+# -n num 读取n个字符
+# -s 不回显输入（non-echoed）
+# -p msg 显示提示词
+# -t timeout 超时时间
 ```
 
 参考
@@ -1005,6 +1034,26 @@ done
 ### function
 
 todo
+
+```bash
+$0
+$1
+$2
+$@ —— "a" "b" "c"
+$* —— "a b c"
+$? —— 返回值
+```
+
+::: tip
+Fork 炸弹： `:() { :|:& };:` —— 这个脚本将以指数规模创建信的进程，最终造成拒绝服务攻击。可以通过 `/etc/security/limits.conf` 配置来限制可生成的最大进程数。
+:::
+
+导出函数
+
+```bash
+export val1 # 导出变量
+export -f func1 # 导出函数
+```
 
 ### exit
 
@@ -1314,13 +1363,29 @@ chmod +x /tmp/demo-equals-separated.sh
 ### 管道：read
 
 ```bash
+# options —— 影响读取命令与输入交互方式
+# name —— 存储的变量名
 $ read [options] [name...]
+
+# 参数选项
+
+# -r 如果没有该选项，则 \（backslash） 作为一个转义字符；有的话 \ 就是个正常的字符了
+
+# -d delim 定界符/结束符
+# IFS=flag 指定分隔符
+# -n/-N num 读取n个字符，除非发生超时或到达 EOF
+
+# -s 不回显输入（non-echoed）
+# -p msg 显示提示词
+
+# -t timeout 超时时间
+
+# -a array 将单词拆分操作的结果存储在一个数组中而不是单独的变量中
+
+# -u fd 从给定的文件描述符中读取输入行
+# -e 使用`Bash`内置的`Readline`库读取输入行。在输入的时候可以使用命令补全功能
+# -i text 将文本打印为标准输出流上的默认输入（只能与`-e`结合使用）
 ```
-
-+ `options` —— 影响读取命令与输入交互方式
-+ `name` —— 存储的变量名
-
----
 
 默认会将`stdin`（标准输入流）中获取一行，分配给`REPLY`
 
@@ -1331,10 +1396,7 @@ $ echo $REPLY
 baeldung is a cool tech site
 ```
 
----
-
-默认情况下，读取命令将输入​​拆分为单词，将`<space>`、`<tab>`和`<newline>`字符视为“单词分隔符”。\
-同时，可以指定参数名。
+默认情况用 `\n` 回车符号拆分输入到各个变量中
 
 ```bash
 $ read input1 input2 input3
@@ -1345,39 +1407,21 @@ $ echo "[$input1] [$input2] [$input3]"
 [baeldung] [is] [a cool tech site]
 ```
 
----
-
-内部字段分隔符(`IFS`)确定给定行中的单词边界
+可以指定 IFS（Internal Field Separator，内部字段分隔符） 改变拆分符号
 
 ```bash
+# CSV（Comma Separated Value，逗号分隔型数值）
 $ {
-      IFS=";"
+      IFS=","
       read input1 input2 input3
       echo "[$input1] [$input2] [$input3]"
   }
-baeldung;;is;a;cool;tech;site # what we type
-[baeldung] [] [is;a;cool;tech;site]
+baeldung,,is,a,cool,tech;site # what we type
+[baeldung] [] [is,a,cool,tech;site]
 ```
 
 ```bash
-$ {
-IFS=" "
-read input1 input2 input3
-echo "[$input1] [$input2] [$input3]"
-}
-```
-
----
-
-参数选项
-
-+ `-s`：不将输入行回显到标准输出流
-+ `-p prompt`：在从标准输入流请求输入之前打印提示文本，不带`<newline>`字符
-+ `-a array`：将单词拆分操作的结果存储在一个数组中而不是单独的变量中
-+ `-e`：使用`Bash`内置的`Readline`库读取输入行
-+ `-i text`：将文本打印为标准输出流上的默认输入（只能与`-e`结合使用）
-
-```bash
+# -p
 $ {
       prompt="You shall not pass:"
       read -p "$prompt" -s input
@@ -1386,7 +1430,10 @@ $ {
 You shall not pass: # invisible input here
 input word [baledung is a cool site]
 ```
+
 ```bash
+# -e -i 读取变量值作为输入
+# -a
 $ {
       declare -a input_array
       text="baeldung is a cool tech site"
@@ -1400,18 +1447,21 @@ baeldung is a cool tech site # default input here
 [baeldung] [is] [a] [cool] [tech] [site] 
 ```
 
----
+#### 例子：获取用户bash配置
 
-高级语法
+```bash
+#!/bin/bash
 
-现在我们已经看到了`read`的实际效果，让我们来看看一些更高级的选项：
-
-+ `-d delim`：指定输入行的分隔符而不是使用`<换行>`字符
-+ `-u fd`：从给定的文件描述符中读取输入行
-+ `-r`：按原样处理`<backslash>`字符（不能用于转义特殊字符）
-+ `-t 超时`：尝试在给定的秒数内读取输入
-+ `-N`：从输入中准确读取`N`个字符，除非发生超时或到达`EOF`
-
+line="root:x:0:0:root:/root:/bin/bash"
+IFS=":"
+count=0
+for item in $line; do
+  [ $count -eq 0 ] && user=$item
+  [ $count -eq 6 ] && shell=$
+  let count++
+done
+echo "$user's shell is $shell"
+```
 
 #### 例子：从其他命令读取
 
@@ -1522,4 +1572,16 @@ emsg="$(./test_error.sh 2>&1)" # no catch, throw here.
 echo "emsg: \"$emsg\""
 
 # nothing to print, case of "set -e" (throw when exception and no catch)
+```
+
+## 进程
+
+通过 `()` 形式定义一个子 shell
+
+e.g.
+
+```bash
+pwd # /mnt/c/Users/xxx
+(cd /bin; ls) # 子 shell
+pwd # /mnt/c/Users/xxx
 ```
