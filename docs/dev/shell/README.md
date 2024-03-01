@@ -84,6 +84,54 @@ todo 用 PS1 改变提示文本
 
 `history` 查看
 
+## 回放
+
+用 `script` 和 `scriptreplay` 命令可以将终端的会话记录记录下来并回放。
+
+```bash
+script # 进入会话记录模式，并默认将会话记录记录在 typescript 文件中
+exit # 退出会话模式
+```
+
+会话记录和回放
+
+```bash
+# 记录命令时间戳
+# script [options] [file]
+# -t[<file>], --timing[=<file>] deprecated alias to -T (default file is stderr)
+# -T, --log-timing <file>       log timing information to file
+# -a, --append                  append to the log file
+
+# 旧写法
+script -t 2>timing.log -a output.session
+
+# 新写法
+script -T timing.log -a output.session
+
+...
+
+exit
+
+# 回放上述命令
+# scriptreplay [-t] timingfile [typescript] [divisor]
+scriptreplay timing.log output.session
+```
+
+会话记录广播
+
+```bash
+# session1
+mkfifo scriptfifo
+script -f scriptfifo
+
+....
+
+exit
+
+# session2
+cat scriptfifo # waiting change
+```
+
 ## 系统时间
 
 在 UNIX 系统中，时间被存储为一个整数，其大小为自世界标准时间（UTC）时间1970年1月1日0时0分0秒起所流逝的秒数。

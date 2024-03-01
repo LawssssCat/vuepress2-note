@@ -500,7 +500,105 @@ b
 2
 ```
 
-### 拼接
+### 字符映射
+
+#### tr
+
+```bash
+# tr [OPTION]... SET1 [SET2]
+# -d set 删除
+# -s set 压缩多个连续的相同字符为一个字符 e.g. 111 -> 1
+# -c set 补集 e.g. -c [0-9] 意思为 “指定 0~9 意外的全部字符”
+```
+
+例子： 大写转成小写
+
+```bash
+echo "HELLO WORLD!" | tr 'A-Z' 'a-z' # hello world!
+# 💡 可以使用下面的 “字符类” 实现
+```
+
+例子： todo ROT13加密
+
+例子： 删除字符
+
+```bash
+echo "hello world 2024!" | tr -d '0-9 ' # helloworld!
+echo "hello world 2024!" | tr -d -c '0-9' # 2024
+```
+
+例子： 压缩字符
+
+```bash
+echo "1           2" | tr -s ' ' # 1 2
+```
+
+例子： 相加 （没用的技巧）
+
+```bash
+echo "
+1
+2
+3
+4" | echo $[$(tr '\n' '+') 0] # 10
+```
+
+另外，tr 可以指定预定的 “字符类”
+
+字符类 | 说明
+--- | ---
+alnum | 字母、数字
+alpha | 字母
+digit | 数字
+graph | 图像字符
+lower | 小写字母
+upper | 大写字母
+cntrl | 控制（非打印）字符
+print | 可打印字符
+punct | 标点符号
+space | 空白字符
+xdigit | 十六进制字符
+
+例子： 大小写转换
+
+```bash
+echo 'hello world!' | tr '[:lower:]' '[:upper:]' # HELLO WORLD!
+```
+
+### 分割/合并
+
+#### xargs
+
+将多行输入变成 “空格隔开的单行输入”，或者单行变多行。
+
+```bash
+$ a="1 2 3
+> 3 4 5 6"
+$ echo "$a" | xargs
+1 2 3 3 4 5 6
+$ echo "$a" | xargs -n 2
+1 2
+3 3
+4 5
+6
+
+# -d delim 指定定界符
+
+# -I {} 替换字符
+$ echo "1 2 3 4" | xargs -n 1 | xargs -I {} echo "--- {} ---"
+--- 1 ---
+--- 2 ---
+--- 3 ---
+--- 4 ---
+```
+
+xargs 与 find 的结合： 因为 find 的结果中可能有空格，而 xargs 后的命令可能用空格做参数分割，或者用空格加回车做参数分割，如 rm 者可能造成错误。特别当 find 与 xargs 一起使用时，需要加上下面参数
+
+```bash
+find . -type f -name "*.txt" -print0 | xargs -0 rm -fv
+```
+
+### 拼接 todo
 
 参考： 
 
@@ -508,8 +606,7 @@ b
 
 #### Pure Bash
 todo
-#### tr
-todo
+
 #### paste
 todo
 #### sed
@@ -832,6 +929,36 @@ case <VALUE> in
 esac
 ```
 
+### 逻辑或
+
+```bash
+#!/bin/bash
+
+set -e
+
+emsg="$(./test_error.sh)" || echo "other 1"
+echo "emsg: \"$emsg\""
+
+# error!        <== &2 in "test_error.sh"
+# other 1       <== &1 in "here"
+# emsg: "ok!"   <== &1 in "here" from &1 in "test_error.sh"
+
+echo "==================="
+
+emsg="$(./test_error.sh 2>&1)" || echo "other 2"
+echo "emsg: \"$emsg\""
+
+# other 2              <== &1 in "here"
+# emsg: "ok!\nerror!"  <== &1 in "here" from &1+&2 in "test_error.sh"
+
+echo "==================="
+
+emsg="$(./test_error.sh 2>&1)" # no catch, throw here.
+echo "emsg: \"$emsg\""
+
+# nothing to print, case of "set -e" (throw when exception and no catch)
+```
+
 ## 循环
 
 ### for
@@ -1103,6 +1230,88 @@ server {
 EOF
 ```
 
+### 文件查找
+
+find
+
+```bash
+# 行为：打印
+find . -print # 默认，用 \n 分割每个匹配的文件
+find . -print0 # 用 \0 分割每个匹配的文件
+# 行为：跳过
+find . \( -name ".git" -prune \) -o \( -type f -print \)
+# 行为：删除
+# -delete
+# 行为：执行
+find . -exec echo "-- {}" \; # 注意结尾
+
+# 匹配文件名
+find . -name "*.txt"
+find . -iname "*.txt" # 忽略大小写
+# 匹配整个路径
+find . -path "*slynux*"
+# 匹配整个路径（正则）
+find . -regex ".*\(\.py\|\.sh\)$"
+# 匹配用户
+# -user username
+# 匹配权限
+# -perm 644
+# 匹配类型
+find . -type f # 匹配文件
+# f 普通文件
+# l 符号链接
+# d 目录
+# c 字符设备
+# b 块设备
+# s 套接字
+# p 管道Fifo
+# 匹配时间（每个文件都有三种时间戳，单位“天”）
+# -atime 访问时间，用户最近一次访问文件的时间
+# -mtime 修改时间，文件内容最后一次被修改的时间
+# -ctime 变化时间，文件元素据（matedata，如权限、所有权）最后一次变化的时间
+find . -type f -atime -7 -print # 在7天内访问
+find . -type f -atime 7 -print # 在前第7天访问
+find . -type f -atime -7 -print # 在7天前访问
+# -newer file 比某个文件更新
+find . -type f -newer file.txt -print
+# 匹配大小
+# -size +2k
+# -size -2k
+# -size 2k
+# 大小单位
+# b 块
+# c 字节
+# w 字（2字节）
+# k 千字节
+# M
+# G
+
+# 取反
+find . ! -name "*.txt" # 排除
+
+# 多个条件
+# -o 或
+find . -name "*.txt" -o -name "*.pdf"
+find . \( -name "*.txt" -o -name "*.pdf" \) -print # 如果参数比较多，可以将相似的放在一起，括起来
+
+# 搜索深度
+-maxdepth 10
+-mindepth 1
+```
+
+### 文件读取
+
+#### cat、tr
+
+```bash
+cat filename
+cat -s filename # 压缩空行，将多个连续空行压缩为一个空行
+cat filename | tr -s '\n' # 删除空行
+
+# -T 显示制表符
+# -n 显示行号
+```
+
 ## 参数处理
 
 参考
@@ -1360,7 +1569,10 @@ chmod +x /tmp/demo-equals-separated.sh
 /tmp/demo-equals-separated.sh -e=conf -s=/etc /etc/hosts
 ```
 
-### 管道：read
+## 信息传递
+
+
+### 读取： read
 
 ```bash
 # options —— 影响读取命令与输入交互方式
@@ -1525,7 +1737,11 @@ input word2 []
 + 它不再将输入拆分为单词，因为我们只想将 11 个字符分配给input1。
 + 如果发生超时，  read甚至会将部分输入分配给input1变量。
 
-## 信息传递
+### 管道
+
+```bash
+cmd1 | cmd2 | cmd3 -
+```
 
 ### 重定向
 
@@ -1538,42 +1754,6 @@ input word2 []
 <<<       —— 输入重定向到字符串，同"|"
 ```
 
-### 管道
-
-```bash
-cmd1 | cmd2 | cmd3 -
-```
-
-### 管道传递
-
-```bash
-#!/bin/bash
-
-set -e
-
-emsg="$(./test_error.sh)" || echo "other 1"
-echo "emsg: \"$emsg\""
-
-# error!        <== &2 in "test_error.sh"
-# other 1       <== &1 in "here"
-# emsg: "ok!"   <== &1 in "here" from &1 in "test_error.sh"
-
-echo "==================="
-
-emsg="$(./test_error.sh 2>&1)" || echo "other 2"
-echo "emsg: \"$emsg\""
-
-# other 2              <== &1 in "here"
-# emsg: "ok!\nerror!"  <== &1 in "here" from &1+&2 in "test_error.sh"
-
-echo "==================="
-
-emsg="$(./test_error.sh 2>&1)" # no catch, throw here.
-echo "emsg: \"$emsg\""
-
-# nothing to print, case of "set -e" (throw when exception and no catch)
-```
-
 ## 进程
 
 通过 `()` 形式定义一个子 shell
@@ -1584,4 +1764,6 @@ e.g.
 pwd # /mnt/c/Users/xxx
 (cd /bin; ls) # 子 shell
 pwd # /mnt/c/Users/xxx
+
+cmd0 | ( cmd1;cmd2;cmd3 ) | cmd4
 ```
