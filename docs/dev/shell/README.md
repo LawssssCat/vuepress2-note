@@ -185,19 +185,31 @@ UNIX纪元时（以秒为单位，1709128922） | `%s`
 
 ### 路径处理
 
-#### 获取路径文件名
 ```bash
-$ basename "/var/services/backup//tmp//backup__2023-05-02_0.tar.gz"
-backup__2023-05-02_0.tar.gz
-```
-#### 获取路径文件夹名
-```bash
-$ str="/var/services/backup//tmp//backup__2023-05-02_0.tar.gz"; 
-$ echo "${str%/*}"
+$ filepath="/var/services/backup//tmp//backup__2023-05-02_0.tar.gz"
+# 获取路径文件夹名
+# %/ —— 删除最后一个/及其右边的字符串
+$ echo "${filepath%/*}"
 /var/services/backup//tmp/
+# 获取路径文件名
+$ filename=$(basename $filepath)
+$ echo $filename
+backup__2023-05-02_0.tar.gz
+# 获取文件名前缀
+# %.* —— 删除最后一个.及其右边的字符串
+# %%.* （greedy）
+$ echo ${filename%.*}
+backup__2023-05-02_0.tar
+$ echo ${filename%%.*}
+backup__2023-05-02_0
+# 获取文件名后缀
+# #*. —— 删除前面内容
+# ##*. （greedy）
+$ echo ${filename#*.}
+tar.gz
+$ echo ${filename##*.}
+gz
 ```
-解释：
-+ `%/` ——  拿掉最后一个`/`及其右边的字符串
 
 ### 文件编辑
 
@@ -303,6 +315,43 @@ cat filename | tr -s '\n' # 删除空行
 # -n 显示行号
 ```
 
+### 文件移动
+
+#### mv
+
+批量改名
+
+```bash
+#!/bin/bash
+
+count=1
+for img in *.jpg *.png; do
+  new=image-$count.${img##*.}
+  mv -v "$img" "$new"
+  if [ $? -eq 0 ]; then
+    let count++
+  fi
+done
+```
+
+#### rename
+
+```bash
+# 将 JPG 后缀改为 jpg 后缀
+rename *.JPG *.jpg
+# 将空格改为 _ 连接
+rename 's/ /_/g' *
+
+# 变换文件名大小写
+rename 'y/A-Z/a-z/' *
+rename 'y/a-z/A-Z/' *
+```
+
+```bash
+find path -type f -name "*.mp3" -exec mv {} target_dir \;
+find path -type f -name "*.mp3" -exec rename 's/ /_/g' {} \;
+```
+
 ### 文件校验和核实
 
 校验和（checksum）程序用来从文件中生成校验和密钥，然后利用这个校验和密钥核实文件的完整性。
@@ -358,6 +407,74 @@ test/file_sum1.md5: OK
 
 # 方式二： 使用 find 命令
 find test/ -type f -print0 | xargs -0 md5sum >> test.md5
+```
+
+### 分割文件和数据
+
+在某些情况下，必须把文件分割成多个更小的片段，比如提高可读性、生成日志等。
+
+#### split
+
+```bash
+# 生成指定大小的文件
+$ dd if=/dev/zero bs=100k count=1 of=data.file # 创建一个内容全是0的文件
+1+0 records in
+1+0 records out
+102400 bytes (102 kB, 100 KiB) copied, 0.00106122 s, 96.5 MB/s
+
+# 分割文件
+# -b 按大小划分
+#     k KB
+#     M MB
+#     G GB
+#     c byte
+#     w word
+# -l 按行数划分
+$ split -b 10k data.file
+$ ls
+data.file  xaa  xab  xac  xad  xae  xaf  xag  xah  xai  xaj # 默认以字母为后缀
+# -d 以数字为后缀
+# -a num 指定后缀长度
+$ split -b 10k data.file -d -a 4
+$ ls
+data.file  x0001  x0003  x0005  x0007  x0009  xab  xad  xaf  xah  xaj
+x0000      x0002  x0004  x0006  x0008  xaa    xac  xae  xag  xai
+# 指定前缀
+# split [OPTION]... [FILE [PREFIX]]
+$ split -b 10k data.file split_file
+$ ls
+data.file     split_fileac  split_fileaf  split_fileai  x0001  x0004  x0007  xaa  xad  xag  xaj
+split_fileaa  split_filead  split_fileag  split_fileaj  x0002  x0005  x0008  xab  xae  xah
+split_fileab  split_fileae  split_fileah  x0000         x0003  x0006  x0009  xac  xaf  xai
+```
+
+#### csplit
+
+split 只能根据文件大小或者行数划分文件，csplit 可以根据关键字划分文件。
+
+```bash
+$ cat server.log
+server-1
+111111111111
+server-2
+222222222222
+server-3
+333333333333
+$ csplit server.log /server/ {*} -n 10 -f server -b "%02d.log" -s
+# {*} 表示重复执行分割，直到文件末尾 {整数}=分割行的次数
+# -n 后缀的数字个数，如 01 02 03
+# -f 前缀
+# -b 后缀
+# -s 静默模式
+$ ll
+total 24
+drwxr-xr-x 2 uv01 uv01 4096 Mar  2 20:52 ./
+drwxr-xr-x 4 uv01 uv01 4096 Mar  2 20:49 ../
+-rw-r--r-- 1 uv01 uv01   66 Mar  2 20:50 server.log
+-rw-r--r-- 1 uv01 uv01    0 Mar  2 20:52 server00.log
+-rw-r--r-- 1 uv01 uv01   22 Mar  2 20:52 server01.log
+-rw-r--r-- 1 uv01 uv01   22 Mar  2 20:52 server02.log
+-rw-r--r-- 1 uv01 uv01   22 Mar  2 20:52 server03.log
 ```
 
 ### 临时文件
@@ -502,6 +619,64 @@ read password
 stty echo
 echo
 echo "password read"
+```
+
+## 交互自动化
+
+交互命令
+
+```bash
+#!/bin/bash
+# interactive.sh
+read -p "Enter number:" no
+read -p "Enter name:" name
+echo You have entered $no, $name
+
+chmod +x interactive.sh
+```
+
+管道输入
+
+```bash
+$ echo -e "1\nhello\n" | ./interactive.sh
+You have entered 1, hello
+```
+
+文件输入
+
+```bash
+$ cat input.data
+1
+hello
+$ ./interactive.sh < input.data
+You have entered 1, hello
+```
+
+expect 交互自动化工具，但是并没有附带与多数常见linux系统中，即需要下载！
+
+```bash
+#!/usr/bin/expect
+# automate_expect.sh
+
+# 指定需要自动化哪个命令
+spawn ./interactive.sh
+# 提供需要等待的消息
+expect "Enter number:"
+# 要发送的消息
+send "1\n"
+expect "Enter name:"
+send "hello\n"
+# 指明命令交互结束
+expect eof
+```
+
+```bash
+$ chmod +x automate_expect.sh
+$ ./automate_expect.sh
+spawn ./interactive.sh
+Enter number:1
+Enter name:hello
+You have entered 1, hello
 ```
 
 ## 例子

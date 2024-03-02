@@ -736,6 +736,69 @@ sort file | awk '{if ($0!=line) print;line=$0}'
 sort file | sed '$!N; /^.∗\n\1$/!P; D'
 ```
 
+### 拼写检查
+
+Linux 大多数的发行版都含有一份字典文件。目录 `/usr/share/dict/` 包含了一些词典文件。“词典文件” 包含了一些词典单词列表的文本文件。我们可以利用这个列表来检查某个单词是否为词典中的单词。
+
+```bash
+#!/bin/bash
+# checkword.sh
+word=$1
+grep "^$word$" /usr/share/dict/british-english -q
+if [ $? -eq 0 ]; then
+  echo $word is a dictionary word;
+else
+  echo $word is not a dictionary word;
+fi
+
+$ ./checkword.sh ful
+```
+
+#### look
+
+查找以字典开头的内容
+
+```bash
+look [words] file # 默认看 /usr/share/dict/words 中的内容
+
+# 相当于
+grep "^word" file
+```
+
+```bash
+$ cat test.fs
+android
+android's
+ss
+androids
+xxxandroid
+$ look android test.fs
+android
+android's
+```
+
+#### aspell
+
+检查单词拼写
+
+用法：
+
+```bash
+aspell -a # 交互模式，检查输入，返回推荐拼写 Ctrl+D 退出
+aspell list # 交互模式，检查输入，返回拼写错误输入 Ctrl+D 退出
+```
+
+```bash
+#!/bin/bash
+word=$1
+output=`echo \"$word\" | aspell list`
+if [ -z $output ]; then # -z 判断是否为空
+  echo $word is a dictionary word;
+else
+  echo $word is not a dictionary word;
+fi
+```
+
 ### json解析 - jq
 
 参考
