@@ -638,20 +638,91 @@ todo
 + [Linux使用awk去掉重复值的几种情况](https://blog.csdn.net/shenyuye/article/details/107725445)
 + [linux sed去除重复,删除文本中的重复行(sort+uniq/awk/sed)](https://blog.csdn.net/weixin_42348880/article/details/117278175)
 
+#### sort+uniq
+
+```bash
+sort file | uniq
+# -b 忽略签到空格字符
+# -r 逆序
+# -d 按字典顺序（默认）
+# -n 按数字排序
+# -M 按月份排序
+# -k num 按哪一列排序
+
+# -z 以 \0 分割结果，而不是默认的分割方式 \n 
+
+# -m file1 file2 合并两个文件，但不对两个合并后的结果排序
+
+# -C 检查是否排序，exit 0=有序，1=无序
+```
+uniq将服务删除所有的重复行。经过排序后，所有相同的行都在相邻，因此unqi可以正常删除重复行。
+
+```bash
+$ cat xx
+1
+2
+3
+2
+1
+0
+$ cat xx | sort
+0
+1
+1
+2
+2
+3
+$ cat xx | sort | uniq # 或者 sort -u
+0
+1
+2
+3
+```
+
+```bash
+$ cat qq
+1 3 1
+2 2 2
+2 2 1
+3 1 1
+$ cat qq | sort
+1 3 1
+2 2 1
+2 2 2
+3 1 1
+$ cat qq | sort -k 2,2
+3 1 1
+2 2 1
+2 2 2
+1 3 1
+```
+
+```bash
+uniq —— 只能去重排序过的行
+# -u 只显示唯一的行
+# -d 只显示重复的行
+
+# -c 显示行出现次数
+
+# -s 指定跳过N个字符
+# -w 指定用于比较的最大字符数
+# -s 2 -w 2 从第二个字符后开始，对比两个字符
+
+# -z 以 \0 分割匹配行，与 xargs -0 配合使用
+```
+
+统计字符出现次数
+
+```bash
+INPUT="ahebhaaa"
+OUTPUT=`echo $INPUT | sed 's/[^\n]/&\n/g' | sed '/^$/d' | sort | uniq -c | tr -d '\n'` && echo $OUTPUT # 4 a 1 b 1 e 2 h
+```
 
 #### awk
 
 <p class="callout info">
   效率应该比<code>sort</code>后<code>uniq</code>高。（应该！因为未验证！todo）
 </p>
-
-
-#### sort+uniq
-
-```bash
-sort file | uniq
-```
-uniq将服务删除所有的重复行。经过排序后，所有相同的行都在相邻，因此unqi可以正常删除重复行。
 
 #### ~~sort+awk~~
 
@@ -1310,6 +1381,63 @@ cat filename | tr -s '\n' # 删除空行
 
 # -T 显示制表符
 # -n 显示行号
+```
+
+### 文件校验和核实
+
+校验和（checksum）程序用来从文件中生成校验和密钥，然后利用这个校验和密钥核实文件的完整性。
+
+`md5sum`/`sha1sum`
+
+```bash
+$ md5sum filename
+$ md5sum filename > file_sum.md5
+
+# 生成密钥
+$ touch filename
+$ md5sum filename
+d41d8cd98f00b204e9800998ecf8427e  filename
+$ touch filename1
+$ md5sum filename1
+d41d8cd98f00b204e9800998ecf8427e  filename1
+
+# 校验和
+$ md5sum filename > file_sum.md5
+$ md5sum -c file_sum.md5
+filename: OK
+$ echo a >> filename
+$ md5sum -c file_sum.md5
+filename: FAILED
+md5sum: WARNING: 1 computed checksum did NOT match
+```
+
+对目录校验
+
+```bash
+# 生成校验文件
+# 方式一： 使用 md5deep/sha1deep（需要安装）
+uv01@lpc19:~$ ll test
+total 20
+drwxr-xr-x 2 uv01 uv01 4096 Mar  2 11:40 ./
+drwxr-x--- 4 uv01 uv01 4096 Mar  2 11:46 ../
+-rw-r--r-- 1 uv01 uv01   43 Mar  2 11:20 file_sum.md5
+-rw-r--r-- 1 uv01 uv01   44 Mar  2 11:26 file_sum1.md5
+-rw-r--r-- 1 uv01 uv01    2 Mar  2 11:20 filename
+-rw-r--r-- 1 uv01 uv01    0 Mar  2 11:17 filename1
+uv01@lpc19:~$ md5deep -rl test/ > test.md5
+uv01@lpc19:~$ cat test.md5
+d41d8cd98f00b204e9800998ecf8427e  test/filename1
+e914786832e3689d3ccec80c0689ed64  test/file_sum.md5
+60b725f10c9c85c70d97880dfe8191b3  test/filename
+3152d0d707b419f8291d55de09ef4b0a  test/file_sum1.md5
+uv01@lpc19:~$ md5sum -c test.md5
+test/filename1: OK
+test/file_sum.md5: OK
+test/filename: OK
+test/file_sum1.md5: OK
+
+# 方式二： 使用 find 命令
+find test/ -type f -print0 | xargs -0 md5sum >> test.md5
 ```
 
 ## 参数处理
