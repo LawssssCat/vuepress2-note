@@ -105,6 +105,8 @@ todo
     + 准入类 —— 焊工、特种工、道路运输、消防设备操作
     + 水平类 —— 同上
 
+details: [link](continuing-education.md)
+
 ##### 大病医疗
 
 ##### 住房贷款利息
