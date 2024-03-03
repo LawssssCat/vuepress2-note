@@ -1,3 +1,16 @@
+/* 引入字体 */
+// https://github.com/source-foundry/Hack
+@import url("//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css"); // 等宽
+
+:root {
+  // 字体变量
+  --font-family: "Hack", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  --font-family-code: "Hack", Consolas, Monaco, "Andale Mono", "Ubuntu Mono",
+    monospace;
+}
+
 .page {
   pre {
     white-space: pre-wrap; // 代码块换行

@@ -19,6 +19,14 @@ awesome-vuepress： <https://github.com/vuepress/awesome-vuepress>
 + 内容不错 - <https://docs.shanyuhai.top/>
 + 太花哨，但牛逼 - <https://artiely.github.io/>
 
+## 样式
+
+默认主题使用 SASS 作为 CSS 预处理器。
+
+用户可以通过 palette 文件 来自定义样式变量，还可以通过 style 文件 来添加额外的样式。
+
+<https://ecosystem.vuejs.press/zh/themes/default/styles.html>
+
 ## 内置功能（默认主题）
 
 ### 内置组件 - 提示框
