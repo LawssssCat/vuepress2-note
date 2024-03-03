@@ -430,6 +430,24 @@ file1
 
 `echo -e` 转义字符
 
+::: tip
+echo 有一个技巧，可能经常被用到，就是将多行输出为当行
+
+e.g.
+
+```bash
+$ a="a
+> b
+> c"
+$ echo "$a"
+a
+b
+c
+$ echo $a # 当没有""（双引号）时，以单行输出
+a b c
+```
+:::
+
 #### printf
 
 格式替代符（format substitution character）
@@ -482,7 +500,105 @@ b
 2
 ```
 
-### 拼接
+### 字符映射
+
+#### tr
+
+```bash
+# tr [OPTION]... SET1 [SET2]
+# -d set 删除
+# -s set 压缩多个连续的相同字符为一个字符 e.g. 111 -> 1
+# -c set 补集 e.g. -c [0-9] 意思为 “指定 0~9 意外的全部字符”
+```
+
+例子： 大写转成小写
+
+```bash
+echo "HELLO WORLD!" | tr 'A-Z' 'a-z' # hello world!
+# 💡 可以使用下面的 “字符类” 实现
+```
+
+例子： todo ROT13加密
+
+例子： 删除字符
+
+```bash
+echo "hello world 2024!" | tr -d '0-9 ' # helloworld!
+echo "hello world 2024!" | tr -d -c '0-9' # 2024
+```
+
+例子： 压缩字符
+
+```bash
+echo "1           2" | tr -s ' ' # 1 2
+```
+
+例子： 相加 （没用的技巧）
+
+```bash
+echo "
+1
+2
+3
+4" | echo $[$(tr '\n' '+') 0] # 10
+```
+
+另外，tr 可以指定预定的 “字符类”
+
+字符类 | 说明
+--- | ---
+alnum | 字母、数字
+alpha | 字母
+digit | 数字
+graph | 图像字符
+lower | 小写字母
+upper | 大写字母
+cntrl | 控制（非打印）字符
+print | 可打印字符
+punct | 标点符号
+space | 空白字符
+xdigit | 十六进制字符
+
+例子： 大小写转换
+
+```bash
+echo 'hello world!' | tr '[:lower:]' '[:upper:]' # HELLO WORLD!
+```
+
+### 分割/合并
+
+#### xargs
+
+将多行输入变成 “空格隔开的单行输入”，或者单行变多行。
+
+```bash
+$ a="1 2 3
+> 3 4 5 6"
+$ echo "$a" | xargs
+1 2 3 3 4 5 6
+$ echo "$a" | xargs -n 2
+1 2
+3 3
+4 5
+6
+
+# -d delim 指定定界符
+
+# -I {} 替换字符
+$ echo "1 2 3 4" | xargs -n 1 | xargs -I {} echo "--- {} ---"
+--- 1 ---
+--- 2 ---
+--- 3 ---
+--- 4 ---
+```
+
+xargs 与 find 的结合： 因为 find 的结果中可能有空格，而 xargs 后的命令可能用空格做参数分割，或者用空格加回车做参数分割，如 rm 者可能造成错误。特别当 find 与 xargs 一起使用时，需要加上下面参数
+
+```bash
+find . -type f -name "*.txt" -print0 | xargs -0 rm -fv
+```
+
+### 拼接 todo
 
 参考： 
 
@@ -490,8 +606,7 @@ b
 
 #### Pure Bash
 todo
-#### tr
-todo
+
 #### paste
 todo
 #### sed
@@ -523,20 +638,91 @@ todo
 + [Linux使用awk去掉重复值的几种情况](https://blog.csdn.net/shenyuye/article/details/107725445)
 + [linux sed去除重复,删除文本中的重复行(sort+uniq/awk/sed)](https://blog.csdn.net/weixin_42348880/article/details/117278175)
 
+#### sort+uniq
+
+```bash
+sort file | uniq
+# -b 忽略签到空格字符
+# -r 逆序
+# -d 按字典顺序（默认）
+# -n 按数字排序
+# -M 按月份排序
+# -k num 按哪一列排序
+
+# -z 以 \0 分割结果，而不是默认的分割方式 \n 
+
+# -m file1 file2 合并两个文件，但不对两个合并后的结果排序
+
+# -C 检查是否排序，exit 0=有序，1=无序
+```
+uniq将服务删除所有的重复行。经过排序后，所有相同的行都在相邻，因此unqi可以正常删除重复行。
+
+```bash
+$ cat xx
+1
+2
+3
+2
+1
+0
+$ cat xx | sort
+0
+1
+1
+2
+2
+3
+$ cat xx | sort | uniq # 或者 sort -u
+0
+1
+2
+3
+```
+
+```bash
+$ cat qq
+1 3 1
+2 2 2
+2 2 1
+3 1 1
+$ cat qq | sort
+1 3 1
+2 2 1
+2 2 2
+3 1 1
+$ cat qq | sort -k 2,2
+3 1 1
+2 2 1
+2 2 2
+1 3 1
+```
+
+```bash
+uniq —— 只能去重排序过的行
+# -u 只显示唯一的行
+# -d 只显示重复的行
+
+# -c 显示行出现次数
+
+# -s 指定跳过N个字符
+# -w 指定用于比较的最大字符数
+# -s 2 -w 2 从第二个字符后开始，对比两个字符
+
+# -z 以 \0 分割匹配行，与 xargs -0 配合使用
+```
+
+统计字符出现次数
+
+```bash
+INPUT="ahebhaaa"
+OUTPUT=`echo $INPUT | sed 's/[^\n]/&\n/g' | sed '/^$/d' | sort | uniq -c | tr -d '\n'` && echo $OUTPUT # 4 a 1 b 1 e 2 h
+```
 
 #### awk
 
 <p class="callout info">
   效率应该比<code>sort</code>后<code>uniq</code>高。（应该！因为未验证！todo）
 </p>
-
-
-#### sort+uniq
-
-```bash
-sort file | uniq
-```
-uniq将服务删除所有的重复行。经过排序后，所有相同的行都在相邻，因此unqi可以正常删除重复行。
 
 #### ~~sort+awk~~
 
@@ -548,6 +734,69 @@ sort file | awk '{if ($0!=line) print;line=$0}'
 
 ```bash
 sort file | sed '$!N; /^.∗\n\1$/!P; D'
+```
+
+### 拼写检查
+
+Linux 大多数的发行版都含有一份字典文件。目录 `/usr/share/dict/` 包含了一些词典文件。“词典文件” 包含了一些词典单词列表的文本文件。我们可以利用这个列表来检查某个单词是否为词典中的单词。
+
+```bash
+#!/bin/bash
+# checkword.sh
+word=$1
+grep "^$word$" /usr/share/dict/british-english -q
+if [ $? -eq 0 ]; then
+  echo $word is a dictionary word;
+else
+  echo $word is not a dictionary word;
+fi
+
+$ ./checkword.sh ful
+```
+
+#### look
+
+查找以字典开头的内容
+
+```bash
+look [words] file # 默认看 /usr/share/dict/words 中的内容
+
+# 相当于
+grep "^word" file
+```
+
+```bash
+$ cat test.fs
+android
+android's
+ss
+androids
+xxxandroid
+$ look android test.fs
+android
+android's
+```
+
+#### aspell
+
+检查单词拼写
+
+用法：
+
+```bash
+aspell -a # 交互模式，检查输入，返回推荐拼写 Ctrl+D 退出
+aspell list # 交互模式，检查输入，返回拼写错误输入 Ctrl+D 退出
+```
+
+```bash
+#!/bin/bash
+word=$1
+output=`echo \"$word\" | aspell list`
+if [ -z $output ]; then # -z 判断是否为空
+  echo $word is a dictionary word;
+else
+  echo $word is not a dictionary word;
+fi
 ```
 
 ### json解析 - jq
@@ -708,6 +957,10 @@ ${#a[@]}
 + `[[]]` 中能用 `==` 进行模式匹配
 + `=~` 正则 `[[ "expression" =~ "string" ]]`
 
+::: tip
+`[]` 和 `[[]]` 的区别： 前者更早出现，后者更晚出现。后者是前者的功能增强版，语法更兼容，但可能不是全部系统都能用。（实际上现在都2024年了，全部系统都能用了！）
+:::
+
 ```bash
 sudo systemctl is-active mariadb > /dev/null 2>&1
 MARIADB_ACTIVE=$?
@@ -808,6 +1061,36 @@ case <VALUE> in
     ...
     ;;
 esac
+```
+
+### 逻辑或
+
+```bash
+#!/bin/bash
+
+set -e
+
+emsg="$(./test_error.sh)" || echo "other 1"
+echo "emsg: \"$emsg\""
+
+# error!        <== &2 in "test_error.sh"
+# other 1       <== &1 in "here"
+# emsg: "ok!"   <== &1 in "here" from &1 in "test_error.sh"
+
+echo "==================="
+
+emsg="$(./test_error.sh 2>&1)" || echo "other 2"
+echo "emsg: \"$emsg\""
+
+# other 2              <== &1 in "here"
+# emsg: "ok!\nerror!"  <== &1 in "here" from &1+&2 in "test_error.sh"
+
+echo "==================="
+
+emsg="$(./test_error.sh 2>&1)" # no catch, throw here.
+echo "emsg: \"$emsg\""
+
+# nothing to print, case of "set -e" (throw when exception and no catch)
 ```
 
 ## 循环
@@ -957,6 +1240,13 @@ while IFS= read -r line
 do
     echo "$line"
 done <<< "$the_list"
+# -r 屏蔽\，如果没有该选项，则\作为一个转义字符，有的话 \就是个正常的字符了。
+# -d delim 结束符
+# IFS=flag 指定分隔符
+# -n num 读取n个字符
+# -s 不回显输入（non-echoed）
+# -p msg 显示提示词
+# -t timeout 超时时间
 ```
 
 参考
@@ -1006,6 +1296,26 @@ done
 
 todo
 
+```bash
+$0
+$1
+$2
+$@ —— "a" "b" "c"
+$* —— "a b c"
+$? —— 返回值
+```
+
+::: tip
+Fork 炸弹： `:() { :|:& };:` —— 这个脚本将以指数规模创建信的进程，最终造成拒绝服务攻击。可以通过 `/etc/security/limits.conf` 配置来限制可生成的最大进程数。
+:::
+
+导出函数
+
+```bash
+export val1 # 导出变量
+export -f func1 # 导出函数
+```
+
 ### exit
 
 `exit n` —— n 返回值，默认0， 取值范围 0~255
@@ -1013,46 +1323,6 @@ todo
 exit 命令用于退出当前程序，并返回程序执行结果
 
 一般，返回 0 表示成功，非0 表示失败（出错）
-
-## 文件
-
-### 路径处理
-
-#### 获取路径文件名
-```bash
-$ basename "/var/services/backup//tmp//backup__2023-05-02_0.tar.gz"
-backup__2023-05-02_0.tar.gz
-```
-#### 获取路径文件夹名
-```bash
-$ str="/var/services/backup//tmp//backup__2023-05-02_0.tar.gz"; 
-$ echo "${str%/*}"
-/var/services/backup//tmp/
-```
-解释：
-+ `%/` ——  拿掉最后一个`/`及其右边的字符串
-
-### 文件编辑
-
-追加（append）、覆盖
-
-```bash
-sudo tee /etc/nginx/sites-available/$project_name <<EOF
-server {
-    listen 80;
-    server_name test.com;
-
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \$host;
-        proxy_cache_bypass \$http_upgrade;
-    }
-}
-EOF
-```
 
 ## 参数处理
 
@@ -1311,16 +1581,35 @@ chmod +x /tmp/demo-equals-separated.sh
 /tmp/demo-equals-separated.sh -e=conf -s=/etc /etc/hosts
 ```
 
-### 管道：read
+## 信息传递
+
+
+### 读取： read
 
 ```bash
+# options —— 影响读取命令与输入交互方式
+# name —— 存储的变量名
 $ read [options] [name...]
+
+# 参数选项
+
+# -r 如果没有该选项，则 \（backslash） 作为一个转义字符；有的话 \ 就是个正常的字符了
+
+# -d delim 定界符/结束符
+# IFS=flag 指定分隔符
+# -n/-N num 读取n个字符，除非发生超时或到达 EOF
+
+# -s 不回显输入（non-echoed）
+# -p msg 显示提示词
+
+# -t timeout 超时时间
+
+# -a array 将单词拆分操作的结果存储在一个数组中而不是单独的变量中
+
+# -u fd 从给定的文件描述符中读取输入行
+# -e 使用`Bash`内置的`Readline`库读取输入行。在输入的时候可以使用命令补全功能
+# -i text 将文本打印为标准输出流上的默认输入（只能与`-e`结合使用）
 ```
-
-+ `options` —— 影响读取命令与输入交互方式
-+ `name` —— 存储的变量名
-
----
 
 默认会将`stdin`（标准输入流）中获取一行，分配给`REPLY`
 
@@ -1331,10 +1620,7 @@ $ echo $REPLY
 baeldung is a cool tech site
 ```
 
----
-
-默认情况下，读取命令将输入​​拆分为单词，将`<space>`、`<tab>`和`<newline>`字符视为“单词分隔符”。\
-同时，可以指定参数名。
+默认情况用 `\n` 回车符号拆分输入到各个变量中
 
 ```bash
 $ read input1 input2 input3
@@ -1345,39 +1631,21 @@ $ echo "[$input1] [$input2] [$input3]"
 [baeldung] [is] [a cool tech site]
 ```
 
----
-
-内部字段分隔符(`IFS`)确定给定行中的单词边界
+可以指定 IFS（Internal Field Separator，内部字段分隔符） 改变拆分符号
 
 ```bash
+# CSV（Comma Separated Value，逗号分隔型数值）
 $ {
-      IFS=";"
+      IFS=","
       read input1 input2 input3
       echo "[$input1] [$input2] [$input3]"
   }
-baeldung;;is;a;cool;tech;site # what we type
-[baeldung] [] [is;a;cool;tech;site]
+baeldung,,is,a,cool,tech;site # what we type
+[baeldung] [] [is,a,cool,tech;site]
 ```
 
 ```bash
-$ {
-IFS=" "
-read input1 input2 input3
-echo "[$input1] [$input2] [$input3]"
-}
-```
-
----
-
-参数选项
-
-+ `-s`：不将输入行回显到标准输出流
-+ `-p prompt`：在从标准输入流请求输入之前打印提示文本，不带`<newline>`字符
-+ `-a array`：将单词拆分操作的结果存储在一个数组中而不是单独的变量中
-+ `-e`：使用`Bash`内置的`Readline`库读取输入行
-+ `-i text`：将文本打印为标准输出流上的默认输入（只能与`-e`结合使用）
-
-```bash
+# -p
 $ {
       prompt="You shall not pass:"
       read -p "$prompt" -s input
@@ -1386,7 +1654,10 @@ $ {
 You shall not pass: # invisible input here
 input word [baledung is a cool site]
 ```
+
 ```bash
+# -e -i 读取变量值作为输入
+# -a
 $ {
       declare -a input_array
       text="baeldung is a cool tech site"
@@ -1400,18 +1671,21 @@ baeldung is a cool tech site # default input here
 [baeldung] [is] [a] [cool] [tech] [site] 
 ```
 
----
+#### 例子：获取用户bash配置
 
-高级语法
+```bash
+#!/bin/bash
 
-现在我们已经看到了`read`的实际效果，让我们来看看一些更高级的选项：
-
-+ `-d delim`：指定输入行的分隔符而不是使用`<换行>`字符
-+ `-u fd`：从给定的文件描述符中读取输入行
-+ `-r`：按原样处理`<backslash>`字符（不能用于转义特殊字符）
-+ `-t 超时`：尝试在给定的秒数内读取输入
-+ `-N`：从输入中准确读取`N`个字符，除非发生超时或到达`EOF`
-
+line="root:x:0:0:root:/root:/bin/bash"
+IFS=":"
+count=0
+for item in $line; do
+  [ $count -eq 0 ] && user=$item
+  [ $count -eq 6 ] && shell=$
+  let count++
+done
+echo "$user's shell is $shell"
+```
 
 #### 例子：从其他命令读取
 
@@ -1475,7 +1749,11 @@ input word2 []
 + 它不再将输入拆分为单词，因为我们只想将 11 个字符分配给input1。
 + 如果发生超时，  read甚至会将部分输入分配给input1变量。
 
-## 信息传递
+### 管道
+
+```bash
+cmd1 | cmd2 | cmd3 -
+```
 
 ### 重定向
 
@@ -1488,38 +1766,16 @@ input word2 []
 <<<       —— 输入重定向到字符串，同"|"
 ```
 
-### 管道
+## 进程
+
+通过 `()` 形式定义一个子 shell
+
+e.g.
 
 ```bash
-cmd1 | cmd2 | cmd3 -
-```
+pwd # /mnt/c/Users/xxx
+(cd /bin; ls) # 子 shell
+pwd # /mnt/c/Users/xxx
 
-### 管道传递
-
-```bash
-#!/bin/bash
-
-set -e
-
-emsg="$(./test_error.sh)" || echo "other 1"
-echo "emsg: \"$emsg\""
-
-# error!        <== &2 in "test_error.sh"
-# other 1       <== &1 in "here"
-# emsg: "ok!"   <== &1 in "here" from &1 in "test_error.sh"
-
-echo "==================="
-
-emsg="$(./test_error.sh 2>&1)" || echo "other 2"
-echo "emsg: \"$emsg\""
-
-# other 2              <== &1 in "here"
-# emsg: "ok!\nerror!"  <== &1 in "here" from &1+&2 in "test_error.sh"
-
-echo "==================="
-
-emsg="$(./test_error.sh 2>&1)" # no catch, throw here.
-echo "emsg: \"$emsg\""
-
-# nothing to print, case of "set -e" (throw when exception and no catch)
+cmd0 | ( cmd1;cmd2;cmd3 ) | cmd4
 ```
