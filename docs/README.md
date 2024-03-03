@@ -22,7 +22,7 @@ features:
   #   details: 
   - title: 旅游日志
     details: 火焰的水潭，寒冰的土地，满沙的雪原！
-footer: MIT Licensed | Copyright © 2018-present Lawsssscat
+footer: MIT Licensed | Copyright © 2023-2024 Lawsssscat
 footerHtml: true
 ---
 
