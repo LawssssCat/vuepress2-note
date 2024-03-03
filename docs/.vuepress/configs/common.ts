@@ -64,6 +64,10 @@ export const tagAliasMapConfig: Record<string, string[]> = genTagAliasConfig({
     ]),
     tags: arrayToLowerCase([]),
   },
+  测试: {
+    alias: arrayToLowerCase(["test"]),
+    tags: arrayToLowerCase([]),
+  },
   安全: {
     alias: arrayToLowerCase(["Security"]),
     tags: arrayToLowerCase([]),
