@@ -17,7 +17,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
   "/art/": [
     {
       text: "绘图",
-      children: ["pixel/", "svg/", "stable-diffusion/"],
+      children: ["pixel/", "svg/", "ascii-art.md", "stable-diffusion/"],
     },
     {
       text: "音视频",
@@ -237,6 +237,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       link: "README.md",
     },
     "indicator/",
+    "cpu.md",
     {
       text: "GPU",
       children: ["gpu/"],
