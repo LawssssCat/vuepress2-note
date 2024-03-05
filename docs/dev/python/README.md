@@ -14,7 +14,7 @@ title: Python 使用笔记
 
 + ~~done80% 《Python 程序设计入门到实战》 by 何敏煌~~
 + todo 《Python 网络编程攻略》 by Dr.M.O.Faruque Sarker
-+ todo 《Python 绝技 —— 运用 Python 成为顶级黑客》 by TJ.O' Connor
++ doing 《Python 绝技 —— 运用 Python 成为顶级黑客》 by TJ.O' Connor
 + todo 《完全学会 Git · Github · Git Server 的 24 堂课》 by 孙宏明
 + todo All Algorithms implemented in Python https://github.com/TheAlgorithms/Python
 + todo Python Examples https://github.com/geekcomputers/Python
