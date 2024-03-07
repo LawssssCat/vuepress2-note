@@ -168,7 +168,13 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     },
     {
       text: "操作系统",
-      children: ["os/", "os/fedora.md", "os/open-euler.md"],
+      children: [
+        "os/",
+        "os/internal.md",
+        "os/busybox.md",
+        "os/fedora.md",
+        "os/open-euler.md",
+      ],
     },
     {
       text: "软件包管理",
