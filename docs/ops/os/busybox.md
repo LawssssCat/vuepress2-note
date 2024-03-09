@@ -9,73 +9,107 @@ title: BusyBox 使用笔记
 
 busybox官网： <https://www.busybox.net/>
 
-Busybox是一个开源项目，遵循GPL v2协议。
-Busybox将众多的UNIX命令集合进了一个很小的可执行程序中，可以用来替代GNU fileutils、shellutils等工具集。
-Busybox中各种命令与相应的GNU工具相比，所能提供的选项比较少，但是对于一般的应用场景也足够了，特别是在嵌入式系统的设计中。
+Busybox 是一个开源项目，遵循GPL v2协议。
+Busybox 将众多的UNIX命令集合进了一个很小的可执行程序中，可以用来替代 GNU fileutils、shellutils 等工具集。
 
-## busybox代码目录结构
+像 ls、mv 和其他此类命令像是 Linux 的一部分，而事实是这些命令是 GNU Coreutils 软件包的一部分，并且大多数 Linux 发行版都预装了它。
+GNU Coreutils几乎是各种 UNIX/Linux 命令的事实上的提供者，几乎是因为总是有替代品，而 BusyBox 就是 GNU Coreutils 的替代品之一。
 
-在较老版本的Busybox中，对于Busybox的多个程序是全部塞进了一个名为utility.c的文件中，后来更改了Busybox的整体源码结构和设计，将这些程序拆分成了各个工具模块。
+BusyBox 是 GNU Coreutils 的绝佳替代品，虽然其中各种命令与相应的GNU工具相比，所能提供的选项比较少，但是对于一般的应用场景也足够了，特别是在操作系统的小尺寸很重要的情况下。如：
 
-目录名称 | 功能说明
---- | ---
-docs | 相关支持文档
-applets    | 实现applets框架的文件。目录中包含了几个main()的文件
-applets_sh | 此目录包含了几个作为shell脚本实现的applet示例。在“make install”时不会被自动安装，需要使用时，手动处理
-testsuite  | 命令测试套
-include    | busybox项目的头文件
-configs    | busybox自带的默认配置文件
-libbb        | 与busybox实现相关的库文件（可复用函数）
-arch       | 包含用于不同体系架构的makefile文件。约束busybox在不同架构体系下的编译构建过程
-archival   | 与压缩相关命令的实现源文件。
-debianutils   | 针对Debian的套件。
-init       | init进程的实现源码目录
-console-tools | 与控制台相关的一些命令
-klibc-utils  | klibc命令套件
-e2fsprogs  | 针对Linux Ext2 FS prog的命令。例如chattr、lsattr
-coreutils     | 常用的一些核心命令。例如chgrp、rm、cat等
-editors    | 常用的编辑命令。例如diff、vi等
-networking | 与网络相关的命令，例如arp
-findutils  | 用于查找的命令，例如find、grep等
-libpwdgrp    | libpwdgrp相关的命令
-loginutils   | 与用户管理相关的命令
-mailutils  | 与mail相关的命令套件
-miscutils  | 该文件下是一些杂项命令，针对特定应用场景
-modutils   | 与模块相关的命令
-printutils | Print相关的命令
-procps     | 与内存、进程相关的命令
-runit      | 与Runit实现相关的命令
-shell      | 与shell相关的命令，例如ash、mash等
-sysklogd   | 系统日志记录工具相关的命令
-util-linux | Linux下常用的命令，主要与文件系统操作相关的命令。
++ 在嵌入式系统的设计中。
++ 在 Docker 用户中，许多 Docker 镜像使用 BusyBox 为您提供最小镜像。
 
-## busybox交叉编译
+## 代码分析/目录结构
+
+参考： [link](./busybox-src.md)
+
+## 交叉编译
+
+在准备编译前，可以先参考INSTALL、README以及examples目录和docs目录下的文件。获取到相关的构建说明、安装说明和一些使用的示例。
+
+### Ubuntu 22.04 jammy
+
+```bash
+$ screenfetch
+                          ./+o+-       uv01@lpc19
+                  yyyyy- -yyyyyy+      OS: Ubuntu 22.04 jammy(on the Windows Subsystem for Linux)
+               ://+//////-yyyyyyo      Kernel: x86_64 Linux 5.10.16.3-microsoft-standard-WSL2
+           .++ .:/++++++/-.+sss/`      Uptime: 5h 48m
+         .:++o:  /++++++++/:--:/-      Packages: 571
+        o:+o+:++.`..```.-/oo+++++/     Shell: bash 5.1.16
+       .:+o:+o/.          `+sssoo+/    Disk: 1.3T / 4.0T (32%)
+  .++/+:+oo+o:`             /sssooo.   CPU: AMD Ryzen 7 7840HS w/ Radeon 780M Graphics @ 16x 3.793GHz
+ /+++//+:`oo+o               /::--:.   GPU: NVIDIA GeForce RTX 4050 Laptop GPU
+ \+/+o+++`o++o               ++////.   RAM: 322MiB / 15640MiB
+  .++.o+++oo+:`             /dddhhh.
+       .+.o+oo:.          `oddhhhh+
+        \+.++o+o``-````.:ohdhhhhh+
+         `:o+++ `ohhhhhhhhyo++os:
+           .o:`.syhhhhhhh/.oo++o`
+               /osyyyyyyo++ooo+++/
+                   ````` +oo+++o\:
+                          `oo++.
+```
+
+编译环境
+
+```bash
+sudo apt-get update
+# 编译工具
+sudo apt-get install make build-essential
+# curses.h：No such file or directory
+sudo apt-get install libncurses5-dev libncursesw5-dev
+# 交叉编译：
+sudo apt-get 
+```
+
+编译源码
 
 ```bash
 tar -xf busybox-1.36.1.tar.bz2
 cd busybox-1.36.1/
+```
 
+编译目标（命令选项）
+
+```bash
+make help # 全部target
+######################################
 make clean # 清除构建结果
 make mrproper # 清除构建结果、安装文件、配置文件
 make menuconfig
+######################################
+```
 
+生成编译配置
+
+```bash
+make menuconfig
+
+######################################
 # 配置
+######################################
+
+# 链接
 Settings > Build static binary (no shared libs) # 编译使用静态链接
 
+# 安装
+Settings >  (./_install) Destination path for 'make install' # 安装目录
+```
+
+编译、编译参数
+
+```bash
 # -j8 启动8个线程进行编译
 make -j8 # 编译
 
-make install # 安装
-
-# 默认安装在 ./_install/
-./_install/bin/busybox # 查看全部命令
-./_install/bin/busybox echo 123
-./_install/bin/busybox sh
-
-file busybox # 查看文件编译架构
+# CROSS_COMPILE # 交叉编译器的路径
+# ARCH          # 对应的架构，这里以arm为例
 ```
 
-架构
+::: tip
+不同 cpu 架构交叉编译后的文件格式如下：
 
 ```bash
 $ file busybox
@@ -88,6 +122,21 @@ ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), statically linked, for
 ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), statically linked, stripped
 # x86_64
 ELF 64-bit LSB executable, x86-64, EABI5 version 1 (SYSV), statically linked, stripped
+ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statically linked, BuildID[sha1]=b09604e98d0991efee238212a2811192087b88c3, for GNU/Linux 3.2.0, stripped
+```
+:::
+
+安装
+
+```bash
+make install # 安装
+
+# 默认安装在 ./_install/
+./_install/bin/busybox # 查看全部命令
+./_install/bin/busybox echo 123
+./_install/bin/busybox sh
+
+file busybox # 查看文件编译架构
 ```
 
 ## 配置运行
@@ -100,13 +149,30 @@ busybox --list # 查看支持的命令
 busybox echo hello world 
 ```
 
-## busybox的init进程
+## 作为init进程
 
 ​在linux内核启动的最后阶段，会调用run_init_process()函数启动用户空间进程，对于Busybox来说，它同样将提供一个init程序，满足linux内核最后阶段的启动跳转。只要run_init_process()创建进程成功，那么此函数将不会返回了，从而从内核态进入了用户态进程。
 
 busybox的init程序的描述源文件位于源代码下的init/init.c文件中。
 核心功能的由init_main函数实现。
 
-## 代码分析
+## 使用（linux）
 
-Busybox是在linux内核启动后加载运行的用户空间程序，在源码设计上是基于C语言完成设计和开发的。与常规程序一样，Busybox的入口同样是main()，定义在libbb/appletlib文件的末尾处。
+```bash
+# 下载
+$ sudo apt install busybox
+
+# 使用
+$ busybox cat sample.txt
+
+# 如果 BusyBox 未实现命令，则会引发“找不到小程序”的错误
+$ busybox xyz
+xyz: applet not found
+```
+
+## 使用（docker）
+
+```bash
+$ docker pull busybox
+$ docker run -it --rm busybox
+```

@@ -61,6 +61,10 @@ export const navbarConfig: NavbarConfig = [
         link: "/dev/back-end/",
         children: [
           {
+            text: "C/C++",
+            link: "/dev/c/",
+          },
+          {
             text: "Java",
             link: "/dev/java/java/",
           },
@@ -71,6 +75,10 @@ export const navbarConfig: NavbarConfig = [
           {
             text: "Shell",
             link: "/dev/shell/",
+          },
+          {
+            text: "系统开发",
+            link: "/dev/arch-arm.md",
           },
         ],
       },

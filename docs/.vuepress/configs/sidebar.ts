@@ -75,6 +75,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
   ],
   "/dev/back-end/workflow/": ["README.md", "activiti.md", "flowable.md"],
   "/dev/back-end/im/": ["README.md"],
+  "/dev/c/": ["README.md", "makefile.md", "cmake.md"],
   "/dev/java/": [
     {
       text: "Java",
@@ -172,6 +173,8 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
         "os/",
         "os/internal.md",
         "os/busybox.md",
+        "os/busybox-src.md",
+        "os/ubuntu.md",
         "os/fedora.md",
         "os/open-euler.md",
       ],
