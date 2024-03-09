@@ -25,6 +25,10 @@ export default defineUserConfig({
     importCode: {
       handleImportPath: (str) => {
         str = str.replace(
+          /^@code\/c/,
+          path.resolve(appRoot.path, "code/demo-c/")
+        );
+        str = str.replace(
           /^@code\/java/,
           path.resolve(appRoot.path, "code/demo-java/src")
         );

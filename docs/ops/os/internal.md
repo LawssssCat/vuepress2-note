@@ -28,3 +28,7 @@ title: Linux内核
 ## busybox
 
 [link](./busybox.md)
+
+## 初始化系统 init
+
+todo <https://linux.cn/article-7873-1.html> | System V (SysV)

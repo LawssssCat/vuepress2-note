@@ -75,7 +75,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
   ],
   "/dev/back-end/workflow/": ["README.md", "activiti.md", "flowable.md"],
   "/dev/back-end/im/": ["README.md"],
-  "/dev/c/": ["README.md", "makefile.md", "cmake.md"],
+  "/dev/c/": ["README.md", "gcc.md", "makefile.md", "cmake.md"],
   "/dev/java/": [
     {
       text: "Java",
