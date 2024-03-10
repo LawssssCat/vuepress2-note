@@ -2,6 +2,8 @@
 title: GCC使用笔记
 ---
 
+c语言编译器
+
 参考：
 
 + [x] B站|李呵欠|GNU Makefile编译C/C++教程（Linux系统、VSCODE） - <https://www.bilibili.com/video/BV1EM41177s1/><br> 配套文档 - <https://github.com/WohimLee/GNC-Tutorial>
@@ -47,7 +49,7 @@ make | 一个工具程序，它会读makefile脚本来确定程序中哪部分�
 .s | 汇编语言文件 <br> Assembly language code. <br> this type of file is produced as an intermediate step in compilation.
 .o | 目标文件 <br> An object file in a format appropriate to be supplied to the linker. <br> This type of file is produced as an intermediate step in compilation.
 .a | 静态库文件 <br> Static object library (archive).
-.so | 动态库/共享库/运行时库文件 <br> Shared object library.
+.so <br>.lib/.dll (for windows) | 动态库/共享库/运行时库文件 <br> Shared object library.
 
 ## 编译过程
 
