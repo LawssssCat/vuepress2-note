@@ -442,3 +442,18 @@ Makefile （正确）
 ### 例子：动态库编译
 
 @[code](@code/c/src/demo-make-03/Makefile-dynamiclib)
+
+### 例子：嵌套编译
+
+大项目中会分出多个小项目，这时需要使用嵌套（递归）make构建。
+
+具体做法为：
+
+1. 每个子项目都写一个Makefile
+1. 写一个总的Makefile调用各子项目Makefile
+
+e.g.
+
+将main.cpp外的其他cpp存为一个子项目，编译为一个库文件。然后将main.cpp作为另一个子项目，编译为.o文件。最后再链接库文件成可执行文件。
+
+todo 完成例子
