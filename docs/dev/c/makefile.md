@@ -320,6 +320,21 @@ a_libs  := $(subst lib,$(basename $(filter %.a,$(libs))))
 so_libs := $(subst lib,$(basename $(filter %.so,$(libs))))
 ```
 
+## 隐式规则
+
+业界约定俗成的规则，如什么场景的变量一般用什么变量名。
+
+### 隐式变量名
+
+变量名 | 说明
+--- | ---
+CC | 指定C编译程序 <br> Program for compiling C programs; default gcc
+CXX | 指定C++编译程序 <br> Program for  compiling C++ programs; default g++
+CFLAGS | 传递给C编译程序的额外参数 <br> Extra flags to give to the C compiler
+CXXFLAGS | 传递给C++编译程序的额外参数 <br> Extra flags to give to the C++ compiler
+CPPFLAGS | 传递给C处理器的额外参数 <br> Extra flags to give to the C preprocessor
+LDFLAGS | 传递给链接器的额外参数 <br> Extra flags to give to compiler when they are supposed to invoke the linker
+
 ## 交叉编译
 
 “交叉编译” 指在一个平台上生成另一个平台上的可执行文件。
@@ -344,3 +359,40 @@ so_libs := $(subst lib,$(basename $(filter %.so,$(libs))))
 + Linux —— 在已安装操作系统的机器上跑。一般：个人pc、公司服务器
 + baremetal —— 直接由硬件调起。一般：嵌入式
 :::
+
+## 例子
+
+### 例子：编译参数链接/问题：解决缺少头文件问题
+
+代码
+
+::: details
+src/main.cpp
+
+@[code](@code/c/src/demo-make-03/src/main.cpp)
+
+add.hpp
+
+@[code](@code/c/src/demo-make-03/include/add.hpp)
+
+add.cpp
+
+@[code](@code/c/src/demo-make-03/src/add.cpp)
+:::
+
+Makefile （错误：缺少头文件路径参数）
+
+@[code](@code/c/src/demo-make-03/Makefile-fail-01-header)
+
+```bash
+$ make # 缺失头文件问题
+src/add.cpp:1:10: fatal error: add.hpp: No such file or directory
+    1 | #include <add.hpp>
+      |          ^~~~~~~~~
+compilation terminated.
+make: *** [Makefile:6: objs/add.o] Error 1
+```
+
+Makefile （正确）
+
+@[code](@code/c/src/demo-make-03/Makefile)
