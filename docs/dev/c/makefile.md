@@ -296,10 +296,11 @@ $(notdir <names...>)
 libs := $(notdir $(shell find /usr/lib -name lib*))
 ```
 
-#### filter
+#### filter/filter-out
 
 ```makefile
-$(filter <names...>)
+$(filter <names...>) # 包含
+$(filter-out <names...>) # 排除
 ```
 
 ```makefile
@@ -396,3 +397,11 @@ make: *** [Makefile:6: objs/add.o] Error 1
 Makefile （正确）
 
 @[code](@code/c/src/demo-make-03/Makefile)
+
+### 例子：静态库编译
+
+@[code](@code/c/src/demo-make-03/Makefile-staticlib)
+
+### 例子：动态库编译
+
+@[code](@code/c/src/demo-make-03/Makefile-dynamiclib)
