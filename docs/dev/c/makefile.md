@@ -8,6 +8,12 @@ tags:
 + GNU Make 官方文档地址： <https://www.gnu.org/software/make/manual/>
 + Makefile Tutorial: <https://makefiletutorial.com/>
 
+::: details
+参考：
+
++ [ ] B站|无限十三年|从零开始学Makefile - <https://www.bilibili.com/video/BV1Bv4y1J7QT> todo 看完+笔记
+:::
+
 ## 基本使用
 
 ### 基本格式
@@ -73,13 +79,18 @@ $(obj) : ${cpp}
 compile : $(obj)
 ```
 
-#### 预定义变量
+#### 预定义变量/自动变量
 
 变量 | 说明
 --- | ---
 `$@` | 目标（target）的完整名称
+`$*` | 目标（target）的主干部分（即：不包括后缀）
+`$%` | 如果目标不是归档文件，则为空；<br>如果目标是归档文件成员，则为对应的成员文件名
 `$<` | 第一个依赖文件（prerequisties）的名称
-`$^` | 所有的依赖文件（prerequisties），用空格分开，不包含重复的依赖文件
+`$^` | 所有的依赖文件（prerequisties）。用空格分开，不包含重复的依赖文件
+`$^` | 同 `$^` 但包含重复的文件名
+`$?` | 依赖中修改时间晚于目标修改时间的所有文件名。用空格分开
+`$|` | 所有order-only依赖文件名
 
 ```makefile
 cpp := src/main.cpp
@@ -100,6 +111,32 @@ clean :
 $ make compile 
 $ make clean 
 removed 'objs/main.o'
+```
+
+#### 变量范围
+
+Makefile中的变量一般时全局变量，也就是说定义后可以在Makefile中的任意位置使用。
+但也可以将变量指定在某个目标范围内。
+
+```makefile
+target ... : variable-assignment
+target ... : prerequisites
+  recipes
+  ...
+```
+
+```makefile
+var1 = Global Var
+
+%.c: var2 = Some Target Var # 全部 .c 目标能访问
+
+.PHONY: test.c
+
+test.c: var3 = Specific Target Var # 只有该目标能访问
+test.c:
+  @echo $(var1)
+  @echo $(var2)
+  @echo $(var3)
 ```
 
 ### 常用符号
