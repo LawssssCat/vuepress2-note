@@ -24,6 +24,32 @@ BusyBox 是 GNU Coreutils 的绝佳替代品，虽然其中各种命令与相应
 
 参考： [link](./busybox-src.md)
 
+## 编译笔记
+
+todo 交叉编译工具链
+<https://blog.csdn.net/weixin_48983798/article/details/107290244>
+<https://www.cnblogs.com/arnoldlu/p/14243491.html>
+<https://blog.csdn.net/m0_46577050/article/details/125588421>
+
+todo ARCH/CROSS_COMPILE作用
+<https://blog.csdn.net/weixin_42963900/article/details/129171817>
+<https://www.cnblogs.com/jiangzhaowei/p/12288515.html>
+
+todo CC/CXX/CPPFLAGS/CFLAGS/CXXFLAGS/LDFLAGS
+<https://blog.csdn.net/lusic01/article/details/78645316>
+<https://blog.csdn.net/lailaiquququ11/article/details/126691913>
+<https://blog.csdn.net/zmlovelx/article/details/80263030>
+<https://blog.csdn.net/langzijing/article/details/78555812>
+
+todo 安全编译增改措施
+
+```bash
+make 
+make V=1 # 调试模式，增加make命令输出日志
+
+CROSS_COMPILE=aarch64-linux-gnu-
+```
+
 ## 交叉编译
 
 在准备编译前，可以先参考INSTALL、README以及examples目录和docs目录下的文件。获取到相关的构建说明、安装说明和一些使用的示例。
@@ -61,7 +87,9 @@ sudo apt-get install make build-essential
 # curses.h：No such file or directory
 sudo apt-get install libncurses5-dev libncursesw5-dev
 # 交叉编译：
-sudo apt-get 
+sudo apt-get gcc-arm-linux-gnueabi
+sudo apt-get gcc-arm-linux-gnueabihf
+sudo apt-get gcc-i686-linux-gnu
 ```
 
 编译源码
@@ -85,7 +113,7 @@ make menuconfig
 生成编译配置
 
 ```bash
-make menuconfig
+make menuconfig # 使用 ARCH 参数
 
 ######################################
 # 配置
@@ -102,10 +130,14 @@ Settings >  (./_install) Destination path for 'make install' # 安装目录
 
 ```bash
 # -j8 启动8个线程进行编译
-make -j8 # 编译
+make -j${nproc} # 编译
 
 # CROSS_COMPILE # 交叉编译器的路径
 # ARCH          # 对应的架构，这里以arm为例
+make -j8 # x86_64
+make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- # arm64
+make -j8 ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- # armv8l/arm32
+make -j8 ARCH=i686 CROSS_COMPILE=i686-linux-gnu- # i686
 ```
 
 ::: tip

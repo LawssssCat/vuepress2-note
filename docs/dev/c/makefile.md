@@ -366,6 +366,7 @@ so_libs := $(subst lib,$(basename $(filter %.so,$(libs))))
 
 变量名 | 说明
 --- | ---
+MAKEFLAGS | `make -f1 -f2 ....` 中的 `-f1 -f2 -f3 ...`
 CC | 指定C编译程序 <br> Program for compiling C programs; default gcc
 CXX | 指定C++编译程序 <br> Program for  compiling C++ programs; default g++
 CFLAGS | 传递给C编译程序的额外参数 <br> Extra flags to give to the C compiler

@@ -8,6 +8,7 @@ c语言编译器
 
 + [x] B站|李呵欠|GNU Makefile编译C/C++教程（Linux系统、VSCODE） - <https://www.bilibili.com/video/BV1EM41177s1/><br> 配套文档 - <https://github.com/WohimLee/GNC-Tutorial>
 
+GCC官网地址： <https://gcc.gnu.org/> \
 GCC官方文档： <https://gcc.gnu.org/onlinedocs/>
 
 GCC（GNU Compiler Collection，GNU编译程序集合）是GNU项目的一个产品，是最重要的开放源码软件。如Python就是由C语言开发，由GNU编译程序编译的！
