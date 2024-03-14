@@ -79,16 +79,46 @@ Linux fedora 6.5.6-300.fc39.x86_64 #1 SMP PREEMPT_DYNAMIC Fri Oct  6 19:57:21 UT
 ```
 
 ```bash
-wget https://www.python.org/ftp/python/3.12.1/Python-3.12.1.tgz
-
 # 安装依赖
-yum -y install make gcc gcc-c++
+# yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc* make -y
+# yum -y install make gcc gcc-c++
+yum install wget gcc make readline-devel
+# 解决 import bz2 报错
+yum install  bzip2-devel
+# 解决 import curses 报错
+yum install  ncurses-devel
+# 解决 import sqlite3 报错
+yum install sqlite-devel
+# 解决 _dbm _gdbm 缺失提醒
+yum install gdbm-devel
+# 解决 _lzma 缺失提醒
+yum install xz-devel
+# 解决 _tkinter 缺失提醒
+yum install tk-devel
+# 解决 readline 缺失提醒及方向键行为非预期的问题
+yum install readline-devel
+yum install zlib-devel
+# 解决 ImportError: No module named ‘_ctypes’ 错误
+yum install libffi-devel
+
+wget https://www.python.org/ftp/python/3.10.1/Python-3.10.1.tgz
+# wget https://www.python.org/ftp/python/3.12.1/Python-3.12.1.tgz
 # 解压
-tar -xfv Python-3.12.1.tgz && cd ${_%.*}
+# tar -xfv Python-3.12.1.tgz && cd ${_%.*}
+tar xvf Python-3.10.1.tgz
+
 # 编译安装
 # 默认在 /usr/local | 通过 ./configure --prefix=/usr/local/python3 指定安装目录
-./configure
-make && make install
+# ./configure
+# --prefix 指定了预期安装目录
+# --enable-optimizations 优化选项
+./configure --prefix=/usr/local/python3.10 --enable-optimizations
+# make && make install
+make -j8
+make install
+# rm ln /usr/bin/python3
+ln -s /usr/local/python3.10/bin/python3 /usr/bin/python3
+ln -s /usr/local/python3.10/bin/pip3 /usr/bin/pip3
 ```
 
 💡 python3.10编译安装报SSL失败解决方法： <https://blog.csdn.net/mdh17322249/article/details/123966953>
