@@ -45,9 +45,40 @@ todo 安全编译增改措施
 
 ```bash
 make 
-make V=1 # 调试模式，增加make命令输出日志
+make V=1 # KBUILD_VERBOSE | 调试模式，增加make命令输出日志
+make C=1 # KBUILD_CHECKSRC | enable sparse checking
+make M=dir # KBUILD_EXTMOD / SUBDIRS | 子目录
+# KBUILD_SRC is set on invocation of make in OBJ directory
+# KBUILD_SRC is not intended to be used by the regular user (for now)
+# make O=dir/to/store/output/files/ # KBUILD_OUTPUT
 
 CROSS_COMPILE=aarch64-linux-gnu-
+##################################### --> 默认： CONFIG_CROSS_COMPILER_PREFIX in .config
+CROSS_COMPILE ?=
+# bbox: we may have CONFIG_CROSS_COMPILER_PREFIX in .config,
+# and it has not been included yet... thus using an awkward syntax.
+ifeq ($(CROSS_COMPILE),)
+CROSS_COMPILE := $(shell grep ^CONFIG_CROSS_COMPILER_PREFIX .config 2>/dev/null)
+CROSS_COMPILE := $(subst CONFIG_CROSS_COMPILER_PREFIX=,,$(CROSS_COMPILE))
+CROSS_COMPILE := $(subst ",,$(CROSS_COMPILE))
+#")
+endif
+#####################################
+
+ARCH
+#####################################
+ifneq ($(CROSS_COMPILE),)
+SUBARCH := $(shell echo $(CROSS_COMPILE) | cut -d- -f1 | sed 's:^.*/::g')
+else
+SUBARCH := $(shell uname -m)
+endif
+SUBARCH := $(shell echo $(SUBARCH) | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
+					 -e s/arm.*/arm/ -e s/sa110/arm/ \
+					 -e s/s390x/s390/ -e s/parisc64/parisc/ \
+					 -e s/ppc.*/powerpc/ -e s/mips.*/mips/ )
+
+ARCH ?= $(SUBARCH)
+#####################################
 ```
 
 ## 交叉编译
@@ -107,6 +138,8 @@ make help # 全部target
 make clean # 清除构建结果
 make mrproper # 清除构建结果、安装文件、配置文件
 make menuconfig
+make savedefconfig # todo 执行 make saveconfig 作用是通过执行.config 生成最小的 defconfig 文件；
+make olddefconfig # todo 　通过make oldconfig将刚增加的config项的.config做依赖检查重新生成新的.config文件，且新生成的.config和以前的不同是，将旧的.config重命名为.config.old文件
 ######################################
 ```
 
@@ -134,7 +167,7 @@ make -j${nproc} # 编译
 
 # CROSS_COMPILE # 交叉编译器的路径
 # ARCH          # 对应的架构，这里以arm为例
-make -j8 # x86_64
+make -j8 ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu- # x86_64
 make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- # arm64
 make -j8 ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- # armv8l/arm32
 make -j8 ARCH=i686 CROSS_COMPILE=i686-linux-gnu- # i686
@@ -169,6 +202,51 @@ make install # 安装
 ./_install/bin/busybox sh
 
 file busybox # 查看文件编译架构
+```
+
+### Fedora Linux 39 (Workstation Edition)
+
+```bash
+$ uname -a
+Linux fedora 6.5.6-300.fc39.x86_64 #1 SMP PREEMPT_DYNAMIC Fri Oct  6 19:57:21 UTC 2023 x86_64 GNU/Linux
+$ cat /etc/os-release
+NAME="Fedora Linux"
+VERSION="39 (Workstation Edition)"
+ID=fedora
+VERSION_ID=39
+VERSION_CODENAME=""
+PLATFORM_ID="platform:f39"
+PRETTY_NAME="Fedora Linux 39 (Workstation Edition)"
+ANSI_COLOR="0;38;2;60;110;180"
+LOGO=fedora-logo-icon
+CPE_NAME="cpe:/o:fedoraproject:fedora:39"
+DEFAULT_HOSTNAME="fedora"
+HOME_URL="https://fedoraproject.org/"
+DOCUMENTATION_URL="https://docs.fedoraproject.org/en-US/fedora/f39/system-administrators-guide/"
+SUPPORT_URL="https://ask.fedoraproject.org/"
+BUG_REPORT_URL="https://bugzilla.redhat.com/"
+REDHAT_BUGZILLA_PRODUCT="Fedora"
+REDHAT_BUGZILLA_PRODUCT_VERSION=39
+REDHAT_SUPPORT_PRODUCT="Fedora"
+REDHAT_SUPPORT_PRODUCT_VERSION=39
+SUPPORT_END=2024-05-14
+VARIANT="Workstation Edition"
+VARIANT_ID=workstation
+```
+
+```bash
+# yum -y install gcc gcc-c++ glibc glibc-devel pcre pcre-devel openssl openssl-devel systemd-devel zlib-devel libmcrypt-devel glibc-static ncurses-devel
+yum -y install make gcc
+
+yum install -y binutils-aarch64-linux-gnu
+yum install -y binutils-x86_64-linux-gnu
+yum install -y binutils-arm-linux-gnu
+
+gcc-x86_64-linux-gnu
+gcc-aarch64-linux-gnu
+gcc-arm-linux-gnu
+# gcc-i686-linux-gnu
+glibc-devel.i686
 ```
 
 ## 配置运行

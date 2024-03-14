@@ -48,7 +48,7 @@ echo hello world! # 隐藏命令加@符号
 hello world!
 ```
 
-### 伪目标
+#### 伪目标
 
 “伪目标” 不是一个具体的文件，而是一个标签。
 
@@ -112,6 +112,14 @@ $ make compile
 $ make clean 
 removed 'objs/main.o'
 ```
+
+#### 环境变量
+
+变量 | 说明
+--- | ---
+MAKE | 值："make"
+CURDIR | 项目根路径
+MAKECMDGOALS | 命令行中输入的目标值
 
 #### 变量范围
 
@@ -358,6 +366,75 @@ a_libs  := $(subst lib,$(basename $(filter %.a,$(libs))))
 so_libs := $(subst lib,$(basename $(filter %.so,$(libs))))
 ```
 
+#### origin 
+
+返回变量出处
+
+```makefile
+ifeq ("$(origin M)", "command line")
+  KBUILD_EXTMOD := $(M)
+endif
+
+# command line
+# file
+```
+
+#### if
+
+```makefile
+#if 函数的语法是:
+#$(if <condition>,<then-part> )
+#或
+#$(if <condition>,<then-part>,<else-part> )
+#<condition>参数是if的表达式，如果其返回的为非空字符串，那么这个表达式就相当于返回真，于是，<then-part>会被计算，否则<else-part>会被计算
+#
+#if函数的返回值是，
+#     如果<condition>为真（非空字符串），那个<then-part>会是整个函数的返回值，
+#     如果<condition>为假（空字符串），那么<else-part>会是整个函数的返回值，此时如果<else-part>没有被定义，那么，整个函数返回空字串。
+
+SRC_DIR := src
+
+#if函数---设置默认值
+#如果变量SRC_DIR的值不为空,则将SRC_DIR指定的目录作为SUBDIR子目录;否则将/home/src作为子目录
+SUBDIR += $(if $(SRC_DIR),$(SRC_DIR),/home/src)
+
+all:
+    @echo $(SUBDIR)
+
+# 例子：
+KBUILD_OUTPUT := $(shell cd $(KBUILD_OUTPUT) && /bin/pwd)
+$(if $(KBUILD_OUTPUT),, \
+     $(error output directory "$(saved-output)" does not exist))
+```
+
+### 逻辑判断
+
+是否定义
+
+```makefile
+ifdef V
+  ifeq ("$(origin V)", "command line")
+    KBUILD_VERBOSE = $(V)
+  endif
+endif
+ifndef KBUILD_VERBOSE
+  KBUILD_VERBOSE = 0
+endif
+```
+
+是否相等
+
+```makefile
+defconfig: $(obj)/conf
+ifeq ($(KBUILD_DEFCONFIG),)
+	$< -d Config.in
+else
+	@echo *** Default configuration is based on '$(KBUILD_DEFCONFIG)'
+	$(Q)$< -D $(KBUILD_DEFCONFIG) Config.in
+endif
+	$(MTIME_IS_COARSE) && sleep 1
+```
+
 ## 隐式规则
 
 业界约定俗成的规则，如什么场景的变量一般用什么变量名。
@@ -398,6 +475,13 @@ LDFLAGS | 传递给链接器的额外参数 <br> Extra flags to give to compiler
 + Linux —— 在已安装操作系统的机器上跑。一般：个人pc、公司服务器
 + baremetal —— 直接由硬件调起。一般：嵌入式
 :::
+
+## kbuild/kconfig
+
+todo
+
+Menuconfig配置原理：
+在Linux里面我们所看到的menuconfig界面是通过配置内核顶层的Kconfig产生的，而当输入make menuconfig命令的时候系统会读取Makefile来解析Kconfig。
 
 ## 例子
 
