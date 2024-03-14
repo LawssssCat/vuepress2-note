@@ -75,6 +75,7 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
   ],
   "/dev/back-end/workflow/": ["README.md", "activiti.md", "flowable.md"],
   "/dev/back-end/im/": ["README.md"],
+  "/dev/c/": ["README.md", "gcc.md", "gpp.md", "makefile.md", "cmake.md"],
   "/dev/java/": [
     {
       text: "Java",
@@ -168,7 +169,15 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
     },
     {
       text: "操作系统",
-      children: ["os/", "os/fedora.md", "os/open-euler.md"],
+      children: [
+        "os/",
+        "os/internal.md",
+        "os/busybox.md",
+        "os/busybox-src.md",
+        "os/ubuntu.md",
+        "os/fedora.md",
+        "os/open-euler.md",
+      ],
     },
     {
       text: "软件包管理",

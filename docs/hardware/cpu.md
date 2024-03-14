@@ -2,6 +2,20 @@
 title: 处理器
 ---
 
+## 指令集
+
+### 流水线
+
+静态流水线、动态流水线
+
+~~题 <https://www.bilibili.com/video/BV1qK4y167MJ>~~
+
+### 记分牌算法
+
+“记分牌算法” 是 cpu 通过动态调度指令以提高计算机运行效率的一种填表方法。其核心在于填什么表，如何进行填表。
+
+todo <https://blog.csdn.net/hanmo22357/article/details/127408447>
+
 ## 内存/缓存/MESI协议
 
 参考：
