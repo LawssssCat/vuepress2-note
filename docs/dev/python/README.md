@@ -50,6 +50,13 @@ Python 生态：（完整：<https://en.wikipedia.org/wiki/List_of_Python_softwa
 
 参考： https://www.cnblogs.com/minseo/p/17817739.html
 
+::: warning
+不要手贱：
+centos8版本等系统一般都会自带集成python3及python版本，供系统底层调用。
+不要删除系统中的python旧版本及其目录结构，避免系统依赖出错。
+新版本安装到新地址，安装完后把系统中相关配置指向新版本所在目录，做相关配置即可。
+:::
+
 ```bash
 $ cat /etc/os-release
 NAME="Fedora Linux"
@@ -177,6 +184,8 @@ Python 3.11.5
 
 todo ja-netfilter https://zhaiblog.cn/169.html
 
+使用： <https://pycharm.iswbm.com/preface.html>
+
 ## 项目环境
 
 ### 虚拟环境
@@ -264,7 +273,26 @@ import sys
 print("系统信息："+sys.version)
 ```
 
-## 模块
+## 安装模块
+
+参考：
+
++ todo <https://cloud.tencent.com/developer/article/1524896>
++ todo <https://developer.aliyun.com/article/1011104>
+
+一般用 pip 安装。如果遇到不能用 pip 安装的场景，使用源码中的 setup.py 脚本安装：
+
+```bash
+
+# python setup.py develop
+python setup.py build
+python setup.py install # build + install | 不会安装该包的相关依赖包
+
+# 其他辅助命令
+python setup.py --help-commands 
+```
+
+## 常见模块
 
 ### 文件系统
 
@@ -438,6 +466,125 @@ b | 以二进制方式打开文件。不能单独使用，需要与其他模式�
 `flush()` | 把缓冲区的内容写入文件，但不关闭文件
 `close()` | 把缓冲区的内容写入文件，且关闭文件，释放文件对象相关资源
 
+## 项目打包
+
+参考：
+
++ todo 花了两天，终于把 Python 的 setup.py 给整明白了 - <https://zhuanlan.zhihu.com/p/276461821>
++ todo <>https://zhuanlan.zhihu.com/p/128020789
+
+Python 项目打包工具很成熟。如 disutils、 distutils 、distutils2、setuptools等等。
+下面介绍他们的关系。
+
+### distutils （包分发的始祖）
+
+distutils 是 Python 的一个标准库，从命名上很容易看出它是一个分发（distribute）工具（utlis）。
+它是 Python 官方开发的一个分发打包工具，所有后续的打包工具，全部都是基于它进行开发的。
+
+distutils 的精髓在于编写 setup.py，它是模块分发与安装的指导文件。
+比如下面这条命令就是用它来进行模块的安装： `python setup.py install`。
+（这样的安装方法是通过源码安装，与之对应的是通过二进制软件包的安装。）
+
+### setuptools/distribute
+
+setuptools 是 distutils 增强版，不包括在标准库中，但大部分 Python 用户都会使用更先进的 setuptools 模块。
+
+::: tip
+distribute 是 setuptools 有一个分支版本，分支的原因可能是有一部分开发者认为 setuptools 开发太慢了。
+但现在，distribute 又合并回了 setuptools 中。
+因此，我们可以认为它们是同一个东西。
+:::
+
+```bash
+###################
+# setuptools 安装 #
+###################
+
+# 方式一：
+# 下载压缩包： https://pypi.org/project/setuptools/#files
+# 安装： 
+python setup.py install
+
+# 方式二：通过引导程序安装
+wget http://peak.telecommunity.com/dist/ez_setup.py
+python ez_setup.py
+
+###################
+# setuptools 更新 #
+###################
+
+# 方式一：
+python ez_setup.py –U setuptools
+# 方式二：
+pip install -U setuptools
+```
+
+#### easy_install
+
+文档： https://setuptools.pypa.io/en/latest/easy_install.html
+
+安装完 setuptools 后，可以使用名叫 easy_install 的第三方管理工具。
+
+```bash
+#########
+# 镜像源
+#########
+# 编辑配置文件 /root/.pydistutils.cfg
+[easy_install]
+index-url=http://mirrors.aliyun.com/pypi/simple/
+find-links=http://mirrors.aliyun.com/pypi/simple/
+
+#########
+# 安装
+#########
+
+# 通过包名，从PyPI寻找最新版本，自动下载、编译、安装
+$ easy_install pkg_name
+
+# 通过包名从指定下载页寻找链接来安装或升级包
+$ easy_install -f http://pythonpaste.org/package_index.html 
+
+# 指定线上的包地址安装
+$ easy_install http://example.com/path/to/MyPackage-1.2.3.tgz
+
+# 从本地的 .egg 文件安装
+$ easy_install xxx.egg
+
+# 在安装时你可以添加额外的参数
+# 指定安装目录：--install-dir=DIR, -d DIR
+# 指定用户安装：--user
+
+#########
+# 升级
+#########
+
+# 从 pypi 中搜索并升级包
+$ easy_install --upgrade pkg_name
+
+# 指定版本进行升级
+$ easy_install "SomePackage==2.0"
+
+#########
+# 卸载
+#########
+
+$ easy_install -m pkg_name
+# 注意：这样的删除仅在 easy-install.pth 文件中删除，使 python 不能使用该模块。但实际的包还在电脑中，若要删除彻底，需要手动删除相关的 .egg 及其他文件。
+```
+
+todo https://zhuanlan.zhihu.com/p/276461821
+
+### Pyinstaller
+
+编译 py 文件生成 exe 文件
+
+```bash
+# 安装工具
+pip install PyInstaller
+# 生成 exe 文件
+pyinstaller -F stusystem.py # stusystem.exe
+```
+
 ## 场景
 
 ### 去重
@@ -591,14 +738,3 @@ todo 部署
 + cloud9 ide —— 云工作空间
 + DigitalOcean —— 云虚拟机
 + Heroku —— 云计算服务
-
-### 项目打包
-
-编译 py 文件生成 exe 文件
-
-```bash
-# 安装工具
-pip install PyInstaller
-# 生成 exe 文件
-pyinstaller -F stusystem.py # stusystem.exe
-```
