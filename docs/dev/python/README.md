@@ -87,8 +87,10 @@ Linux fedora 6.5.6-300.fc39.x86_64 #1 SMP PREEMPT_DYNAMIC Fri Oct  6 19:57:21 UT
 
 ```bash
 # 安装依赖
-# yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc* make -y
-# yum -y install make gcc gcc-c++
+# yum install -y zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc* make
+# yum install -y make gcc gcc-c++
+# yum install -y openssl-devel bzip2-devel libffi-devel
+# yum groupinstall -y 'Development Tools'
 yum install wget gcc make readline-devel
 # 解决 import bz2 报错
 yum install  bzip2-devel
@@ -117,8 +119,13 @@ tar xvf Python-3.10.1.tgz
 # 编译安装
 # 默认在 /usr/local | 通过 ./configure --prefix=/usr/local/python3 指定安装目录
 # ./configure
-# --prefix 指定了预期安装目录
-# --enable-optimizations 优化选项
+# --prefix 指定了预期安装目录 | 所有文件放在一个目录下
+#          若不配置，默认比较凌乱
+#          + 可执行文件   —— /usr/local/bin
+#          + 库文件       —— /usr/local/lib
+#          + 配置文件     —— /usr/local/etc
+#          + 其他资源文件 —— /usr/local/share
+# --enable-optimizations 优化选项（LTO,PGO 等）。加上这个 flag 编译后，性能有 10% 左右的优化，但是这会明显的增加编译时间
 ./configure --prefix=/usr/local/python3.10 --enable-optimizations
 # make && make install
 make -j8
@@ -175,6 +182,44 @@ openssl version
 $ python3 --version
 Python 3.11.5
 ```
+
+#### 问题： --enable-shared
+
+```bash
+./configure --prefix=/home/steven/python-2.7 --enable-shared
+```
+
+在大多数 Unix 系统上（除了 Mac OS X 之外），共享库的路径不是绝对路径。 
+因此，如果我们在非标准位置安装 Python，为了不和相同版本的系统 Python 产生干扰，我们需要配置非标准位置安装的 Python共享库的路径，或者通过设置运行时的环境变量，
+如 `LD_LIBRARY_PATH`。
+
+或者配置编译选项时加上 `LDFLAGS=-Wl,-rpath=<path>` 参数
+
+```bash
+# LDFLAGS=-Wl,<options...> 链接配置
+# -rpath=<path> 运行时的动态链接库位置
+./configure --enable-shared --prefix=/opt/python LDFLAGS=-Wl,-rpath=/opt/python/lib
+```
+
+### 升级
+
+```bash
+# python -m ensurepip --default-pip # 安装pip
+pip install --upgrade python
+pip install --upgrade python==3.x.x
+pip install --upgrade python==3.11.4 -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
+python --version
+```
+
+```bash
+# 问题： 无版本
+$ pip install --upgrade python
+Defaulting to user installation because normal site-packages is not writeable
+ERROR: Could not find a version that satisfies the requirement python (from versions: none)
+ERROR: No matching distribution found for python
+```
+
+或源码编译、安装、环境配置 （需要注意编译异常和编译选项风险）
 
 ### 模块管理工具 pip
 
@@ -273,7 +318,7 @@ import sys
 print("系统信息："+sys.version)
 ```
 
-## 安装模块
+## 安装模块（压缩包）
 
 参考：
 
@@ -584,6 +629,72 @@ pip install PyInstaller
 # 生成 exe 文件
 pyinstaller -F stusystem.py # stusystem.exe
 ```
+
+#### 问题： 打包报 enable-shared 错误
+
+参考： https://blog.csdn.net/zhouguoqionghai/article/details/103102724
+
+编译安装 python
+
+```bash
+wget https://www.python.org/ftp/python/3.4.0/Python-3.4.0.tgz
+tar -zxvf Python-3.4.0.tgz
+cd Python-3.4.0
+./configure
+make
+make install
+```
+
+使用 pyinstaller 将所有依赖打包到一个文件当中
+
+```bash
+pyinstaller --console --onefile script.py
+```
+
+结果报错
+
+```bash
+* On Debian/Ubuntu, you would need to install Python development packages
+  * apt-get install python3-dev
+  * apt-get install python-dev
+* If you're building Python by yourself, please rebuild your Python with `--enable-shared` (or, `--enable-framework` on Darwin)
+```
+
+重新编译安装 python
+
+```bash
+./configure --enable-shared
+```
+
+报错： `error while loading shared libraries： `
+
+```bash
+# 搜动态库位置
+$ find /usr -name 'libpython3.6m.so.1.0'
+/usr/local/lib
+
+# ldconfig 命令用来管理链接器的动态库搜索路径，默认的是 /lib 和 /usr/lib 已经 /etc/ld.so.conf 配置文件中包含的目录
+# 该路径不在连链接器默认的动态库搜索范围里，可以 ldconfig -v | grep python 看不到该动态库。
+# 若该库不在链接器的搜索范围内，执行 ldd $(which python3) 可查看到该库指向为 not found.
+$ ldd $(which python3) 
+        linux-vdso.so.1 =>  (0x00007ffd609e2000)
+        libpython3.4m.so.1.0 => not found
+        libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f6e934cf000)
+        libdl.so.2 => /lib64/libdl.so.2 (0x00007f6e932ca000)
+        libutil.so.1 => /lib64/libutil.so.1 (0x00007f6e930c7000)
+        libm.so.6 => /lib64/libm.so.6 (0x00007f6e92e43000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007f6e92aae000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f6e93ba2000)
+```
+
+解决
+
+```bash
+echo '/usr/local/lib' >> /etc/ld.so.conf # 将路径写入动态链接库配置
+ldconfig # 刷新一下缓存
+```
+
+另外，临时的替代方法就是修改预定义变量：`LD_LIBRARY_PATH`，然后 `export` 使得子进程当中能够使用
 
 ## 场景
 
