@@ -67,3 +67,24 @@ NX(DEP)
 rpath | 必选 | 二进制特征会显示rpath/runpath路径。攻击者更加容易构造rpath类的攻击 <br> ~~指定运行时链接器寻找动态库的路径：`-Wl,-rpath=.`~~ | `set(CMAKE_SKIP_RPATH TRUE)` （Cmake）
 RELRO<br>Bind-Now | 必选 | 全部重定向只读保护，防止内存越界，一旦越界就会segmentation faul。<br>对ret2plt攻击进行防护 | `-Wl,-z,now` （链接选项）
 Strip | 必选 | 去除符号表：链接过程完成后，符号表对可执行文件运行已无任何作用，反而会成为攻击者构造攻击的工具。<br>同时，删除符号表还可以对文件“减肥”，降低文件大小 | `-Wl,-s` （链接选项）
+
+### 安全编译选项检测工具
+
+#### binscope todo
+
+参考：
+
++ todo binscope说明 - Windows平台MSVC的安全编译选项检测工具 <https://zhuanlan.zhihu.com/p/624647089>
+  + todo [binscope](https://www.microsoft.com/en-us/download/details.aspx?id=44995)
+  + todo [官方文档 编译器选项](https://docs.microsoft.com/en-us/cpp/build/reference/compiling-a-c-cpp-program?view=msvc-170)
+  + todo [官方文档 链接器选项](https://docs.microsoft.com/en-us/cpp/build/reference/linking?view=msvc-170)
+  + todo [MSVC编译参数](https://blog.csdn.net/sunweiliang/article/details/89338099)
+  + todo [MSVC编译参数](https://blog.csdn.net/john_crash/article/details/50127309)
+  + todo [Security Best Practices for C++](https://docs.microsoft.com/en-us/cpp/security/security-best-practices-for-cpp?view=msvc-170)
+  + todo [Security Features in the CRT](https://docs.microsoft.com/en-us/cpp/c-runtime-library/security-features-in-the-crt?view=msvc-170)
+  + todo [_ITERATOR_DEBUG_LEVEL](https://docs.microsoft.com/en-us/cpp/standard-library/iterator-debug-level?view=msvc-170)
+  + todo [Checked Iterators](https://docs.microsoft.com/en-us/cpp/standard-library/checked-iterators?view=msvc-170)
+  + todo [Code analysis for C/C++ overview](https://docs.microsoft.com/en-us/cpp/code-quality/code-analysis-for-c-cpp-overview?view=msvc-170)
++ todo BinScope 2014 <https://www.microsoft.com/en-us/download/details.aspx?id=44995>
++ todo binscope github <https://github.com/andrew-d/binscope>
++ todo SecBinaryCheck ResultAnalyzer <https://gitee.com/dangoxj/secbinarycheck-result-analyzer>
