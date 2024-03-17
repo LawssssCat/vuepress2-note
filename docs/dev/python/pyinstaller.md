@@ -2,6 +2,8 @@
 title: pyinstaller 使用笔记
 ---
 
+### 简单使用
+
 编译 py 文件生成 exe 文件
 
 ```bash
@@ -11,8 +13,11 @@ pip install PyInstaller
 pyinstaller -F stusystem.py # stusystem.exe
 
 # pyInstaller -F -w -p /dir1/;/dir2/ -i /dir3/icon.ico ***.py
+# -F/--onefile
 # -F 表示生成单一的exe文件
 #    💡虽然生成了单一文件，但实际上还是压缩包形式存储全部文件，通过特殊方法可以解压 | todo 解压生成的单一文件
+#    ⚠️单文件模式下，启动程序时会先将可执行文件进行解压缩到 /temp 目录 下，再执行。
+#       所以被打包进去的数据文件在被解压的路径下，所以如果是在运行的路径下（即启动程序的目录下）搜索文件是找不到数据文件的！
 # -w 表示生成的exe文件执行时去掉背后的dos窗口
 # -p pyinstaller 手动提供包的位置（dir1，dir2），以分号隔开";"
 # -i 加入图标
@@ -22,13 +27,86 @@ pyinstaller -F stusystem.py # stusystem.exe
 pyinstaller present_fasttext_txt.spec
 ```
 
-#### 例子： 
+#### 例子： 简单flask服务
 
 ```py
+'''
+初始化：所有的Flask都必须创建程序实例，
+web服务器使用wsgi协议，把客户端所有的请求都转发给这个程序实例
+程序实例是Flask的对象，一般情况下用如下方法实例化
+Flask类只有一个必须指定的参数，即程序主模块或者包的名字，__name__是系统变量，该变量指的是本py文件的文件名
+'''
+from flask import Flask
+import datetime
 
+server=Flask(__name__)
+
+@server.route('/time',methods=['post','get'])
+def get_time():
+    now=str(datetime.datetime.now())#把当前时间转换成字符串
+    return "当前的时间是：%s"%now
+
+server.run(port=8888)
 ```
 
-#### spac 文件
+```bash
+# 直接运行
+pip3 install flask
+python3 app.py &
+curl 127.0.0.1:8888
+```
+
+```bash
+# 编译运行
+pyinstaller app.py
+./dist/app/app 
+```
+
+#### 问题： 资源文件的路径
+
+在 py 中，资源文件放在项目根目录下，所以调用的时候直接用的文件名。
+
+但打包成 exe 文件的后，资源文件会在 dist 文件夹下搜索文件，从而导致资源文件找不到的问题。
+
+代码片段1：
+
+```py
+import os, sys
+ 
+def resource_path(relative_path):
+    """
+    定义一个读取相对路径的函数
+      """
+    if hasattr(sys, "_MEIPASS"):
+        base_path = sys._MEIPASS
+    else:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+```
+
+调用
+
+```py
+# 前
+classifier1 = fasttext.load_model("comment_fasttext_isinv.model.bin"， label_prefix='__label__')
+# 后
+classifier1 = fasttext.load_model(resource_path("comment_fasttext_isinv.model.bin"), label_prefix='__label__')
+```
+
+代码片段2：不能在代码中直接使用相对路径调用文件
+
+```py
+# 先获取当前运行时临时目录路径
+if getattr(sys, 'frozen', None):
+    basedir = sys._MEIPASS
+else:
+    basedir = path.dirname(__file__)
+# 使用 os.path.join() 方法，将 临时目录路径与文件相对路径拼接
+with open(path.join(basedir, 'file.txt'), 'r') as fp:
+    pass
+```
+
+### spac 文件
 
 ```py
 # -*- mode: python -*-
@@ -80,7 +158,7 @@ pyi-makespec options name.py
 pyi-makespec present_fasttext_txt.py -F --hidden-import fasttext.model
 ```
 
-#### 问题： 打包报 enable-shared 错误
+### 问题： 打包报 enable-shared 错误
 
 参考： https://blog.csdn.net/zhouguoqionghai/article/details/103102724
 
@@ -152,7 +230,7 @@ export LD_LIBRARY_PATH # 得子进程当中能够使用
 ./configure --enable-shared --prefix=/opt/python LDFLAGS=-Wl,-rpath=/opt/python/lib
 ```
 
-#### 问题： 运行时 No module named 'matplotlib.backends.backend_tkagg'
+### 问题： 运行时 No module named 'matplotlib.backends.backend_tkagg'
 
 ```bash
 E:\0E207\soft\dist>.\dist\cellsim
@@ -178,40 +256,102 @@ Failed to execute script CellSim
 
   加参数 `--hidden-import matplotlib.backends.backend_tkagg`
 
-#### 问题： GLIBC issue
+### 问题： GLIBC issue / 静态编译
+
+::: waning
+PyInstaller + StaticX 实测有问题。
+todo 理解、解决方案
+:::
 
 参考：
 
 + GLIBC issue | https://github.com/orgs/pyinstaller/discussions/5669
 + Python 编译「静态」可执行文件 (PyInstaller + StaticX) | https://hydrotho.github.io/Compiling-Python-Application-Into-Static-Binary-Using-PyInstaller-And-StaticX/
 
-todo
-
-#### 问题： 打包成一个exe之后资源文件的路径
-
-在 py 中，资源文件放在项目根目录下，所以调用的时候直接用的文件名。
-
-但打包成 exe 文件的后，资源文件会在 dist 文件夹下搜索文件，从而导致资源文件找不到的问题。
-
-```py
-import os, sys
- 
-def resource_path(relative_path):
-    """
-    定义一个读取相对路径的函数
-      """
-    if hasattr(sys, "_MEIPASS"):
-        base_path = sys._MEIPASS
-    else:
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
+```bash
+# 打包项目为可执行文件（ELF），存放放在dist中 
+pyinstaller main.py # 多文件
+# or
+pyinstaller main.py --onefile # 单文件
+pyinstaller -F main.py
 ```
 
-调用
+通过上面命令，可以将项目打包为可执行文件（ELF）。
 
-```py
-# 前
-classifier1 = fasttext.load_model("comment_fasttext_isinv.model.bin"， label_prefix='__label__')
-# 后
-classifier1 = fasttext.load_model(resource_path("comment_fasttext_isinv.model.bin"), label_prefix='__label__')
+但可执行文件仍然可能在其他机器（甚至同架构、同系统的机器）上运行报错。因为，其生成的可执行文件是动态链接的：
+
+```bash
+$ ldd dist/app/app 
+        linux-vdso.so.1 (0x00007ffd52bf8000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f520b7dc000)
+        libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f520b7c0000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f520b7bb000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f520b592000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f520b7e9000)
 ```
+
+因为这种可执行文件不是完全静态的，所以它依赖于系统的 libc。
+在 Linux 下，GLIBC 的 ABI 是向后兼容的，但不是向前兼容的。
+因此，如果你用较新的 GLIBC 链接，你就不能在较旧的系统上运行编译好的可执行文件。
+
+一种解决方法是在最老的系统上编译 Python 解释器及其模块，从而使用旧的 GLIBC 版本，但这必然引入安全问题。
+
+彻底解决的方法是将 Python 应用程序编译成「静态」可执行文件。
+这里，使用 StaticX 工具：
+
+```bash
+pip install -U staticx
+staticx <动态可执行文件路径> <静态可执行文件路径>
+```
+
+```bash
+$ staticx dist/app/app dist/app/app-staticx
+$ file dist/app/app
+dist/app/app: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=4900f1057c817d78f6abf8c33793107b79dcd1a7, for GNU/Linux 2.6.32, stripped
+$ ldd dist/app/app
+        linux-vdso.so.1 (0x00007ffec835e000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f19f2be6000)
+        libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f19f2bca000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f19f2bc5000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f19f299c000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f19f2bf3000)
+$ file dist/app/app-staticx 
+dist/app/app-staticx: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, with debug_info, not stripped
+$ ldd dist/app/app-staticx
+        not a dynamic executable
+```
+
+::: warning
+除了安装 StaticX 包，还需要确保已安装如下命令：
+
++ `ldd`
++ `readelf`
++ `objcopy`
++ `patchelf`
+
+通过 `command -v <COMMAND>` 来检查命令是否存在。
+:::
+
+::: danger
+**存在的问题**
+
+StaticX 生成的「静态」可执行文件在运行时将在系统的 `/tmp/` 路径下创建随机临时文件夹，其中存放有应用程序运行所需的库，并且该目录将在应用程序退出时被自动清除。
+
+应用程序在运行时以该临时文件夹为其工作目录，这意味着诸如 `__file__` 变量和 `os`, `pathlib` 等库所获取到的路径将出现异常。
+
+因此：
+
+1. 通过 `pyinstaller app.py` 生成的多文件形式不能使用这种方式。
+
+  ```bash
+  $ ./dist/app/app-staticx 
+  [1141] Error loading Python lib '/tmp/staticx-EbFLcK/_internal/libpython3.10.so.1.0': dlopen: /tmp/staticx-EbFLcK/_internal/libpython3.10.so.1.0: cannot open shared object file: No such file or directory
+  ```
+
+1. 通过 `pyinstaller -F app.py` 生成的单文件形式也可能出现问题：
+
+  ```bash
+  $ staticx dist/app dist/app-staticx
+  staticx: /tmp/staticx-pyi-ct_w5qq1/base_library.zip: Invalid ELF image: Magic number does not match
+  ```
+:::
