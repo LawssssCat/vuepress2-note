@@ -119,8 +119,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
   ],
   "/dev/python/": [
     "README.md",
+    "python-build.md",
     "syntax.md",
     "pip.md",
+    "pyinstaller.md",
     "jupyter.md",
     "python-network.md",
   ],
