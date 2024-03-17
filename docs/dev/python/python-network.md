@@ -2,6 +2,10 @@
 title: Python 网络编程
 ---
 
+## 套接字（socket）
+
+@[code](@code/python/security/vulnerable-scanning.py)
+
 ## 抓取网络数据
 
 不管是半结构化数据（HTML）还是结构化数据（JSON、XML），通过解析网站提供的这些数据可以获取更多的信息。比如，通过 USGS 地震观测数据网站（<https://eqrthquake.usgs.gov/earthquakes/>）可以以视觉的方式看到全球地震相关信息，同时也能以不同的格式提取这些数据。

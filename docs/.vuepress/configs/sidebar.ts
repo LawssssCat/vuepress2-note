@@ -120,8 +120,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
   ],
   "/dev/python/": [
     "README.md",
+    "python-build.md",
     "syntax.md",
     "pip.md",
+    "pyinstaller.md",
     "jupyter.md",
     "python-network.md",
   ],
@@ -267,5 +269,5 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       children: ["pfsense.md"],
     },
   ],
-  "/security/": ["README.md"],
+  "/security/": ["README.md", "kali.md", "python.md"],
 });

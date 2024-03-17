@@ -621,6 +621,22 @@ echo
 echo "password read"
 ```
 
+## 终端控制 fg、bg、jobs、&、nohup
+
++ `&` —— 在后台运行任务，随会话结束结束 | e.g. `sleep 111 &`
++ `nohup` —— 在后台运行任务，不随会话结束结束 | e.g. `nohup sleep 111 &`
++ `jobs` —— 查看后台运行情况
+
+  ```bash
+  -l 
+  ```
+
++ `fg %jobnumber` —— 将job调至前台
++ `Ctrl + Z` —— 将前台任务调至后台，并且暂停任务
++ `bg %jobnumber` —— 将后台暂停任务继续运行
+
++ `kill %num <pid>` —— 结束任务
+
 ## 交互自动化
 
 交互命令

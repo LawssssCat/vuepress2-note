@@ -14,7 +14,7 @@ title: Python 使用笔记
 
 + ~~done80% 《Python 程序设计入门到实战》 by 何敏煌~~
 + todo 《Python 网络编程攻略》 by Dr.M.O.Faruque Sarker
-+ todo 《Python 绝技 —— 运用 Python 成为顶级黑客》 by TJ.O' Connor
++ doing 《Python 绝技 —— 运用 Python 成为顶级黑客》 by TJ.O' Connor
 + todo 《完全学会 Git · Github · Git Server 的 24 堂课》 by 孙宏明
 + todo All Algorithms implemented in Python https://github.com/TheAlgorithms/Python
 + todo Python Examples https://github.com/geekcomputers/Python
@@ -44,100 +44,47 @@ Python 生态：（完整：<https://en.wikipedia.org/wiki/List_of_Python_softwa
 
 ## 开发环境配置
 
-### 编译
+### 编译/升级
 
-源码地址： https://www.python.org/downloads/source/
+[link](./python-build.md)
 
-参考： https://www.cnblogs.com/minseo/p/17817739.html
+#### 问题： --enable-shared
 
 ```bash
-$ cat /etc/os-release
-NAME="Fedora Linux"
-VERSION="39 (Workstation Edition)"
-ID=fedora
-VERSION_ID=39
-VERSION_CODENAME=""
-PLATFORM_ID="platform:f39"
-PRETTY_NAME="Fedora Linux 39 (Workstation Edition)"
-ANSI_COLOR="0;38;2;60;110;180"
-LOGO=fedora-logo-icon
-CPE_NAME="cpe:/o:fedoraproject:fedora:39"
-DEFAULT_HOSTNAME="fedora"
-HOME_URL="https://fedoraproject.org/"
-DOCUMENTATION_URL="https://docs.fedoraproject.org/en-US/fedora/f39/system-administrators-guide/"
-SUPPORT_URL="https://ask.fedoraproject.org/"
-BUG_REPORT_URL="https://bugzilla.redhat.com/"
-REDHAT_BUGZILLA_PRODUCT="Fedora"
-REDHAT_BUGZILLA_PRODUCT_VERSION=39
-REDHAT_SUPPORT_PRODUCT="Fedora"
-REDHAT_SUPPORT_PRODUCT_VERSION=39
-SUPPORT_END=2024-05-14
-VARIANT="Workstation Edition"
-VARIANT_ID=workstation
-$ uname -a
-Linux fedora 6.5.6-300.fc39.x86_64 #1 SMP PREEMPT_DYNAMIC Fri Oct  6 19:57:21 UTC 2023 x86_64 GNU/Linux
+./configure --prefix=/home/steven/python-2.7 --enable-shared
+```
+
+在大多数 Unix 系统上（除了 Mac OS X 之外），共享库的路径不是绝对路径。 
+因此，如果我们在非标准位置安装 Python，为了不和相同版本的系统 Python 产生干扰，我们需要配置非标准位置安装的 Python共享库的路径，或者通过设置运行时的环境变量，
+如 `LD_LIBRARY_PATH`。
+
+或者配置编译选项时加上 `LDFLAGS=-Wl,-rpath=<path>` 参数
+
+```bash
+# LDFLAGS=-Wl,<options...> 链接配置
+# -rpath=<path> 运行时的动态链接库位置
+./configure --enable-shared --prefix=/opt/python LDFLAGS=-Wl,-rpath=/opt/python/lib
+```
+
+### 升级
+
+```bash
+# python -m ensurepip --default-pip # 安装pip
+pip install --upgrade python
+pip install --upgrade python==3.x.x
+pip install --upgrade python==3.11.4 -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
+python --version
 ```
 
 ```bash
-wget https://www.python.org/ftp/python/3.12.1/Python-3.12.1.tgz
-
-# 安装依赖
-yum -y install make gcc gcc-c++
-# 解压
-tar -xfv Python-3.12.1.tgz && cd ${_%.*}
-# 编译安装
-# 默认在 /usr/local | 通过 ./configure --prefix=/usr/local/python3 指定安装目录
-./configure
-make && make install
+# 问题： 无版本
+$ pip install --upgrade python
+Defaulting to user installation because normal site-packages is not writeable
+ERROR: Could not find a version that satisfies the requirement python (from versions: none)
+ERROR: No matching distribution found for python
 ```
 
-💡 python3.10编译安装报SSL失败解决方法： <https://blog.csdn.net/mdh17322249/article/details/123966953>
-
-::: details
-说明： python3.10之后版本不在支持libressl使用ssl，需要使用openssl安装来解决编译安装
-
-编译、安装、配置 openssl
-
-```bash
-# 编译、安装
-wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz
-tar -zxvf openssl-1.1.1w.tar.gz
-cd openssl-1.1.1w
-# ./config
-./config --prefix=/usr/local/openssl
-make 
-make install
-
-# 修改链接文件
-mv /usr/bin/openssl /usr/bin/openssl.bak
-ln -sf /usr/local/openssl/bin/openssl /usr/bin/openssl
-
-# 添加路径至ld.so.conf
-## 路径最后不带“/”，否则报错
-echo "/usr/local/openssl/lib" >> /etc/ld.so.conf
-ldconfig -v
-
-openssl version
-```
-
-修改Python编译源文件的Module/Setup链接，修改如下： （每个人的文件可能不一样，以自己的为准）
-
-1. 第211行路径修改为OpenSSL编译的路径
-1. 第212-214解除注释
-
-```make
-210 # socket line above, and edit the OPENSSL variable:
-211  OPENSSL=/usr/local/openssl
-212  _ssl _ssl.c \
-213      -I$(OPENSSL)/include -L$(OPENSSL)/lib \
-214      -lssl -lcrypto
-```
-:::
-
-```bash
-$ python3 --version
-Python 3.11.5
-```
+或源码编译、安装、环境配置 （需要注意编译异常和编译选项风险）
 
 ### 模块管理工具 pip
 
@@ -146,6 +93,8 @@ Python 3.11.5
 ### 安装 IDE PyCharm
 
 todo ja-netfilter https://zhaiblog.cn/169.html
+
+使用： <https://pycharm.iswbm.com/preface.html>
 
 ## 项目环境
 
@@ -234,7 +183,26 @@ import sys
 print("系统信息："+sys.version)
 ```
 
-## 模块
+## 安装模块（压缩包）
+
+参考：
+
++ todo <https://cloud.tencent.com/developer/article/1524896>
++ todo <https://developer.aliyun.com/article/1011104>
+
+一般用 pip 安装。如果遇到不能用 pip 安装的场景，使用源码中的 setup.py 脚本安装：
+
+```bash
+
+# python setup.py develop
+python setup.py build
+python setup.py install # build + install | 不会安装该包的相关依赖包
+
+# 其他辅助命令
+python setup.py --help-commands 
+```
+
+## 常见模块
 
 ### 文件系统
 
@@ -408,6 +376,118 @@ b | 以二进制方式打开文件。不能单独使用，需要与其他模式�
 `flush()` | 把缓冲区的内容写入文件，但不关闭文件
 `close()` | 把缓冲区的内容写入文件，且关闭文件，释放文件对象相关资源
 
+## 项目打包
+
+参考：
+
++ todo 花了两天，终于把 Python 的 setup.py 给整明白了 - <https://zhuanlan.zhihu.com/p/276461821>
++ todo <>https://zhuanlan.zhihu.com/p/128020789
+
+Python 项目打包工具很成熟。如 disutils、 distutils 、distutils2、setuptools等等。
+下面介绍他们的关系。
+
+### distutils （包分发的始祖）
+
+distutils 是 Python 的一个标准库，从命名上很容易看出它是一个分发（distribute）工具（utlis）。
+它是 Python 官方开发的一个分发打包工具，所有后续的打包工具，全部都是基于它进行开发的。
+
+distutils 的精髓在于编写 setup.py，它是模块分发与安装的指导文件。
+比如下面这条命令就是用它来进行模块的安装： `python setup.py install`。
+（这样的安装方法是通过源码安装，与之对应的是通过二进制软件包的安装。）
+
+### setuptools/distribute
+
+setuptools 是 distutils 增强版，不包括在标准库中，但大部分 Python 用户都会使用更先进的 setuptools 模块。
+
+::: tip
+distribute 是 setuptools 有一个分支版本，分支的原因可能是有一部分开发者认为 setuptools 开发太慢了。
+但现在，distribute 又合并回了 setuptools 中。
+因此，我们可以认为它们是同一个东西。
+:::
+
+```bash
+###################
+# setuptools 安装 #
+###################
+
+# 方式一：
+# 下载压缩包： https://pypi.org/project/setuptools/#files
+# 安装： 
+python setup.py install
+
+# 方式二：通过引导程序安装
+wget http://peak.telecommunity.com/dist/ez_setup.py
+python ez_setup.py
+
+###################
+# setuptools 更新 #
+###################
+
+# 方式一：
+python ez_setup.py –U setuptools
+# 方式二：
+pip install -U setuptools
+```
+
+#### easy_install
+
+文档： https://setuptools.pypa.io/en/latest/easy_install.html
+
+安装完 setuptools 后，可以使用名叫 easy_install 的第三方管理工具。
+
+```bash
+#########
+# 镜像源
+#########
+# 编辑配置文件 /root/.pydistutils.cfg
+[easy_install]
+index-url=http://mirrors.aliyun.com/pypi/simple/
+find-links=http://mirrors.aliyun.com/pypi/simple/
+
+#########
+# 安装
+#########
+
+# 通过包名，从PyPI寻找最新版本，自动下载、编译、安装
+$ easy_install pkg_name
+
+# 通过包名从指定下载页寻找链接来安装或升级包
+$ easy_install -f http://pythonpaste.org/package_index.html 
+
+# 指定线上的包地址安装
+$ easy_install http://example.com/path/to/MyPackage-1.2.3.tgz
+
+# 从本地的 .egg 文件安装
+$ easy_install xxx.egg
+
+# 在安装时你可以添加额外的参数
+# 指定安装目录：--install-dir=DIR, -d DIR
+# 指定用户安装：--user
+
+#########
+# 升级
+#########
+
+# 从 pypi 中搜索并升级包
+$ easy_install --upgrade pkg_name
+
+# 指定版本进行升级
+$ easy_install "SomePackage==2.0"
+
+#########
+# 卸载
+#########
+
+$ easy_install -m pkg_name
+# 注意：这样的删除仅在 easy-install.pth 文件中删除，使 python 不能使用该模块。但实际的包还在电脑中，若要删除彻底，需要手动删除相关的 .egg 及其他文件。
+```
+
+todo https://zhuanlan.zhihu.com/p/276461821
+
+### Pyinstaller
+
+[link](./pyinstaller.md)
+
 ## 场景
 
 ### 去重
@@ -561,14 +641,3 @@ todo 部署
 + cloud9 ide —— 云工作空间
 + DigitalOcean —— 云虚拟机
 + Heroku —— 云计算服务
-
-### 项目打包
-
-编译 py 文件生成 exe 文件
-
-```bash
-# 安装工具
-pip install PyInstaller
-# 生成 exe 文件
-pyinstaller -F stusystem.py # stusystem.exe
-```
