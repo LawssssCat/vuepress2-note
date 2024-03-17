@@ -7,7 +7,9 @@ title: python 编译/升级
 
 源码地址： https://www.python.org/downloads/source/
 
-参考： https://www.cnblogs.com/minseo/p/17817739.html
+参考： 
+
++ https://devguide.python.org/getting-started/setup-building/
 
 ::: warning
 不要手贱：
@@ -79,10 +81,12 @@ tar xvf Python-3.10.1.tgz
 # 编译/安装
 ###############
 
-# 默认在 /usr/local | 通过 ./configure --prefix=/usr/local/python3 指定安装目录
+# make clean
+# make distclean # 清理全部，包括 ./configure 生成的 Makefile 相关文件
+
 # ./configure
-# --prefix 指定了预期安装目录 | 所有文件放在一个目录下
-#          若不配置，默认比较凌乱
+# --prefix 指定安装目录，这样的话所有文件将放在一个目录下，方便安装、下载
+#          若不配置默认在 /usr/local 目录（比较凌乱，与程序其他共享）
 #          + 可执行文件   —— /usr/local/bin
 #          + 库文件       —— /usr/local/lib
 #          + 配置文件     —— /usr/local/etc
@@ -201,6 +205,101 @@ LINKFORSHARED="${LINKFORSHARED} -Xlinker -export-dynamic"
 export LINKFORSHARED
 
 ./config --enable-optimizations --enable-shared --with-ssl --prefix=/opt/python LDFLAGS=-Wl,-rpath=/opt/python/lib
+```
+
+## 静态编译
+
+参考：
+
++ <https://wiki.python.org/moin/BuildStatically>
+
+```bash
+$ ./configure LDFLAGS="-static" --disable-shared
+# LINKFORSHARED=“ ” 阻止将 -export-dynamic 传递给链接器，这将导致二进制文件被构建为动态链接的可执行文件。您可能需要其他标志才能成功生成。
+$ make LDFLAGS="-static" LINKFORSHARED=" "
+```
+
+### 问题： Glibc 的问题，Musl libc 的使用
+
+参考：
+
++ <https://linuxstory.org/musl-libc-yet-another-libc/>
+
+Python 依赖 Glibc。Glibc 存在很多问题：
+
++ 源码可读性差
++ 性能差
++ 体积大
++ 对静态链接支持不佳 【重点】
+
+理论上来说，Glibc 是支持静态链接的。
+但，这也仅仅是从理论上来说，由于一些历史遗留问题（当然，也包括对功能实现的考虑）Glibc 的静态链接并不是真正的静态链接：
+如果你的程序中使用了某些不支持静态链接的特性（这一点在大型软件中非常常见），那么即便你在链接时选择静态链接，生成出来的程序实际上仍然是依赖于 Glibc 动态库的，一旦你尝试删除掉它，你立马就会发现这些“静态”链接的程序统统罢工不干了。
+
+解决上 Glibc 述问题，可使用 Musl （Musl + Busybox）。
+Musl 从设计之初就很关注静态链接的可用性，因此它完全可以被静态链接进其他程序中，不存在 Glibc 对动态库的依赖问题。
+
+### 编译
+
+参考：
+
++ <http://main.lv/writeup/compile_python.md>
++ maddouri/build-static-python.sh | <https://gist.github.com/maddouri/c4b97474f21fabc9ef61> 
+A simple script that builds static versions of Python and LibPython using musl-libc
++ Compiling Python and LibPython Statically Using Musl-Libc | <https://web.archive.org/web/20180926104719/http://general-purpose.io/2015/12/06/compiling-python-and-libpython-statically-using-musl-libc/>
++ todo <https://askubuntu.com/questions/63711/building-a-static-version-of-python>
++ todo <https://github.com/bendmorris/static-python>
+
+```bash
+#!/bin/bash
+# set -eux
+
+# This a simple script that builds static versions of Python and LibPython using musl-libc
+# Find the associated article at: http://general-purpose.io/2015/12/06/compiling-python-and-libpython-statically-using-musl-libc/
+
+WORKING_DIR="/code/static-python"
+MUSL_PREFIX="/code/static-python/musl"
+PY_PREFIX="/code/static-python/python"
+
+# COMPILER="gcc"
+# COMPILER_VERSION="4.8"
+COMPILER="clang"
+COMPILER_VERSION="3.7"
+
+# make the compiler's actual command name
+export CC="${COMPILER}-${COMPILER_VERSION}"
+
+# prepare the working directory
+mkdir --parents "${WORKING_DIR}"
+
+# download/extract/build static musl libc
+cd "${WORKING_DIR}"
+wget "http://www.musl-libc.org/releases/musl-1.1.12.tar.gz"
+tar -xzf musl-1.1.12.tar.gz
+cd musl-1.1.12
+./configure --prefix="${MUSL_PREFIX}" --disable-shared
+make
+make install
+
+# enable the "musl compiler"
+export CC="${MUSL_PREFIX}/bin/musl-${COMPILER}"
+
+# download/extract/build static python/libpython
+cd "${WORKING_DIR}"
+wget "https://www.python.org/ftp/python/3.5.0/Python-3.5.0.tar.xz"
+tar -xJf Python-3.5.0.tar.xz
+cd Python-3.5.0
+./configure --prefix="${PY_PREFIX}" --disable-shared  \
+            LDFLAGS="-static" CFLAGS="-static" CPPFLAGS="-static"
+make
+make install
+
+# done ! (ignore any error that might happen during "make install")
+# we now have:
+#   ${MUSL_PREFIX}/bin/musl-gcc       : "static gcc" that uses musl
+#   ${PY_PREFIX}/bin/python3.5        : static python interpreter
+#   ${PY_PREFIX}/lib/libpython3.5m.a  : static libpython
+#   ${PY_PREFIX}/include/python3.5m   : include directory for libpython
 ```
 
 ## 升级

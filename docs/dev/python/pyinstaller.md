@@ -2,7 +2,31 @@
 title: pyinstaller 使用笔记
 ---
 
+::: danger
+经过各种踩坑，得出以下总结：
+
+使用 pyinstaller 把 python 打包成一个可执行文件属于脱裤子放屁。
+
+**理由**：
+
+1. 跨平台兼容性差： 由于语言的特性 pyinstaller 打包出来的二进制依赖系统的动态库。这导致程序可能可以跨平台跑，单大概率不能跑。要么动态库缺失，要么GLIBC版本要求太高，系统没有相关函数集。
+1. 破坏项目结构： 打包后的程序依赖的文件路径会改变，要么在 `_internal` 中，要么在解压的 `/tmp` 临时目录中。处理这种路径的变化需要添加额外的代码。如果使用的第三方库没有这种兼容代码，则整个三方库无法选用（除非你自己开分支维护）。
+
+**解决方案**：
+
+很简单，直接使用 python 跑 py 文件即可，根本无需把 python 项目通过 pyinstaller 打包成可执行文件再跑程序。
+环境需要安装 python 环境？
+直接编译一个静态的 python 可执行文件，加上 venv 打包依赖到 site-packages 环境就能确保代码跨系统运行。
+再交叉编译其他架构的 python 可执行文件即可跨架构运行。🎉
+
+python 静态编译参考： [link](./python-build.md) 
+:::
+
 ### 简单使用
+
+参考： 
+
++ ~~<https://www.askpython.com/python/examples/compiling-applications-static-binary>~~ 太冗长
 
 编译 py 文件生成 exe 文件
 

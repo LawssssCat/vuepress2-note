@@ -4,9 +4,25 @@ title: C/C++构建笔记
 
 ## 编译器用法
 
-gcc: [link](./gcc.md)
+参考：
 
-g++: [link](./gpp.md)
++ 详解三大编译器：gcc、llvm 和 clang | <https://zhuanlan.zhihu.com/p/357803433>
+
+todo
+
++ gcc
+
+  gcc: [link](./gcc.md)
+
+  g++: [link](./gpp.md)
+
++ LLVM
+
+  todo
+
++ LLVM2.0 - Clang
+
+  todo
 
 ## 编译工程工具
 
@@ -153,6 +169,14 @@ int main(void)
     return 0; 
 }
 ```
+
+#### Musl libc
+
+参考：
+
++ Musl libc：为什么我们会需要另一个 libc？ | https://linuxstory.org/musl-libc-yet-another-libc/
+
+todo 整理理解
 
 ## 二进制文件结构
 
