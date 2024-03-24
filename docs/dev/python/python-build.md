@@ -163,6 +163,7 @@ todo
 
 参考：
 
++ 编译Python3.7并配置ssl库为LibreSSL - https://cloud.tencent.com/developer/article/1397343
 + python3.10及以上版本编译安装ssl模块 - https://blog.csdn.net/ye__mo/article/details/129436629
 + Python3.11を最速インストールしようとしてSSLモジュールでハマった話 - https://qiita.com/KBT777/items/2ae15faa4b8c7101d6f1
 + python3安装，支持openssl，支持采集https - https://www.cnblogs.com/mengzhilva/p/11059329.html
@@ -180,6 +181,21 @@ openssl 1.0.1以下的版本不支持TLSV1.1 TLSV1.2。
 Could not build the ssl module!
 Python requires a OpenSSL 1.1.1 or newer
 ```
+
+::: tip
+
+在 python 3.7 的报错如下
+
+```bash
+Could not build the ssl module!
+Python requires an OpenSSL 1.0.2 or 1.1 compatible libssl with X509_VERIFY_PARAM_set1_host().
+LibreSSL 2.6.4 and earlier do not provide the necessary APIs, https://github.com/libressl-portable/portable/issues/381
+```
+
+这里提到的 LibreSSL 是 OpenSSL 加密软件库的一个分支，是一个安全套接层（SSL）和传输层安全（TLS）协议的开源实现。
+在 OpenSSL 爆出心脏出血安全漏洞（Heartbleed bug）之后，一些 OpenBSD 开发者于2014年4月创立了 LibreSSL，目标是重构 OpenSSL 的代码，以提供一个更安全的替代品。LibreSSL 复刻自 OpenSSL 库的 1.0.1g 分支，它将遵循 OpenBSD 基金会在其他项目所使用的安全指导原则。
+
+:::
 
 进入 python 也无法 import ssl
 
@@ -200,6 +216,8 @@ pip is configured with locations that require TLS/SSL, however the ssl module in
 
 Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError("Can’t connect to HTTPS URL because the SSL module is not available.
 ```
+
+
 
 ##### 步骤一： 升级openssl
 
