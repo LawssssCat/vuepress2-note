@@ -111,6 +111,32 @@ ln -s /usr/local/python3.10/bin/pip3 /usr/bin/pip3
 PATH=/usr/local/python3.10/bin/:$PATH
 ```
 
+#### 问题： 多线程编译
+
+参考：
+
++ Compiling Python from source: multiple threads for tests?
+https://stackoverflow.com/questions/49793880/compiling-python-from-source-multiple-threads-for-tests
+
+```bash
+make PROFILE_TASK="-m test.regrtest --pgo -j8" -j8
+```
+
+#### 问题： 跳过测试
+
+参考：
+
++ Make (install from source) python without running tests | https://stackoverflow.com/questions/44708262/make-install-from-source-python-without-running-tests
+
+`--enable-optimizations` 听说加了这个参数会优化新能，但会开启一堆测试，增加几倍的编译时间。
+
+有没有既要也要的办法？
+
+```bash
+make -j8 build_all # 只编译，不测试。 me：这样相当于没开--enable-optimizations
+make -j8 altinstall
+```
+
 #### 问题： python3.10编译安装报SSL失败解决方法
 
 💡 python3.10编译安装报SSL失败解决方法： <https://blog.csdn.net/mdh17322249/article/details/123966953>
