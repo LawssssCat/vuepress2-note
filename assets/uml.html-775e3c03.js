@@ -1,0 +1,1 @@
+const t=JSON.parse('{"key":"v-7f6421a3","path":"/management/design/uml.html","title":"统一建模语言（UML）","lang":"zh-CN","frontmatter":{"title":"统一建模语言（UML）"},"headers":[],"git":{"updatedTime":1707141497000,"contributors":[{"name":"lawsssscat","email":"18041500+LawssssCat@users.noreply.github.com","commits":1}]},"filePathRelative":"management/design/uml.md"}');export{t as data};

@@ -1,0 +1,1 @@
+const t=JSON.parse('{"key":"v-4f9e73d4","path":"/security/","title":"安全笔记","lang":"zh-CN","frontmatter":{"title":"安全笔记"},"headers":[],"git":{"updatedTime":1709651629000,"contributors":[{"name":"lawsssscat","email":"18041500+LawssssCat@users.noreply.github.com","commits":2}]},"filePathRelative":"security/README.md"}');export{t as data};

@@ -1,0 +1,1 @@
+const t=JSON.parse('{"key":"v-0b40c865","path":"/dev/front-end/ts/","title":"TypeScript 使用笔记","lang":"zh-CN","frontmatter":{"title":"TypeScript 使用笔记"},"headers":[],"git":{"updatedTime":1700560494000,"contributors":[{"name":"lawsssscat","email":"18041500+LawssssCat@users.noreply.github.com","commits":1}]},"filePathRelative":"dev/front-end/ts/README.md"}');export{t as data};

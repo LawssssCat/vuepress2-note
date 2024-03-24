@@ -1,0 +1,1 @@
+const a=JSON.parse('{"key":"v-67c1bca4","path":"/dev/java/java/jdk-io.html","title":"JDK IO 使用笔记","lang":"zh-CN","frontmatter":{"title":"JDK IO 使用笔记"},"headers":[],"git":{"updatedTime":1704672582000,"contributors":[{"name":"lawsssscat","email":"18041500+LawssssCat@users.noreply.github.com","commits":1}]},"filePathRelative":"dev/java/java/jdk-io.md"}');export{a as data};
