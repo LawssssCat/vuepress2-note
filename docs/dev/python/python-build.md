@@ -53,6 +53,9 @@ Linux fedora 6.5.6-300.fc39.x86_64 #1 SMP PREEMPT_DYNAMIC Fri Oct  6 19:57:21 UT
 # yum install -y openssl-devel bzip2-devel libffi-devel
 # yum groupinstall -y 'Development Tools'
 yum install wget gcc make readline-devel
+# yum install python-devel
+# yum install libuuid-devel
+# yum install mysql-devel
 # 解决 import bz2 报错
 yum install  bzip2-devel
 # 解决 import curses 报错
@@ -231,6 +234,34 @@ LINKFORSHARED="${LINKFORSHARED} -Xlinker -export-dynamic"
 export LINKFORSHARED
 
 ./config --enable-optimizations --enable-shared --with-ssl --prefix=/opt/python LDFLAGS=-Wl,-rpath=/opt/python/lib
+# 💡 --with-ssl 参数3.7有，3.10已不生效，需手动指定系统 openssl 位置 todo
+# 💡 -rpath 存在安全编译问题
+```
+
+#### 问题： 多线程编译
+
+参考：
+
++ Compiling Python from source: multiple threads for tests?
+https://stackoverflow.com/questions/49793880/compiling-python-from-source-multiple-threads-for-tests
+
+```bash
+make PROFILE_TASK="-m test.regrtest --pgo -j8" -j8
+```
+
+#### 问题： 跳过测试
+
+参考：
+
++ Make (install from source) python without running tests | https://stackoverflow.com/questions/44708262/make-install-from-source-python-without-running-tests
+
+`--enable-optimizations` 听说加了这个参数会优化新能，但会开启一堆测试，增加几倍的编译时间。
+
+有没有既要也要的办法？
+
+```bash
+make -j8 build_all # 只编译，不测试。 me：这样相当于没开--enable-optimizations
+make -j8 altinstall
 ```
 
 ## 静态编译
@@ -265,7 +296,9 @@ Python 依赖 Glibc。Glibc 存在很多问题：
 解决上 Glibc 述问题，可使用 Musl （Musl + Busybox）。
 Musl 从设计之初就很关注静态链接的可用性，因此它完全可以被静态链接进其他程序中，不存在 Glibc 对动态库的依赖问题。
 
-### 编译
+todo 解决方法唯有在低glibc系统中编译；或者先编译一个低版本glibc，然后改动态库环境变量
+
+### 例子： 编译脚本（不能无脑用）
 
 参考：
 
