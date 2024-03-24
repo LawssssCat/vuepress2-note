@@ -132,6 +132,36 @@ Linux 下 elf 文件的动态链接器是 ld-linux.so，即 `/lib/ld-linux.so.2`
 + `ld.so.cache`
 + `/etc/ld.so.preload` 指定需要预装载的库
 
+#### 运行时库的连接 `LD_LIBRARY_PATH`
+
+库文件在连接（静态库和共享库）和运行（仅限于使用共享库的程序）时被使用，其搜索路径是在系统中进行设置的。
+
+一般Linux系统把 `/lib` 和 `/usr/lib` 两个目录作为默认的库搜索路径，所以使用这两个目录中的库是不需要进行设置搜索路径即可直接使用。
+对于处于默认库搜索路径之外的库，需要将库的位置添加到 库的搜索路径之中。
+设置库文件的搜索路径有下列两种方式，可任选其一使用：
+
+1. 会话生效 —— 在环境变量 `LD_LIBRARY_PATH` 中指明库的搜索路径。
+
+  `export LD_LIBRARY_PATH=/opt/gtk/lib:$LD_LIBRARY_PATH`
+
+1. 永久生效 —— 在 `/etc/ld.so.conf` 文件中添加库的搜索路径（绝对路径）。 ⚠️一般需管理员权限
+
+  e.g.
+
+  ```
+  /usr/X11R6/lib
+  /usr/local/lib
+  /opt/lib
+  ```
+
+  ::: tip
+  另外，为了加快程序执行时对共享库的定位速度，避免使用搜索路径查找共享库的低效率，会有 `/etc/ld.so.cache` 库列表文件可以直接读取、搜索。
+  `/etc/ld.so.cache` 是一个非文本的数据文件，不能直接编辑，它是根据 `/etc/ld.so.conf` 中设置的搜索路径由 `/sbin/ldconfig` 命令将这些搜索路径下的共享库文件集中在一起而生成的( `ldconfig` 命令要以 root 权限执行)。
+
+  如当安装完一些库文件(例如刚安装好glib)，或者修改 `ld.so.conf` 增加新的库路径后，需要运行一下 `/sbin/ldconfig` 使所有的库文件都被缓存到 `ld.so.cache` 中。
+  否则 `ld.so.conf` 的更改不生效。
+  :::
+
 ### glibc
 
 glibc官网地址: <https://www.gnu.org/software/libc/> \
@@ -660,3 +690,55 @@ Strip | <span class="level-2">必选<br>medium </span>| 去除符号表：链接
 + todo BinScope 2014 <https://www.microsoft.com/en-us/download/details.aspx?id=44995>
 + todo binscope github <https://github.com/andrew-d/binscope>
 + todo SecBinaryCheck ResultAnalyzer <https://gitee.com/dangoxj/secbinarycheck-result-analyzer>
+
+## configure
+
+参考：
+
++ 简述configure、pkg-config、pkg_config_path三者的关系 | https://www.cnblogs.com/wliangde/p/3807532.html
+
+`configure` 是一个脚本文件，定义了执行时可以传入的必要参数，告知配置项目。
+`configure` 程序它会根据传入的配置项目检查程序编译时所依赖的环境以及对程序编译安装进行配置，最终生成编译所需的 `Makefile` 文件供程序 `make` 读入使用进而调用相关编译程式来编译最终的二进制程序。
+
+### pkg-config 链接库配置生成器
+
+一般来说，如果库的头文件不在 `/usr/include` 目录中，那么在编译的时候需要用 `-I` 参数指定其路径。
+
+由于编译的环境和编译后程序运行的环境大概率不同，通过 `-I` 指定的文件路径大概率也不一样，这是需要编译后的 `lib/pkgconfig` 目录中添加 `.pc` 文件来指定库的各种必要信息，包括版本信息、编译和连接需要的参数等。
+这样，不管库文件安装在哪，通过库对应的 `.pc` 文件就可以准确定位，可以使用相同的编译和连接命令，使得编译和连接界面统一。
+
+```txt
+prefix=/opt/gtk/
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+ 
+glib_genmarshal=glib-genmarshal
+gobject_query=gobject-query
+glib_mkenums=glib-mkenums
+ 
+Name: GLib
+Description: C Utility Library
+Version: 2.12.13
+Libs: -L${libdir} -lglib-2.0
+Cflags: -I${includedir}/glib-2.0 -I${libdir}/glib-2.0/include
+```
+
+```bash
+# 列出所有可使用的包
+# 位置在：
+# + /usr/lib/pkgconfig —— 此目录下都是各种.pc文件。
+# + /usr/local/lib/pkgconfig —— 新软件一般都会安装.pc文件
+# + 没有可以自己创建，并且设置环境变量 PKG_CONFIG_PATH 寻找 .pc 文件路径。
+$ pkg-config –list-all
+
+# 给出在编译时所需要的选项
+$ gcc -c `pkg-config --cflags glib-2.0` sample.c
+# 给出连接时的选项
+$ gcc sample.o -o sample `pkg-config --libs glib-2.0`
+```
+
+```bash
+export PKG_CONFIG_PATH=/opt/gtk/lib/pkgconfig:$PKG_CONFIG_PATH
+export LD_LIBRARY_PATH=/opt/gtk/lib:$LD_LIBRARY_PATH
+```
