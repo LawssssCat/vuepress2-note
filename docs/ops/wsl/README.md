@@ -62,7 +62,8 @@ apt-get upgrade
 
 ```bash
 # centos为例
-docker run -it centos:7 bash
+# docker run -it centos:7 bash
+docker create --name CentOS7.9 8652b9f0cb4c
 # 导出容器镜像
 docker export xxxxxxxxxxx -o centos.tar 
 mv centos.tar /mnt/c/Users/iuxt/Desktop
