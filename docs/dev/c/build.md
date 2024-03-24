@@ -76,6 +76,62 @@ compile_arm64
 
 ## 动态链接
 
+参考：
+
++ 动态符号链接的细节 - <https://www.w3cschool.cn/cbook/ojay2ozt.html> 【非常详细】
+
+Linux支持动态连接库，不仅节省了磁盘、内存空间，而且可以提高程序运行效率。不过引入动态连接库也可能会带来很多问题，例如动态连接库的调试、升级更新和潜在的安全威胁。
+
+为了让动态链接器能够进行符号的重定位，必须把动态链接库的相关信息写入到可执行文件当中：
+
+```bash
+# 通过 readelf -d 可以打印出该文件直接依赖的库
+$ readelf -d test | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
+# 通过 ldd 命令则可以打印出所有依赖或者间接依赖的库
+$ ldd test
+      linux-gate.so.1 =>  (0xffffe000) # 在文件系统中并没有对应的库文件，它是一个虚拟的动态链接库，对应进程内存映像的内核部分。参考： http://www.linux010.cn/program/Linux-gateso1-DeHanYi-pcee6103.htm
+      libc.so.6 => /lib/libc.so.6 (0xb7da2000)
+      /lib/ld-linux.so.2 (0xb7efc000) # 动态链接器 | 绝对路径 | readelf -x .interp test | interpeter
+      # 程序的加载过程 - 动态链接器
+      # 当 Shell 解释器或者其他父进程通过exec启动我们的程序时，系统会先为ld-linux创建内存映像，然后把控制权交给ld-linux，
+      # 之后ld-linux负责为可执行程序提供运行环境，负责解释程序的运行，因此ld-linux也叫做dynamic loader（或intepreter）
+      # 参考： http://www.ibm.com/developerworks/cn/linux/l-elf/part1/index.html
+```
+
+程序有两种方式使用库
+
++ 编译时通过 `-l`,`-L` 参数隐式使用： `gcc -o test test.c -lmyprintf -L./ -I./`
++ 运行时通过 `LD_LIBRARY_PATH` 环境变量显示使用： `LD_LIBRARY_PATH=$PWD`
+
+::: tip
+**指定动态库位置**： 
+
+通过 `LD_LIBRARY_PATH` 参数，它类似 Shell 解释器中用于查找可执行文件的 `PATH` 环境变量，也是通过冒号分开指定了各个存放库函数的路径。
+
+该变量实际上也可以通过 `/etc/ld.so.conf` 文件来指定，一行对应一个路径名。 （一般需要管理员权限） <br>
+为了提高查找和加载动态链接库的效率，系统启动后会通过 `ldconfig` 工具创建一个库的缓存 `/etc/ld.so.cache`。
+如果用户通过 `/etc/ld.so.conf` 加入了新的库搜索路径或者是把新库加到某个原有的库目录下，最好是执行一下 `ldconfig` 以便刷新缓存。
+
+更多参考： `man ld-linux`, `/lib/ld-linux.so.2`
+:::
+
+### 动态链接器（dynamic linker/loader）
+
+Linux 下 elf 文件的动态链接器是 ld-linux.so，即 `/lib/ld-linux.so.2`。
+通过 `man ld-linux` 可以获取与动态链接器相关的资料，包括各种相关的环境变量和文件都有详细的说明。
+
+如：
+
++ `LD_LIBRARY_PATH` 
++ `LD_BIND_NOW`
++ `LD_PRELOAD` 指定预装载一些库，以便替换其他库中的函数，从而做一些安全方面的处理
++ `LD_DEBUG` 用来进行动态链接的相关调试
+
++ `ld.so.conf`
++ `ld.so.cache`
++ `/etc/ld.so.preload` 指定需要预装载的库
+
 ### glibc
 
 glibc官网地址: <https://www.gnu.org/software/libc/> \
@@ -177,6 +233,85 @@ int main(void)
 + Musl libc：为什么我们会需要另一个 libc？ | https://linuxstory.org/musl-libc-yet-another-libc/
 
 todo 整理理解
+
+## 静态编译
+
+`-static`
+
+::: tip
+静态编译的二进制通过 `ldd` 可以看到 "not a dynamic executable" 的字样。
+而 ~~`-nostdlib`~~ 通过 `ldd` 看到的是 "statically linked"，这表示 “它恰好没有链接到任何库，但在其他方面与普通 PIE 相同，指定了 ELF 解释器。” —— me: 这运行情况应该跟静态编译出来的差不多？？？
+
+todo What's the difference between "statically linked" and "not a dynamic executable" from Linux ldd? | https://stackoverflow.com/questions/61553723/whats-the-difference-between-statically-linked-and-not-a-dynamic-executable
+:::
+
+### 问题： 安全编译识别失败
+
+todo
+
+`nm` 可以查看 elf 文件的符号信息
+
+```bash
+$ gcc -c test.c
+$ nm test.o
+00000000 B global
+00000000 T main
+          U printf
+```
+
+## 程序执行流程
+
+todo http://www.ibm.com/developerworks/cn/linux/l-elf/part1/index.html
+
+```bash
+# 程序入口
+$ readelf -h test | grep Entry
+  Entry point address:               0x80482b0
+
+# 程序有 printf 符号的地址没有确定 
+# 💡 已知： printf 函数在动态链接库 libc.so 中定义，需要进行动态链接； 这里假设采用 lazy mode 方式，即执行到 printf 所在位置时才去解析该符号的地址。
+
+# 反编译发现： 地址指向了 plt （即过程链接表）
+$ objdump -d -s -j .text test | grep printf
+ 804837c:       e8 1f ff ff ff          call   80482a0 <printf@plt>
+$ objdump -D test | grep "80482a0" | grep -v call
+080482a0 <printf@plt>:
+ 80482a0:       ff 25 8c 95 04 08       jmp    *0x804958c
+# 过程链接表（plt）
+$ readelf -d test
+
+Dynamic section at offset 0x4ac contains 20 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
+ 0x0000000c (INIT)                       0x8048258
+ 0x0000000d (FINI)                       0x8048454
+ 0x00000004 (HASH)                       0x8048148
+ 0x00000005 (STRTAB)                     0x80481c0
+ 0x00000006 (SYMTAB)                     0x8048170
+ 0x0000000a (STRSZ)                      76 (bytes)
+ 0x0000000b (SYMENT)                     16 (bytes)
+ 0x00000015 (DEBUG)                      0x0
+ 0x00000003 (PLTGOT)                     0x8049578 # 这就是GOT表（全局偏移表）。该地址与0x804958c相近，说明在读GOT表！ 
+ 0x00000002 (PLTRELSZ)                   24 (bytes)
+ 0x00000014 (PLTREL)                     REL
+ 0x00000017 (JMPREL)                     0x8048240
+ 0x00000011 (REL)                        0x8048238
+ 0x00000012 (RELSZ)                      8 (bytes)
+ 0x00000013 (RELENT)                     8 (bytes)
+ 0x6ffffffe (VERNEED)                    0x8048218
+ 0x6fffffff (VERNEEDNUM)                 1
+ 0x6ffffff0 (VERSYM)                     0x804820c
+ 0x00000000 (NULL)                       0x0
+
+# 全局偏移表（got）
+$ readelf -x .got.plt test
+
+Hex dump of section '.got.plt':
+  0x08049578 ac940408 00000000 00000000 86820408 ................
+  0x08049588 96820408 a6820408                   ........
+
+todo ...
+```
 
 ## 二进制文件结构
 
@@ -474,22 +609,36 @@ todo linux程序保护机制&gcc编译选项 - <https://www.jianshu.com/p/91fae0
 若不加上，可能运行时会泄露某些信息，方便逆向、CTF。
 
 &nbsp; | 编译选项 | 链接选项
+--- | --- | ---
 必选 | PIC/PIE/Protect-Stack | rpath/Bind-Now/Strip 
 可选 | Fortify-Source/ftrapv
+
+<style>
+  .level-1 {
+    background: red;
+  }
+  .level-2 {
+    background: yellow;
+  }
+  .level-3 {
+    background: green;
+  }
+</style>
 
 具体含义
 
 编译/链接选项 | 必选 | 含义 | 使用方法
 --- | --- | --- | ---
-PIC<br>（Position-Independent-Code） | 必选 | 实现动态库随机加载 | `-fPIC`/~~`-fpic`（旧）~~ （编译选项）
-PIE(ASLR)<br>PIE<br>（Position-Independent-Executable） | 必选 | 降低固定地址类攻击、缓冲溢出攻击的成功率；<br>具备PIE的可执行文件在加载执行时可像共享库一样随机加载 | `-fPIE`/~~`-fpie`（旧）~~ （编译选项） <br> `-pie` （链接选项） <br> ⚠️需要上述两个选项同时使用
-Canary<br>Protect-Stack | 必选 | 栈保护。可以判断是否发生溢出攻击 <br> 参考： <https://www.cnblogs.com/arnoldlu/p/11630979.html> | `-fstack-protector-strong`/~~`-fstack-protector-all`（旧）~~ （编译选项）
-Fortify<br>Fortify-Source | 可选 | GCC编译器和glibc库配合提供在编译时和运行时对固定大小的缓冲区的访问 <br> （无论时动态分配的还是静态声明的内存空间） <br> 参考： <https://forum.butian.net/share/1190> <br> <span style="">Fority 其实非常轻微的检查，用于检查是否存在缓冲区溢出的错误。<br>Fortify 是GCC在编译源码时判断程序的哪些buffer会存在可能的溢出。<br>在buffer大小已知的情况下，GCC会把 strcpy、memcpy、memset等函数自动替换成相应的`__strcpy_chk(dst, src, dstlen)`等函数，达到防止缓冲区溢出的作用。</span> | `-O2` （编译选项） <br> `-D_FORTIFY_SOURCE=2` （编译选项，默认开启，但需要`-O2`启动时才会激活） 
-ftrapv | 可选 | 整数溢出检查 <br> 使用了它之后，在执行有符号整数间的加减乘运算时，不是通过CPU的指令，而是用包含了GCC附属库的libgcc.c里面的函数来实现执行带符号的整数间的加/减/乘/除运算。 <br> <span sytle="background:yellow">对性能影响比较大。</span> | `-ftrapv` （编译选项）
-NX(DEP)
-rpath | 必选 | 二进制特征会显示rpath/runpath路径。攻击者更加容易构造rpath类的攻击 <br> ~~指定运行时链接器寻找动态库的路径：`-Wl,-rpath=.`~~ | `set(CMAKE_SKIP_RPATH TRUE)` （Cmake）
-RELRO<br>Bind-Now | 必选 | 全部重定向只读保护，防止内存越界，一旦越界就会segmentation faul。<br>对ret2plt攻击进行防护 | `-Wl,-z,now` （链接选项）
-Strip | 必选 | 去除符号表：链接过程完成后，符号表对可执行文件运行已无任何作用，反而会成为攻击者构造攻击的工具。<br>同时，删除符号表还可以对文件“减肥”，降低文件大小 | `-Wl,-s` （链接选项）
+PIC<br>（Position-Independent-Code） | <span class="level-1">必选<br>high</span> | 位置无关代码 <br> 实现动态库随机加载 | `-fPIC`/~~`-fpic`（旧）~~ （编译选项）
+PIE(ASLR)<br>PIE<br>（Position-Independent-Executable） | <span class="level-1">必选<br>high </span>| 位置无关代码/随机化<br>可执行文件在加载执行时可像共享库一样随机加载  <br> 降低固定地址类攻击、缓冲溢出攻击的成功率 | `-fPIE`/~~`-fpie`（旧）~~ （编译选项） <br> `-pie` （链接选项） <br> ⚠️需要上述两个选项同时使用 <br> 解释： <ul> <li>`-no-pie`: 关闭</li><li>`-pie`: 开启</li> </ul>
+Canary<br>Protect-Stack<br>SP | <span class="level-1">必选<br>high</span> | 栈保护。可以判断是否发生溢出攻击 <br> 参考： <https://www.cnblogs.com/arnoldlu/p/11630979.html> | `-fstack-protector-strong`/~~`-fstack-protector-all`（旧）~~ （编译选项） <br> 解释： <ul><li>`-fno-stack-protector`: 关闭</li><li>`-fstack-protector`: 开启</li><li>`-fstack-protector-all`: 全开启</li></ul>
+Fortify<br>Fortify-Source<br>FS | <span class="level-2">可选<br>medium</span> | GCC编译器和glibc库配合提供在编译时和运行时对固定大小的缓冲区的访问 <br> （无论时动态分配的还是静态声明的内存空间） <br> 参考： <https://forum.butian.net/share/1190> <br> <span style="">Fority 其实非常轻微的检查，用于检查是否存在缓冲区溢出的错误。<br>Fortify 是GCC在编译源码时判断程序的哪些buffer会存在可能的溢出。<br>在buffer大小已知的情况下，GCC会把 strcpy、memcpy、memset等函数自动替换成相应的`__strcpy_chk(dst, src, dstlen)`等函数，达到防止缓冲区溢出的作用。</span> | `-O2` （编译选项） <br> `-D_FORTIFY_SOURCE=2` （编译选项，默认开启，但需要`-O2`启动时才会激活） 
+ftrapv | <span class="level-2">可选<br>medium</span> | 整数溢出检查 <br> 使用了它之后，在执行有符号整数间的加减乘运算时，不是通过CPU的指令，而是用包含了GCC附属库的libgcc.c里面的函数来实现执行带符号的整数间的加/减/乘/除运算。 <br> <span sytle="background:yellow">对性能影响比较大。</span> | `-ftrapv` （编译选项）
+NX(DEP) | <span class="level-1">可选<br>high</span> | 堆栈不可执行 | `-z noexecstack` <br> 解释： <ul><li>`-z execstack`: 关闭</li><li>`-z noexecstack`: 开启</li></ul>
+rpath | <span class="level-1">必选<br>high</span> | 禁用： “动态库搜索路径” <br> 禁用： `-rpath` <br> 二进制特征会显示rpath/runpath路径。攻击者更加容易构造rpath类的攻击 <br> ~~指定运行时避免使用链接器 `-Wl,-rpath=.` 寻找动态库的路径~~ | `set(CMAKE_SKIP_RPATH TRUE)` （Cmake）
+Bind-Now | <span class="level-1">必选<br>high</span> | 立即绑定 | `-Wl,-z,now` （链接选项） <br> 或：`LD_BIND_NOW=1`
+RELRO | <span class="level-1">必选<br>high</span> | GOT表保护<br>全部重定向只读保护，防止内存越界，一旦越界就会segmentation faul。<br>对ret2plt攻击进行防护 | `-Wl,-z,relro` （链接选项） <br> 解释：<ul> <li>`-z norelro`: 关闭</li><li>`-z lazy`: 部分开启</li><li>`-z now`: 完全开启</li> </ul>
+Strip | <span class="level-2">必选<br>medium </span>| 去除符号表：链接过程完成后，符号表对可执行文件运行已无任何作用，反而会成为攻击者构造攻击的工具。<br>同时，删除符号表还可以对文件“减肥”，降低文件大小 | `-Wl,-s` （链接选项）
 
 ### 安全编译选项检测工具
 
