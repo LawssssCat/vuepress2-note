@@ -114,80 +114,154 @@ ln -s /usr/local/python3.10/bin/pip3 /usr/bin/pip3
 PATH=/usr/local/python3.10/bin/:$PATH
 ```
 
-#### 问题： 多线程编译
+#### 问题： The necessary bits to build these optional modules were not found
 
-参考：
-
-+ Compiling Python from source: multiple threads for tests?
-https://stackoverflow.com/questions/49793880/compiling-python-from-source-multiple-threads-for-tests
+很多时候，编译完 python 会出现下面提示
 
 ```bash
-make PROFILE_TASK="-m test.regrtest --pgo -j8" -j8
+The necessary bits to build these optional modules were not found:
+_bz2                  _ctypes               _ctypes_test
+_dbm                  _gdbm                 _hashlib
+_lzma                 _ssl                  _tkinter
+_uuid                 nis                   readline
+zlib
+To find the necessary bits, look in configure.ac and config.log.
+
+Could not build the ssl module!
+Python requires a OpenSSL 1.1.1 or newer
+
+Checked 111 modules (31 built-in, 65 shared, 1 n/a on linux-x86_64, 1 disabled, 13 missing, 0 failed on import)
 ```
-
-#### 问题： 跳过测试
-
-参考：
-
-+ Make (install from source) python without running tests | https://stackoverflow.com/questions/44708262/make-install-from-source-python-without-running-tests
-
-`--enable-optimizations` 听说加了这个参数会优化新能，但会开启一堆测试，增加几倍的编译时间。
-
-有没有既要也要的办法？
 
 ```bash
-make -j8 build_all # 只编译，不测试。 me：这样相当于没开--enable-optimizations
-make -j8 altinstall
+# yum install wget gcc make readline-devel
+Python build finished successfully!
+The necessary bits to build these optional modules were not found:
+_bz2                  _dbm                  _gdbm
+_hashlib              _lzma                 _sqlite3
+_ssl                  _tkinter              _uuid
+nis                   zlib
+To find the necessary bits, look in setup.py in detect_modules() for the module's name.
+
+
+The following modules found by detect_modules() in setup.py, have been
+built by the Makefile instead, as configured by the Setup files:
+_abc                  pwd                   time
+
+
+Failed to build these modules:
+_ctypes
+
+
+Could not build the ssl module!
+Python requires a OpenSSL 1.1.1 or newer
 ```
+
+todo
 
 #### 问题： python3.10编译安装报SSL失败解决方法
 
-💡 python3.10编译安装报SSL失败解决方法： <https://blog.csdn.net/mdh17322249/article/details/123966953>
+参考：
 
-::: details
-说明： python3.10之后版本不在支持libressl使用ssl，需要使用openssl安装来解决编译安装
++ python3.10及以上版本编译安装ssl模块 - https://blog.csdn.net/ye__mo/article/details/129436629
++ Python3.11を最速インストールしようとしてSSLモジュールでハマった話 - https://qiita.com/KBT777/items/2ae15faa4b8c7101d6f1
++ python3安装，支持openssl，支持采集https - https://www.cnblogs.com/mengzhilva/p/11059329.html
 
-编译、安装、配置 openssl
+在 python3.10 之后版本不再支持 libressl 使用 ssl。 
 
-```bash
-# 编译、安装
-wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz
-tar -zxvf openssl-1.1.1w.tar.gz
-cd openssl-1.1.1w
-# ./config
-./config --prefix=/usr/local/openssl
-make 
-make install
-
-# 修改链接文件
-mv /usr/bin/openssl /usr/bin/openssl.bak
-ln -sf /usr/local/openssl/bin/openssl /usr/bin/openssl
-
-# 添加路径至ld.so.conf
-## 路径最后不带“/”，否则报错
-echo "/usr/local/openssl/lib" >> /etc/ld.so.conf
-ldconfig -v
-
-openssl version
-```
-
-修改Python编译源文件的Module/Setup链接，修改如下： （每个人的文件可能不一样，以自己的为准）
-
-1. 第211行路径修改为OpenSSL编译的路径
-1. 第212-214解除注释
-
-```make
-210 # socket line above, and edit the OPENSSL variable:
-211  OPENSSL=/usr/local/openssl
-212  _ssl _ssl.c \
-213      -I$(OPENSSL)/include -L$(OPENSSL)/lib \
-214      -lssl -lcrypto
-```
+::: tip
+openssl 1.0.1以下的版本不支持TLSV1.1 TLSV1.2。
+出于安全考虑，很多被调用的HTTPS已经不支持TLSV1.1以下的版本了
 :::
 
+如果[要编译 ssl 模块则需要在编译环境中配置 openssl 1.1.1 以上](https://docs.python.org/3/whatsnew/3.10.html)，否则安装 python3 时提示如下信息：
+
 ```bash
-$ python3 --version
-Python 3.11.5
+Could not build the ssl module!
+Python requires a OpenSSL 1.1.1 or newer
+```
+
+进入 python 也无法 import ssl
+
+```bash
+$ ./python
+Python 3.12.2 (main, Mar 24 2024, 16:37:32) [GCC 11.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import ssl
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/uv01/build-python/Python-3.12.2/Lib/ssl.py", line 100, in <module>
+    import _ssl             # if we can't import it, let the error propagate
+    ^^^^^^^^^^^
+ModuleNotFoundError: No module named '_ssl'
+
+# 或者 pip 无法下载 https 资源
+pip is configured with locations that require TLS/SSL, however the ssl module in Python is not available.
+
+Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError("Can’t connect to HTTPS URL because the SSL module is not available.
+```
+
+##### 步骤一： 升级openssl
+
+首先需要编译/安装 openssl 1.1.1 以上版本。
+参考： [link](../c/lib/openssl.md)
+
+##### 步骤二（可选1）： 安装libssl开发工具 
+
+```bash
+# yum install openssl-devel
+apt install libssl-dev
+```
+
+安装这个之后，直接重新编译python即可
+
+##### 步骤二（可选2）： 编译python编译配置
+
+修改Python编译源文件的Module/Setup链接，修改如下： （每个人的文件可能不一样，以自己的为准） todo 自动化脚本
+
+for python-3.11.2
+
+```make
+# To statically link OpenSSL:
+- # _ssl _ssl.c $(OPENSSL_INCLUDES) $(OPENSSL_LDFLAGS) \
+- #    -l:libssl.a -Wl,--exclude-libs,libssl.a \
+- #    -l:libcrypto.a -Wl,--exclude-libs,libcrypto.a
+- # _hashlib _hashopenssl.c $(OPENSSL_INCLUDES) $(OPENSSL_LDFLAGS) \
+- #    -l:libcrypto.a -Wl,--exclude-libs,libcrypto.a
++ _ssl _ssl.c $(OPENSSL_INCLUDES) $(OPENSSL_LDFLAGS) \
++     -l:libssl.a -Wl,--exclude-libs,libssl.a \
++     -l:libcrypto.a -Wl,--exclude-libs,libcrypto.a
++ _hashlib _hashopenssl.c $(OPENSSL_INCLUDES) $(OPENSSL_LDFLAGS) \
++     -l:libcrypto.a -Wl,--exclude-libs,libcrypto.a
+
+./configure --prefix=/usr/local/python-3.11.2 \
+  --with-zlib=/usr/include/ \
+  --with-openssl-rpath=auto \
+  --with-openssl=/usr/include/openssl \
+  OPENSSL_LDFLAGS=-L/usr/include/openssl \
+  OPENSSL_LIBS=-l/usr/include/openssl/ssl \
+  OPENSSL_INCLUDES=-I/usr/include/openssl
+```
+
+for python3.10.7
+
+```bash
+OPENSSL=/usr/local/openssl
+_ssl _ssl.c \
+    -I$(OPENSSL)/include -L$(OPENSSL)/lib64 \    (看openssl安装目录下面是lib  还是lib64  改成跟自己安装目录一样)
+    -lssl -lcrypto
+_hashlib _hashopenssl.c \
+     -I$(OPENSSL)/include -L$(OPENSSL)/lib64 \
+     -lcrypto
+
+./configure --prefix=/usr/local/python3.10 \
+  --enable-optimizations \
+  --with-openssl=/usr/local/openssl \
+  --with-ensurepip=yes \
+  CFLAGS="-I/usr/local/openssl/include" \
+  LDFLAGS="-L/usr/local/openssl/lib64"
+
+make && make altinstall
 ```
 
 #### 问题： --enable-shared
@@ -275,6 +349,28 @@ $ ./configure LDFLAGS="-static" --disable-shared
 # LINKFORSHARED=“ ” 阻止将 -export-dynamic 传递给链接器，这将导致二进制文件被构建为动态链接的可执行文件。您可能需要其他标志才能成功生成。
 $ make LDFLAGS="-static" LINKFORSHARED=" "
 ```
+
+```bash
+# 通过 statically linked 可判断是否静态编译
+file python
+```
+
+### 问题： 部分模块未编译，如 ModuleNotFoundError: No module named '_posixsubprocess'
+
+```bash
+$ ./python
+Python 3.12.2 (main, Mar 24 2024, 11:21:39) [GCC 11.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import subprocess
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/uv01/build-python/Python-3.12.2/Lib/subprocess.py", line 104, in <module>
+    from _posixsubprocess import fork_exec as _fork_exec
+ModuleNotFoundError: No module named '_posixsubprocess'
+>>>
+```
+
+todo
 
 ### 问题： Glibc 的问题，Musl libc 的使用
 

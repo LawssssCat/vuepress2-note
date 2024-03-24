@@ -82,6 +82,10 @@ export const sidebarConfig: SidebarConfig = generateSidebarConfig({
       link: "build.md",
       children: ["gcc.md", "gpp.md", "makefile.md", "cmake.md"],
     },
+    {
+      text: "库",
+      children: ["lib/openssl.md"],
+    },
   ],
   "/dev/java/": [
     {
