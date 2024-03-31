@@ -1,0 +1,1 @@
+const t=JSON.parse('{"key":"v-02eab2d4","path":"/tool/mediaplayer/vlc.html","title":"","lang":"zh-CN","frontmatter":{},"headers":[],"git":{"updatedTime":1708851091000,"contributors":[{"name":"lawsssscat","email":"18041500+LawssssCat@users.noreply.github.com","commits":1}]},"filePathRelative":"tool/mediaplayer/vlc.md"}');export{t as data};

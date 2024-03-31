@@ -1,0 +1,1 @@
+const t=JSON.parse('{"key":"v-1f6384d5","path":"/ops/os/","title":"操作系统介绍","lang":"zh-CN","frontmatter":{"title":"操作系统介绍"},"headers":[],"git":{"updatedTime":1709469406000,"contributors":[{"name":"lawsssscat","email":"18041500+LawssssCat@users.noreply.github.com","commits":2}]},"filePathRelative":"ops/os/README.md"}');export{t as data};
