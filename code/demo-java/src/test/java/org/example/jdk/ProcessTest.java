@@ -3,8 +3,8 @@ package org.example.jdk;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.*;
 
@@ -25,14 +25,14 @@ public class ProcessTest {
         // 方式一
         {
             Process process = Runtime.getRuntime().exec(command);
-            Assert.assertEquals(0, process.waitFor());
-            Assert.assertEquals(expect, IOUtils.toString(process.getInputStream()).trim());
+            Assertions.assertEquals(0, process.waitFor());
+            Assertions.assertEquals(expect, IOUtils.toString(process.getInputStream()).trim());
         }
         // 方式二
         {
             Process process = new ProcessBuilder("cmd", "/c", "echo hello world").start(); // 命令和参数要分开写，否则报错！
-            Assert.assertEquals(0, process.waitFor());
-            Assert.assertEquals(expect, IOUtils.toString(process.getInputStream()).trim());
+            Assertions.assertEquals(0, process.waitFor());
+            Assertions.assertEquals(expect, IOUtils.toString(process.getInputStream()).trim());
         }
         log.info("> {}\n{}", command, expect);
     }
@@ -120,7 +120,7 @@ public class ProcessTest {
         // pb.directory(new File(".")); // 默认
         {
             Process process = pb.start();
-            Assert.assertEquals(0, process.waitFor());
+            Assertions.assertEquals(0, process.waitFor());
             log.info("project: "+pb.directory());
             log.info("project: "+IOUtils.toString(process.getInputStream())); // 项目目录
         }
@@ -128,7 +128,7 @@ public class ProcessTest {
         pb.directory(new File("/"));
         {
             Process process = pb.start();
-            Assert.assertEquals(0, process.waitFor());
+            Assertions.assertEquals(0, process.waitFor());
             log.info("root: "+pb.directory());
             log.info("root: "+IOUtils.toString(process.getInputStream())); // 根目录
         }
@@ -136,7 +136,7 @@ public class ProcessTest {
         pb.directory(new File(this.getClass().getResource("/").getPath()));
         {
             Process process = pb.start();
-            Assert.assertEquals(0, process.waitFor());
+            Assertions.assertEquals(0, process.waitFor());
             log.info("project-root: "+pb.directory());
             log.info("project-root: "+IOUtils.toString(process.getInputStream())); // 运行时根目录
         }
@@ -144,7 +144,7 @@ public class ProcessTest {
         pb.directory(new File(this.getClass().getResource("./").getPath()));
         {
             Process process = pb.start();
-            Assert.assertEquals(0, process.waitFor());
+            Assertions.assertEquals(0, process.waitFor());
             log.info("runtime-current: "+pb.directory());
             log.info("runtime-current: "+IOUtils.toString(process.getInputStream())); // 当前文件目录
         }
@@ -160,29 +160,29 @@ public class ProcessTest {
         {
             Process process = pb.start();
             log.info("------------------------ available");
-            Assert.assertEquals(0, process.waitFor());
+            Assertions.assertEquals(0, process.waitFor());
             log.info("------------------------ available");
-            Assert.assertNotEquals(0, process.getInputStream().available());
+            Assertions.assertNotEquals(0, process.getInputStream().available());
             log.info("process inputstream length: {}", process.getInputStream().available());
         }
         {
             Process process = pb.start();
             log.info("------------------------ pipe");
-            Assert.assertEquals(0, process.getInputStream().available()); // 这里也是0？？？说明子进程还未被执行！
+            Assertions.assertEquals(0, process.getInputStream().available()); // 这里也是0？？？说明子进程还未被执行！
             log.info(IOUtils.toString(process.getInputStream())); // waitFor 前就能得到输出
-            Assert.assertEquals(0, process.getInputStream().available());
+            Assertions.assertEquals(0, process.getInputStream().available());
             log.info("------------------------ pipe");
-            Assert.assertEquals(0, process.waitFor());
+            Assertions.assertEquals(0, process.waitFor());
             log.info("------------------------ pipe");
-            Assert.assertEquals(0, process.getInputStream().available()); // 因为已经被读出了，所以是0！！！
+            Assertions.assertEquals(0, process.getInputStream().available()); // 因为已经被读出了，所以是0！！！
         }
         pb.inheritIO(); // waitFor 后才输出到控制台！
         {
             Process process = pb.start();
             log.info("------------------------ inheritIO");
-            Assert.assertEquals(0, process.getInputStream().available());
+            Assertions.assertEquals(0, process.getInputStream().available());
             log.info("------------------------ inheritIO");
-            Assert.assertEquals(0, process.waitFor());
+            Assertions.assertEquals(0, process.waitFor());
             log.info("------------------------ inheritIO");
         }
     }
