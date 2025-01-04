@@ -68,6 +68,7 @@ R3 -.-> A3
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-security</artifactId>
   </dependency>
+  <!-- 
   <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-web</artifactId>
@@ -80,6 +81,7 @@ R3 -.-> A3
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-security-test</artifactId>
   </dependency>
+  -->
 </dependencies>
 ```
 

@@ -8,65 +8,9 @@ todo mockito/powermock/BaizeTest for java dt
 
 todo cloudsop/springboot
 
-## 初始化
-
-注解方式
-
-```java
-@ExtendWith(MockitoExtension.class)
-public class InitMockOrSpyDemo {
-  @Mock
-  private UserService mockUserService;
-
-  @Spy
-  private UserService spyUserService;
-
-  @Test
-  public void testInit() {
-    Mockito.mockingDetails(mockUserService).isMock(); // true
-    Mockito.mockingDetails(spyUserService).isSpy(); // true
-    Mockito.mockingDetails(spyUserService).isMock(); // true —— ❗Spy是Mock的子类
-  }
-}
-```
-
-等同下面代码
-
-```java
-public class InitMockOrSpyDemo {
-  @Mock
-  private UserService mockUserService;
-
-  @Spy
-  private UserService spyUserService;
-
-  @BeforeEach
-  public void init() {
-    MockitoAnnotations.openMocks(this);
-  }
-}
-```
-
-等同下面代码
-
-```java
-public class InitMockOrSpyDemo {
-  private UserService mockUserService;
-
-  private UserService spyUserService;
-
-  @BeforeEach
-  public void init() {
-    mockUserService = Mockito.mock(UserService.class);
-    spyUserService = Mockito.spy(UserService.class);
-  }
-}
-```
 
 ## Mock 和 Spy
 
-+ Mock 从类型创建； Mock 只是调用方法而没有副作用 
-+ Spy 是对现有实例的封装； Spy 调用被封装实例底层的正真实现
 
 ### 使用 mock
 
