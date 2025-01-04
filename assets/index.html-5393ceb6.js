@@ -1,0 +1,1 @@
+const a=JSON.parse('{"key":"v-36a2e534","path":"/ops/vagrant/","title":"Vagrant 使用笔记","lang":"zh-CN","frontmatter":{"title":"Vagrant 使用笔记","tags":["虚拟机"]},"headers":[],"git":{"updatedTime":1708558473000,"contributors":[{"name":"lawsssscat","email":"18041500+LawssssCat@users.noreply.github.com","commits":1}]},"filePathRelative":"ops/vagrant/README.md"}');export{a as data};

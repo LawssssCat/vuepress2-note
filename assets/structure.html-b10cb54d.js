@@ -1,0 +1,1 @@
+const t=JSON.parse('{"key":"v-59ba62fc","path":"/ops/structure.html","title":"运维体系","lang":"zh-CN","frontmatter":{"title":"运维体系"},"headers":[],"git":{"updatedTime":1700560494000,"contributors":[{"name":"lawsssscat","email":"18041500+LawssssCat@users.noreply.github.com","commits":1}]},"filePathRelative":"ops/structure.md"}');export{t as data};

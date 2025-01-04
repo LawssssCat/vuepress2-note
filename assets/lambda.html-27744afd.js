@@ -1,0 +1,1 @@
+const a=JSON.parse('{"key":"v-3e72f5ff","path":"/dev/java/java/lambda.html","title":"Lambda 使用笔记","lang":"zh-CN","frontmatter":{"title":"Lambda 使用笔记"},"headers":[],"git":{"updatedTime":1707141497000,"contributors":[{"name":"lawsssscat","email":"18041500+LawssssCat@users.noreply.github.com","commits":2}]},"filePathRelative":"dev/java/java/lambda.md"}');export{a as data};
