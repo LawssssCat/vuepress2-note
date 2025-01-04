@@ -1,3 +1,6 @@
+内容将逐步向新地址迁移。
+新地址：https://github.com/LawssssCat/blog
+
 # Getting Started
 
 ```bash
