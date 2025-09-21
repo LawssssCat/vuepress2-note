@@ -2,31 +2,7 @@
 title: C/C++构建笔记
 ---
 
-## 编译器用法
-
-参考：
-
-+ 详解三大编译器：gcc、llvm 和 clang | <https://zhuanlan.zhihu.com/p/357803433>
-
-todo
-
-+ gcc
-
-  gcc: [link](./gcc.md)
-
-  g++: [link](./gpp.md)
-
-+ LLVM
-
-  todo
-
-+ LLVM2.0 - Clang
-
-  todo
-
 ## 编译工程工具
-
-makefile: [link](./makefile.md)
 
 cmake: [link](./cmake.md)
 
