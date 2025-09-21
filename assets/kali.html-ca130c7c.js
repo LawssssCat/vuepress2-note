@@ -1,0 +1,1 @@
+import{_ as e,o as c,c as t,a}from"./app-04e6f892.js";const n={},o=a("p",null,"旧域名： https://www.backtrack-linux.org/ —— BackTrack Linux is now Kali Linux (Since 2013)",-1),s=[o];function _(i,l){return c(),t("div",null,s)}const u=e(n,[["render",_],["__file","kali.html.vue"]]);export{u as default};

@@ -1,0 +1,1 @@
+import{_ as o,o as t,c as n,a as e}from"./app-04e6f892.js";const _={},c=e("p",null,"todo 概述",-1),s=e("p",null,"todo ping 参数",-1),d=e("p",null,"todo traceroute/tracepath 参数、解释",-1),l=e("p",null,"todo wireguard、openvpn",-1),r=[c,s,d,l];function a(i,p){return t(),n("div",null,r)}const h=o(_,[["render",a],["__file","index.html.vue"]]);export{h as default};

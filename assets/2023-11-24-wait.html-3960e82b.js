@@ -1,0 +1,1 @@
+import{_ as e,o as t,c as _,a as c}from"./app-04e6f892.js";const o={},s=c("p",null,"等待，五味杂陈。",-1),a=[s];function n(r,l){return t(),_("div",null,a)}const d=e(o,[["render",n],["__file","2023-11-24-wait.html.vue"]]);export{d as default};

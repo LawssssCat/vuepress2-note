@@ -1,0 +1,1 @@
+import{_ as e,o as t,c as o,a as c}from"./app-04e6f892.js";const n={},s=c("p",null,"todo mybatisX 插件使用",-1),_=[s];function a(r,l){return t(),o("div",null,_)}const i=e(n,[["render",a],["__file","index.html.vue"]]);export{i as default};

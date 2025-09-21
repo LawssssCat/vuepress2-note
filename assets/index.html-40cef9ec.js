@@ -1,0 +1,1 @@
+import{_ as t,o as n,c as o,a as e}from"./app-04e6f892.js";const s={},_=e("p",null,"Tabby",-1),c=e("p",null,"Zellij",-1),l=e("p",null,"Windows Terminal （wt）",-1),a=[_,c,l];function i(r,d){return n(),o("div",null,a)}const f=t(s,[["render",i],["__file","index.html.vue"]]);export{f as default};

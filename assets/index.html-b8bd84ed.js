@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-2b14dcba","path":"/management/project/ruoyi-vue/","title":"","lang":"zh-CN","frontmatter":{},"headers":[],"git":{"updatedTime":1706431474000,"contributors":[{"name":"lawsssscat","email":"18041500+LawssssCat@users.noreply.github.com","commits":1}]},"filePathRelative":"management/project/ruoyi-vue/README.md"}');export{e as data};

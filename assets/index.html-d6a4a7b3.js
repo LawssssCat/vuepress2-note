@@ -1,0 +1,1 @@
+import{_ as o,r as n,o as a,c as r,a as c,b as e,d as s,w as _}from"./app-04e6f892.js";const l={};function d(i,u){const t=n("RouterLink");return a(),r("div",null,[c("p",null,[e("硬件参考： "),s(t,{to:"/hardware/"},{default:_(()=>[e("link")]),_:1})])])}const m=o(l,[["render",d],["__file","index.html.vue"]]);export{m as default};

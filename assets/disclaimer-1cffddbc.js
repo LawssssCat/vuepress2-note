@@ -1,0 +1,1 @@
+import{_ as s,o as c,c as t,a as e}from"./app-04e6f892.js";const o={},n={class:"custom-container danger"},a=e("p",{class:"custom-container-title"},"免责声明",-1),_=e("p",null,"所有信息整理自网络，全部论点论据未经证实，更不代表个人观点！",-1),r=[a,_];function i(d,l){return c(),t("div",n,r)}const f=s(o,[["render",i],["__file","disclaimer.vue"]]);export{f as default};

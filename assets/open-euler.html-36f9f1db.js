@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-ac856604","path":"/ops/os/open-euler.html","title":"OpenEuler 使用笔记","lang":"zh-CN","frontmatter":{"title":"OpenEuler 使用笔记"},"headers":[],"git":{"updatedTime":1706925362000,"contributors":[{"name":"lawsssscat","email":"18041500+LawssssCat@users.noreply.github.com","commits":1}]},"filePathRelative":"ops/os/open-euler.md"}');export{e as data};

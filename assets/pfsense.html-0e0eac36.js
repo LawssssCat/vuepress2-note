@@ -1,0 +1,1 @@
+import{_ as e,o as t,c as s,a as o}from"./app-04e6f892.js";const n={},c=o("p",null,"todo - pfSense Administration Full Course —— https://www.youtube.com/watch?v=wv1qTYR3faQ",-1),_=[c];function a(r,l){return t(),s("div",null,_)}const i=e(n,[["render",a],["__file","pfsense.html.vue"]]);export{i as default};

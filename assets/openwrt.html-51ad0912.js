@@ -1,0 +1,1 @@
+import{_ as t,o,c as a,a as e,b as n}from"./app-04e6f892.js";const r={},c=e("h2",{id:"opkg",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#opkg","aria-hidden":"true"},"#"),n(" opkg")],-1),s=e("p",null,"OpenWrt 使用 opkg 做软件包管理。",-1),_=[c,s];function d(i,l){return o(),a("div",null,_)}const h=t(r,[["render",d],["__file","openwrt.html.vue"]]);export{h as default};

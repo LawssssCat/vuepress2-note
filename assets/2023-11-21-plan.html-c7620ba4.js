@@ -1,0 +1,32 @@
+import{_ as r,r as i,o as t,c,a as e,b as a,d as n,w as l,t as p,e as s}from"./app-04e6f892.js";const h={},m=e("h2",{id:"站点优化计划-⏲️",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#站点优化计划-⏲️","aria-hidden":"true"},"#"),a(" 站点优化计划 ⏲️")],-1),u=e("h3",{id:"迁移至-vuepress-theme-hope-主题-⏲️",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#迁移至-vuepress-theme-hope-主题-⏲️","aria-hidden":"true"},"#"),a(" 迁移至 VuePress Theme Hope 主题 ⏲️")],-1),v={href:"https://theme-hope.vuejs.press/zh/",target:"_blank",rel:"noopener noreferrer"},g=s('<h3 id="渲染todo格式⏲️" tabindex="-1"><a class="header-anchor" href="#渲染todo格式⏲️" aria-hidden="true">#</a> 渲染todo格式⏲️</h3><p>e.g.</p><ul><li>[ ] xxx</li><li>[x] xxx</li></ul><h3 id="给站点添加标签显示-⏲️" tabindex="-1"><a class="header-anchor" href="#给站点添加标签显示-⏲️" aria-hidden="true">#</a> 给站点添加标签显示 ⏲️</h3><p>文章所有 “tags” 找办法显示在文章开头/右边 todo 2023年11月21日</p><h3 id="集成-mermaid-✅" tabindex="-1"><a class="header-anchor" href="#集成-mermaid-✅" aria-hidden="true">#</a> 集成 Mermaid ✅</h3>',6),b={href:"https://vuepress-plugin-mermaidjs.efrane.com/",target:"_blank",rel:"noopener noreferrer"},_=s(`<h4 id="markdown语法形式" tabindex="-1"><a class="header-anchor" href="#markdown语法形式" aria-hidden="true">#</a> markdown语法形式</h4><p>渲染前</p><div class="language-markdown line-numbers-mode" data-ext="md"><pre class="language-markdown"><code><span class="token code"><span class="token punctuation">\`\`\`</span><span class="token code-language">mermaid</span>
+<span class="token code-block language-mermaid language-mermaid language-mermaid">sequenceDiagram
+Alice-&gt;John: Hello John, how are you?
+loop every minute
+    John--&gt;Alice: Great!
+end</span>
+<span class="token punctuation">\`\`\`</span></span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>渲染后 （未生效）</p>`,4),k={class:"custom-container tip"},f=e("p",{class:"custom-container-title"},"提示",-1),x=e("code",null,".vuepress/components/mermaid.vue",-1),w={href:"https://github.com/eFrane/vuepress-plugin-mermaidjs",target:"_blank",rel:"noopener noreferrer"},y=s(`<div class="language-mermaid line-numbers-mode" data-ext="mermaid"><pre class="language-mermaid"><code><span class="token keyword">sequenceDiagram</span>
+Alice<span class="token arrow operator">-&gt;</span>John<span class="token operator">:</span> Hello John, how are you?
+<span class="token keyword">loop</span> every minute
+    John<span class="token arrow operator">--&gt;</span>Alice<span class="token operator">:</span> Great!
+<span class="token keyword">end</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="组件形式" tabindex="-1"><a class="header-anchor" href="#组件形式" aria-hidden="true">#</a> 组件形式</h4><p>渲染前</p><div class="language-markdown line-numbers-mode" data-ext="md"><pre class="language-markdown"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mermaid</span><span class="token punctuation">&gt;</span></span>
+{{\`
+graph TB
+  id1(圆角矩形)--普通线--&gt;id2[矩形];
+  subgraph 子图
+   id2==粗线==&gt;id3{菱形}
+   id3-.虚线.-&gt;id4&gt;右向旗帜]
+   id3--无箭头---id5((圆形))
+  end
+\`}}
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mermaid</span><span class="token punctuation">&gt;</span></span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>渲染后</p>`,5),j=s('<h3 id="搜索结果优化1-⏲️" tabindex="-1"><a class="header-anchor" href="#搜索结果优化1-⏲️" aria-hidden="true">#</a> 搜索结果优化1 ⏲️</h3><p>issue 搜索条件应该是交集，而不应该是并集 todo</p><p>e.g.</p><p>现在，搜索条件<code>python 使用笔记</code>得到的结果为<code>python</code>或者<code>使用笔记</code>其中一个匹配即可。</p><p>但我希望得到<code>python</code>和<code>使用笔记</code>的匹配结果！</p><p>想法： 可以用<code>python &amp; 使用笔记</code>或者<code>python and 使用笔记</code>这样表示并集吗？</p><h3 id="搜索结果优化2-⏲️" tabindex="-1"><a class="header-anchor" href="#搜索结果优化2-⏲️" aria-hidden="true">#</a> 搜索结果优化2 ⏲️</h3><p>搜索结果按权重排序，然后再显示</p><ol><li>完全匹配 10*n</li><li>标签 1~3=9 4~n=18</li><li>描述 5</li></ol><h3 id="插件-地图标签" tabindex="-1"><a class="header-anchor" href="#插件-地图标签" aria-hidden="true">#</a> 插件：地图标签</h3><p>todo 记录旅游地点，通过组件使用，插槽定义内容</p><h2 id="genact-装逼工具-我很忙" tabindex="-1"><a class="header-anchor" href="#genact-装逼工具-我很忙" aria-hidden="true">#</a> genact - 装逼工具 “我很忙”</h2>',12),B={href:"https://svenstaro.github.io/genact/",target:"_blank",rel:"noopener noreferrer"},J=s("<p>genact 是一个无聊的活动生成器，它可以模拟各种看起来很忙或者很酷的命令行输出，让你在无聊的时候可以装作很忙或者很厉害。</p><p>命令： <code>genact -m docker_build</code></p><p>使用<code>-m</code>选项来指定你想要运行的模块。 <br> 使用<code>-l</code>选项来查看所有可用的模块。</p><p>类似的工具：</p><ul><li><code>busygen</code>： 这是一个用Python编写的工具，它可以模拟<code>apt-get</code>和<code>yum</code>等命令，它是genact的灵感来源。</li><li><code>hollywood</code>： 这是一个用Bash编写的工具，它可以模拟电影中的黑客场景，它可以在终端中显示多个窗口，每个窗口都有不同的动画效果。</li><li><code>cool-retro-term</code>： 这是一个用<code>C++</code>和<code>QML</code>编写的工具，它可以模拟复古的终端，它可以让你的终端看起来像老式的电视或者计算机。</li><li><code>cowsay</code>： 这是一个用<code>Perl</code>编写的工具，它可以让一头牛或者其他动物说出你输入的话，它可以让你的终端更有趣。</li><li><code>fortune</code>： 这是一个用<code>C</code>编写的工具，它可以在终端中显示一些随机的名言或者笑话，它可以让你的终端更有智慧。</li></ul>",5);function V(A,C){const d=i("ExternalLinkIcon"),o=i("mermaid");return t(),c("div",null,[m,u,e("p",null,[e("a",v,[a("https://theme-hope.vuejs.press/zh/"),n(d)])]),g,e("p",null,[e("a",b,[a("https://vuepress-plugin-mermaidjs.efrane.com/"),n(d)])]),_,e("div",k,[f,e("p",null,[a("因为是通过components引入的mermaid，在"),x,a("中未处理markdown语法的情况，所以未生效。 todo 使用 "),e("a",w,[a("vuepress-plugin-mermaidjs"),n(d)]),a(" 引入 mermaid。")])]),y,n(o,null,{default:l(()=>[a(p(`
+graph TB
+  id1(圆角矩形)--普通线-->id2[矩形];
+  subgraph 子图
+   id2==粗线==>id3{菱形}
+   id3-.虚线.->id4>右向旗帜]
+   id3--无箭头---id5((圆形))
+  end
+`),1)]),_:1}),j,e("p",null,[a("demo: "),e("a",B,[a("https://svenstaro.github.io/genact/"),n(d)])]),J])}const P=r(h,[["render",V],["__file","2023-11-21-plan.html.vue"]]);export{P as default};

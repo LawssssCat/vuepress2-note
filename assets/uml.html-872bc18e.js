@@ -1,0 +1,1 @@
+import{_ as t,o,c as n,a as e}from"./app-04e6f892.js";const c={},l=e("p",null,"UML（Unified Modeling Language，统一建模语言）",-1),s=e("p",null,"todo StarUML https://www.bilibili.com/video/BV1Kh4y1S72z/",-1),_=e("p",null,"Sequence Diagram： idea 插件，一键生成时序图",-1),i=[l,s,_];function a(d,r){return o(),n("div",null,i)}const m=t(c,[["render",a],["__file","uml.html.vue"]]);export{m as default};

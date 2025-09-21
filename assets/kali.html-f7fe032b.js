@@ -1,0 +1,1 @@
+const t=JSON.parse('{"key":"v-f4dd9be0","path":"/security/kali.html","title":"Kali 使用笔记","lang":"zh-CN","frontmatter":{"title":"Kali 使用笔记"},"headers":[],"git":{"updatedTime":1709651629000,"contributors":[{"name":"lawsssscat","email":"18041500+LawssssCat@users.noreply.github.com","commits":1}]},"filePathRelative":"security/kali.md"}');export{t as data};

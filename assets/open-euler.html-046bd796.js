@@ -1,0 +1,1 @@
+import{_ as e,o,c as t,a as n}from"./app-04e6f892.js";const c={},r=n("p",null,"官网： https://www.openeuler.org/zh/",-1),s=[r];function _(l,a){return o(),t("div",null,s)}const u=e(c,[["render",_],["__file","open-euler.html.vue"]]);export{u as default};

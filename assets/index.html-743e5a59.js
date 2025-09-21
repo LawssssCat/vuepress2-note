@@ -1,0 +1,1 @@
+import{_ as e,o as t,c as o,a as c}from"./app-04e6f892.js";const n={},s=c("p",null,"todo https://www.bilibili.com/video/BV19N4y187aY/",-1),_=[s];function i(a,l){return t(),o("div",null,_)}const d=e(n,[["render",i],["__file","index.html.vue"]]);export{d as default};
